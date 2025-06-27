@@ -54,9 +54,6 @@
   z-index: 1;
 }
 
-.plan-card-container.flipped .card {
-  transform: rotateY(180deg);
-}
 
 @media (hover: hover) and (pointer: fine) {
   .plan-card-container:hover .card {
