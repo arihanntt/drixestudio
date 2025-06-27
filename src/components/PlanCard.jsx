@@ -32,7 +32,8 @@ const PlanCard = ({ name, summary, details, price, currencySymbol, onOrder }) =>
       transition={{ duration: 0.5 }}
       viewport={{ once: true }}
     >
-      <div className={`card ${flipped ? "expanded glowing" : "collapsed"}`}>
+      <div className={`card ${flipped ? "expanded glowing" : "collapsed"} ${isMobile && flipped ? "flipped" : ""}`}>
+
         <div className="card-inner">
           {/* Front */}
           <div className="card-face card-front">
