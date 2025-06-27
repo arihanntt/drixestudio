@@ -82,71 +82,73 @@ const [chatOpen, setChatOpen] = useState(false);
       />
 
       {/* Hero Section */}
-      <section
-  ref={heroRef}
-  className="relative z-10 overflow-hidden flex flex-col justify-center items-center text-center min-h-[80vh] px-4 py-24 sm:py-32 bg-gradient-to-b from-[#0e0e1c] to-[#121227]"
->
-  {/* 🌐 Floating Discord Logos */}
-  {!isMobile ? (
-    <>
-      <img
-        src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png"
-        className="floating-logo absolute w-20 md:w-24 left-10 top-1/3 animate-float1"
-        style={{ transform: `translateX(${(mouseX - window.innerWidth / 2) * -0.08}px)` }}
-        alt="Discord logo left"
-      />
-      <img
-        src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png"
-        className="floating-logo absolute w-20 md:w-24 right-10 bottom-1/3 animate-float2"
-        style={{ transform: `translateX(${(mouseX - window.innerWidth / 2) * 0.08}px)` }}
-        alt="Discord logo right"
-      />
-    </>
-  ) : (
-    <>
-      <img
-        src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png"
-        className="floating-logo animate-float1 absolute w-20 left-4 top-1/3"
-        alt="Discord logo left"
-      />
-      <img
-        src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png"
-        className="floating-logo animate-float2 absolute w-20 right-4 bottom-1/3"
-        alt="Discord logo right"
-      />
-    </>
-  )}
+       <section
+      ref={heroRef}
+      className="relative z-10 overflow-hidden flex flex-col justify-center items-center text-center min-h-[80vh] px-4 py-24 sm:py-32 bg-gradient-to-b from-[#0e0e1c] to-[#121227]"
+    >
+      {/* 🌌 Ambient Background Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blurple/20 blur-3xl rounded-full opacity-20 animate-pulse pointer-events-none"></div>
 
-  {/* 💫 Background Glow Blur */}
-  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blurple/30 blur-3xl rounded-full pointer-events-none animate-pulse opacity-20"></div>
+      {/* 🎯 Floating Discord Logos (Parallax) */}
+      {!isMobile && (
+        <>
+          <motion.img
+            src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png"
+            className="absolute w-16 md:w-20 left-10 top-1/3 animate-float1 opacity-70"
+            style={{ transform: `translateX(${(mouseX - window.innerWidth / 2) * -0.06}px)` }}
+            alt="Discord logo left"
+          />
+          <motion.img
+            src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png"
+            className="absolute w-16 md:w-20 right-10 bottom-1/3 animate-float2 opacity-70"
+            style={{ transform: `translateX(${(mouseX - window.innerWidth / 2) * 0.06}px)` }}
+            alt="Discord logo right"
+          />
+        </>
+      )}
 
-  {/* 🧠 Title & Description */}
-  <div className="relative z-10">
-    <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white drop-shadow-lg">
-      <span className="relative z-10">Drixe Studio</span>
-    </h1>
-    <p className="mt-2 text-base md:text-lg text-gray-400 italic">
-      designed by Drixe, inspired by Lua
-    </p>
-    <p className="mt-4 text-lg text-gray-300 max-w-xl mx-auto">
-      Building premium Discord servers with <span className="text-blurple font-medium">style</span> and <span className="text-blurple font-medium">speed</span>.
-    </p>
-  </div>
+      {/* 🧠 Hero Text Block */}
+      <div className="relative z-10 max-w-2xl px-4">
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-4xl md:text-6xl font-extrabold tracking-tight text-white bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500 bg-clip-text text-transparent"
+        >
+          Drixe Studio
+        </motion.h1>
 
-  {/* 🔽 Scroll Down Button */}
-  <motion.button
-    className="mt-10 text-blurple font-semibold text-sm z-10 underline hover:opacity-100 opacity-80 hover:scale-105 transition-all"
-    animate={{ y: [0, 5, 0] }}
-    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-    onClick={() => {
-      const plans = document.getElementById("plans");
-      if (plans) plans.scrollIntoView({ behavior: "smooth" });
-    }}
-  >
-    ↓ Scroll down to explore more ↓
-  </motion.button>
-</section>
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="mt-3 text-lg md:text-xl text-gray-400"
+        >
+          designed by Drixe, inspired by Lua
+        </motion.p>
 
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="mt-4 text-lg md:text-xl text-gray-300"
+        >
+          Building premium Discord servers with <span className="text-blurple font-medium">style</span> and <span className="text-blurple font-medium">speed</span>.
+        </motion.p>
+
+        <motion.button
+          className="mt-10 text-blurple font-semibold text-sm underline opacity-80 hover:opacity-100 hover:scale-105 transition-all"
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          onClick={() => {
+            const plans = document.getElementById("plans");
+            if (plans) plans.scrollIntoView({ behavior: "smooth" });
+          }}
+        >
+          ↓ Scroll down to explore more ↓
+        </motion.button>
+      </div>
+    </section>
 <StatsSection />
 
 {/* 🧠 Why Us Section */}

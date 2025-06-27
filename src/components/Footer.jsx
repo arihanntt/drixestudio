@@ -1,48 +1,107 @@
-const Footer = () => {
-  return (
-    <footer className="bg-black text-white px-6 py-8 border-t border-neutral-800 mt-20">
-      <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-        <h2 className="text-lg font-semibold text-center md:text-left tracking-wide">
-          Drixe Studio © {new Date().getFullYear()}
-        </h2>
+import React, { useState, useRef } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
-        {/* Contact Buttons */}
-        <div className="flex gap-4 flex-wrap justify-center">
-          <a
-            href="https://discord.com/users/928934131893686292"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="transition-all duration-300 inline-flex items-center px-5 py-2.5 rounded-full border border-blurple text-blurple font-semibold hover:bg-blurple hover:text-black shadow-md"
+const Footer = () => {
+  const [submitting, setSubmitting] = useState(false);
+  const iframeRef = useRef(null);
+
+  const handleSubmit = (e) => {
+    setSubmitting(true);
+    // Toast after a slight delay to simulate submission
+    setTimeout(() => {
+      toast.success("🎉 Subscription successful!");
+      e.target.reset();
+      setSubmitting(false);
+    }, 1000);
+  };
+
+  return (
+    <footer className="bg-black text-white px-6 py-12 border-t border-neutral-800 mt-20">
+      <Toaster position="top-center" />
+
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+        {/* Brand */}
+        <div>
+          <h2 className="text-lg font-bold mb-4">Drixe Studio</h2>
+          <p className="text-gray-400 text-sm leading-relaxed">
+            Helping creators grow since 2019. We build tools, bots, and experiences for Discord and beyond.
+          </p>
+        </div>
+
+        {/* Navigation */}
+        <div>
+          <h2 className="text-lg font-bold mb-4">Navigation</h2>
+          <ul className="space-y-2 text-sm text-gray-400">
+            <li><a href="#plans" className="hover:text-white transition">Plans</a></li>
+            <li><a href="#faq" className="hover:text-white transition">FAQ</a></li>
+           
+          </ul>
+        </div>
+
+        {/* Socials */}
+        <div>
+          <h2 className="text-lg font-bold mb-4">Connect</h2>
+          <div className="flex flex-col gap-3 text-sm">
+            <a
+              href="https://discord.com/users/928934131893686292"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block border border-[#5865F2] text-[#5865F2] px-4 py-2 rounded-full hover:bg-[#5865F2] hover:text-black transition"
+            >
+              💬 Discord
+            </a>
+            <a
+              href="https://t.me/darkxkid"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block border border-teal-400 text-teal-400 px-4 py-2 rounded-full hover:bg-teal-400 hover:text-black transition"
+            >
+              📱 Telegram
+            </a>
+            <a
+              href="mailto:drixebusiness@gmail.com"
+              className="inline-block border border-rose-400 text-rose-400 px-4 py-2 rounded-full hover:bg-rose-400 hover:text-black transition"
+            >
+              📧 Email
+            </a>
+          </div>
+        </div>
+
+        {/* Subscription */}
+        <div>
+          <h2 className="text-lg font-bold mb-4">Subscribe</h2>
+          <form
+            action="https://submit-form.com/J8bwGvLum"
+            method="POST"
+            target="hidden_iframe"
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-3"
           >
-            💬 Discord
-          </a>
-          <a
-            href="https://t.me/darkxkid"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="transition-all duration-300 inline-flex items-center px-5 py-2.5 rounded-full border border-teal-400 text-teal-400 font-semibold hover:bg-teal-400 hover:text-black shadow-md"
-          >
-            📱 Telegram
-          </a>
-          <a
-            href="mailto:drixebusiness@gmail.com"
-            className="transition-all duration-300 inline-flex items-center px-5 py-2.5 rounded-full border border-rose-400 text-rose-400 font-semibold hover:bg-rose-400 hover:text-black shadow-md"
-          >
-            📧 Email
-          </a>
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="Enter your email"
+              className="bg-[#111] border border-gray-700 text-sm px-4 py-2 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+            />
+            <button
+              type="submit"
+              disabled={submitting}
+              className="bg-indigo-600 text-white font-medium py-2 rounded-xl hover:bg-indigo-500 transition disabled:opacity-60"
+            >
+              {submitting ? "Submitting..." : "Subscribe Now"}
+            </button>
+          </form>
+          <iframe
+            name="hidden_iframe"
+            style={{ display: "none" }}
+            ref={iframeRef}
+          />
         </div>
       </div>
 
-      {/* ➤ Navigation Links */}
-      <div className="mt-6 flex justify-center gap-6 text-sm text-gray-400 flex-wrap">
-        <a href="#plans" className="footer-link hover:text-white">Plans</a>
-        <a href="#faq" className="footer-link hover:text-white">FAQ</a>
-        
-      </div>
-
-      {/* ➤ Signature */}
-      <div className="text-sm text-center text-gray-400 mt-6">
-        Made with 💜 by <span className="text-white">Drixe Studio</span> · Helping creators grow since 2019
+      <div className="mt-12 border-t border-gray-700 pt-6 text-center text-sm text-gray-500">
+        <p>© {new Date().getFullYear()} Drixe Studio · All rights reserved.</p>
       </div>
     </footer>
   );
