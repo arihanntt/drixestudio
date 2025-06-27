@@ -58,11 +58,13 @@
   transform: rotateY(180deg);
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .plan-card-container:hover .card {
     transform: perspective(1000px) rotateX(2deg) rotateY(1.5deg);
   }
 }
+
+
 
 .order-btn {
   background: linear-gradient(to right, #5865f2, #4752c4);
