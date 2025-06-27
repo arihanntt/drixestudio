@@ -8,7 +8,7 @@ import FAQ from "./components/FAQ";
 import { motion, useScroll, useTransform } from "framer-motion";
 import CountUp from "react-countup";
 import StatsSection from "./components/StatsSection"; // adjust path if needed
-
+import ChatBotModal from './components/ChatBotModal';
 
 function App() {
   const [currency, setCurrency] = useState("INR");
@@ -19,7 +19,7 @@ function App() {
   const [mouseX, setMouseX] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [openCard, setOpenCard] = useState(null);
-
+const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => {
     const updateMouse = (e) => setMouseX(e.clientX);
@@ -260,20 +260,20 @@ function App() {
       <Footer />
 
       {/* 💬 Discord Button */}
-      <a
-        href="https://discord.com/users/928934131893686292"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-5 right-5 z-50 px-4 py-2 rounded-full shadow-lg animate-pulse text-white font-semibold hover:scale-105 transition-all duration-300"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(88,101,242,0.6) 0%, rgba(17,17,17,0.8) 60%)",
-          backdropFilter: "blur(10px)",
-          border: "1px solid #5865F2",
-        }}
-      >
-        💬 Chat on Discord
-      </a>
+      <button
+  onClick={() => setChatOpen(true)}
+  className="fixed bottom-5 right-5 z-50 px-4 py-2 rounded-full shadow-lg animate-pulse text-white font-semibold hover:scale-105 transition-all duration-300"
+  style={{
+    background:
+      "radial-gradient(circle, rgba(88,101,242,0.6) 0%, rgba(17,17,17,0.8) 60%)",
+    backdropFilter: "blur(10px)",
+    border: "1px solid #5865F2",
+  }}
+>
+  🤖 Ask Bot
+</button>
+
+{chatOpen && <ChatBotModal onClose={() => setChatOpen(false)} />}
 
       {/* Modals */}
       {showModal && (

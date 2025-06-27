@@ -25,7 +25,7 @@ const Modal = ({ onClose, plan }) => {
       name: "discord",
       label: "Your Discord Username",
       placeholder: "e.g. drixeeee",
-      validate: (v) => /^[a-zA-Z0-9_]{3,32}$/.test(v),
+      validate: (v) => /^[a-zA-Z0-9_#]{3,32}$/.test(v),
     },
     Email: {
       name: "email",
@@ -68,9 +68,8 @@ const Modal = ({ onClose, plan }) => {
       });
 
       if (res.ok || res.status === 202) {
-        toast.success("Submitted successfully 🔥");
+        toast.success("🎉 Submitted successfully!");
         setHideForm(true);
-
         setTimeout(() => {
           setSubmitting(false);
           setHideForm(false);
@@ -91,90 +90,103 @@ const Modal = ({ onClose, plan }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 px-4">
+    <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center px-4 backdrop-blur-md">
       <Toaster position="top-center" />
       <AnimatePresence>
         <motion.div
-          initial={{ y: 100, opacity: 0, scale: 0.95 }}
+          initial={{ y: 80, opacity: 0, scale: 0.95 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
-          exit={{ y: 100, opacity: 0 }}
+          exit={{ y: 80, opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.3 }}
-          className="bg-[#1e1e1e] rounded-lg p-6 max-w-md w-full shadow-xl border border-gray-700 relative"
+          className="relative bg-gradient-to-br from-[#1e1e1e] to-[#111] border border-gray-700 backdrop-blur-xl rounded-2xl p-6 w-full max-w-md shadow-2xl text-white"
         >
-          <h3 className="text-lg font-semibold text-blurple mb-3">
+          <h3 className="text-xl font-bold mb-4 text-blurple text-center">
             Order <span className="text-white">{plan}</span> Plan
           </h3>
 
           {!hideForm && (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-5 text-sm">
               <input type="hidden" name="plan" value={plan} />
 
-              <div>
-                <label className="block text-sm mb-1">Your Name</label>
+              {/* Name */}
+              <div className="relative group">
+                <label className="absolute text-xs left-3 top-1 text-gray-400 group-focus-within:text-blurple transition-all">
+                  Your Name
+                </label>
                 <input
-                  name="name"
                   type="text"
-                  placeholder="e.g. John"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-[#2b2b2b] text-white p-2 rounded"
+                  className="w-full mt-5 bg-black bg-opacity-30 border border-gray-700 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blurple"
+                  placeholder="e.g. John"
                 />
               </div>
 
-              <div>
-                <label className="block text-sm mb-1">
+              {/* Method */}
+              <div className="relative group">
+                <label className="absolute text-xs left-3 top-1 text-gray-400 group-focus-within:text-blurple transition-all">
                   Preferred Contact Method
                 </label>
                 <select
+                  required
                   value={method}
                   onChange={(e) => {
                     setMethod(e.target.value);
                     setContactValue("");
                   }}
-                  required
-                  className="w-full bg-[#2b2b2b] text-white p-2 rounded"
+                  className="w-full mt-5 bg-black bg-opacity-30 border border-gray-700 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blurple"
                 >
                   <option value="">Choose one</option>
-                  <option value="Telegram">Telegram</option>
-                  <option value="Discord">Discord</option>
-                  <option value="Email">Email</option>
+                  <option>Telegram</option>
+                  <option>Discord</option>
+                  <option>Email</option>
                 </select>
               </div>
 
+              {/* Contact Input */}
               {selected && (
-                <div>
-                  <label className="block text-sm mb-1">{selected.label}</label>
+                <div className="relative group">
+                  <label className="absolute text-xs left-3 top-1 text-gray-400 group-focus-within:text-blurple transition-all">
+                    {selected.label}
+                  </label>
                   <input
                     type="text"
-                    name={selected.name}
+                    required
                     value={contactValue}
                     onChange={(e) => setContactValue(e.target.value)}
                     placeholder={selected.placeholder}
-                    required
-                    className="w-full bg-[#2b2b2b] text-white p-2 rounded"
+                    className="w-full mt-5 bg-black bg-opacity-30 border border-gray-700 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blurple"
                   />
                 </div>
               )}
 
-              <textarea
-                name="message"
-                placeholder="Extra details (optional)"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className="w-full bg-[#2b2b2b] text-white p-2 rounded"
-              />
+              {/* Message */}
+              <div className="relative group">
+                <label className="absolute text-xs left-3 top-1 text-gray-400 group-focus-within:text-blurple transition-all">
+                  Extra Details (optional)
+                </label>
+                <textarea
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Let us know anything specific..."
+                  className="w-full mt-5 bg-black bg-opacity-30 border border-gray-700 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blurple resize-none"
+                  rows={3}
+                />
+              </div>
 
+              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full bg-gradient-to-r from-blurple to-[#5865F2] hover:from-[#4752c4] hover:to-[#5865F2] text-white font-semibold py-2 rounded shadow transition duration-200"
+                className="w-full py-2 font-semibold rounded-md transition-all duration-300 bg-blurple hover:bg-indigo-500 shadow-md hover:shadow-blurple/30 disabled:opacity-60"
               >
-                {submitting ? "Submitting..." : "Submit"}
+                {submitting ? "Submitting..." : "🚀 Submit Order"}
               </button>
             </form>
           )}
 
+          {/* Close Button */}
           <button
             onClick={() => {
               setMethod("");
@@ -183,9 +195,9 @@ const Modal = ({ onClose, plan }) => {
               setMessage("");
               onClose();
             }}
-            className="absolute top-2 right-3 text-gray-400 hover:text-white text-sm"
+            className="absolute top-3 right-4 text-gray-400 hover:text-white text-lg hover:rotate-90 transition"
           >
-            ✕
+            ×
           </button>
         </motion.div>
       </AnimatePresence>
