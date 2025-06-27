@@ -14,7 +14,9 @@ const PlanCard = ({ name, summary, details, price, currencySymbol, onOrder }) =>
   }, []);
 
   const handleFlip = () => {
-    if (isMobile) setFlipped(!flipped);
+    if (isMobile) {
+      setFlipped((prev) => !prev);
+    }
   };
 
   const isUltimate = name.toLowerCase() === "ultimate";
@@ -44,7 +46,6 @@ const PlanCard = ({ name, summary, details, price, currencySymbol, onOrder }) =>
                 ⭐ Most Popular
               </motion.div>
             )}
-
             <h3 className="text-xl font-semibold mb-2">{name} Plan</h3>
             <p className="text-gray-300 mb-3">{summary}</p>
             <div className="text-2xl font-bold mb-4">

@@ -7,6 +7,8 @@ import ContactModal from "./components/ContactModal";
 import FAQ from "./components/FAQ";
 import { motion, useScroll, useTransform } from "framer-motion";
 import CountUp from "react-countup";
+import StatsSection from "./components/StatsSection"; // adjust path if needed
+
 
 function App() {
   const [currency, setCurrency] = useState("INR");
@@ -14,6 +16,23 @@ function App() {
   const [selectedPlan, setSelectedPlan] = useState("");
   const [showContactModal, setShowContactModal] = useState(false);
   const heroRef = useRef(null);
+  const [mouseX, setMouseX] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [openCard, setOpenCard] = useState(null);
+
+
+  useEffect(() => {
+    const updateMouse = (e) => setMouseX(e.clientX);
+    const updateMobile = () => setIsMobile(window.innerWidth < 768);
+
+    window.addEventListener("mousemove", updateMouse);
+    window.addEventListener("resize", updateMobile);
+
+    return () => {
+      window.removeEventListener("mousemove", updateMouse);
+      window.removeEventListener("resize", updateMobile);
+    };
+  }, []);
 
   const exchangeRates = {
     INR: 1,
@@ -65,24 +84,58 @@ function App() {
       {/* Hero Section */}
       <section
   ref={heroRef}
-  className="relative z-10 text-center py-20 px-4 overflow-hidden min-h-[60vh] flex flex-col justify-center items-center"
+  className="relative z-10 overflow-hidden flex flex-col justify-center items-center text-center min-h-[80vh] px-4 py-24 sm:py-32 bg-gradient-to-b from-[#0e0e1c] to-[#121227]"
 >
-  {/* Main Heading */}
-  <h1 className="text-4xl md:text-5xl font-bold z-10">Drixe Studio</h1>
+  {/* 🌐 Floating Discord Logos */}
+  {!isMobile ? (
+    <>
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png"
+        className="floating-logo absolute w-20 md:w-24 left-10 top-1/3 animate-float1"
+        style={{ transform: `translateX(${(mouseX - window.innerWidth / 2) * -0.08}px)` }}
+        alt="Discord logo left"
+      />
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png"
+        className="floating-logo absolute w-20 md:w-24 right-10 bottom-1/3 animate-float2"
+        style={{ transform: `translateX(${(mouseX - window.innerWidth / 2) * 0.08}px)` }}
+        alt="Discord logo right"
+      />
+    </>
+  ) : (
+    <>
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png"
+        className="floating-logo animate-float1 absolute w-20 left-4 top-1/3"
+        alt="Discord logo left"
+      />
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png"
+        className="floating-logo animate-float2 absolute w-20 right-4 bottom-1/3"
+        alt="Discord logo right"
+      />
+    </>
+  )}
 
-  {/* Sub-title: designed by Drixe, inspired by Lua */}
-  <p className="mt-2 text-base md:text-lg text-gray-400 italic z-10">
-    designed by Drixe, inspired by Lua
-  </p>
+  {/* 💫 Background Glow Blur */}
+  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blurple/30 blur-3xl rounded-full pointer-events-none animate-pulse opacity-20"></div>
 
-  {/* Tagline */}
-  <p className="mt-4 text-lg text-gray-300 z-10">
-    Building premium Discord servers with style and speed.
-  </p>
+  {/* 🧠 Title & Description */}
+  <div className="relative z-10">
+    <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white drop-shadow-lg">
+      <span className="relative z-10">Drixe Studio</span>
+    </h1>
+    <p className="mt-2 text-base md:text-lg text-gray-400 italic">
+      designed by Drixe, inspired by Lua
+    </p>
+    <p className="mt-4 text-lg text-gray-300 max-w-xl mx-auto">
+      Building premium Discord servers with <span className="text-blurple font-medium">style</span> and <span className="text-blurple font-medium">speed</span>.
+    </p>
+  </div>
 
-  {/* Animated Scroll Button */}
+  {/* 🔽 Scroll Down Button */}
   <motion.button
-    className="mt-10 text-blurple font-semibold text-sm z-10 underline focus:outline-none"
+    className="mt-10 text-blurple font-semibold text-sm z-10 underline hover:opacity-100 opacity-80 hover:scale-105 transition-all"
     animate={{ y: [0, 5, 0] }}
     transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
     onClick={() => {
@@ -94,31 +147,90 @@ function App() {
   </motion.button>
 </section>
 
+<StatsSection />
 
-      {/* 📊 Stats Section */}
+{/* 🧠 Why Us Section */}
+{/* 🧠 Why Us Section */}
+<section className="relative z-10 py-16 px-4 bg-gradient-to-br from-[#101020] to-[#1a1a2e] shadow-inner overflow-hidden">
+  <div className="max-w-6xl mx-auto text-center">
+    <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+      Why Choose <span className="text-blurple">Drixe Studio?</span>
+    </h2>
+    <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto">
+      We don’t just build Discord servers. We craft immersive digital communities with powerful tools, custom systems, and high-end aesthetics.
+    </p>
+    <p className="text-gray-400 text-xs sm:text-sm mt-4 italic">
+      👉 Tap on a card to reveal more details
+    </p>
+  </div>
 
-<section className="relative z-10 px-4 py-8 bg-gradient-to-br from-[#1f1f3f] to-[#101020] shadow-inner">
-  <div className="max-w-5xl mx-auto flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-10 text-center">
+  <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
     {[
-      { label: "Orders Completed", value: 100, suffix: "+" },
-      { label: "Happy Clients", value: 98, suffix: "%" },
-      { label: "Rating", value: 5, suffix: "⭐" },
-    ].map((stat, i) => (
-      <motion.div
-        key={i}
-        whileInView={{ opacity: [0, 1], y: [20, 0] }}
-        transition={{ duration: 0.6, delay: i * 0.2 }}
-        viewport={{ once: true }}
-        className="min-w-[100px] sm:min-w-[120px] bg-[#151527] border border-[#5865F2]/40 rounded-lg p-4 sm:p-5 shadow-md text-white"
+      {
+        title: "✨ Tailored Designs",
+        desc: "Every server is custom-built with your vision in mind — nothing generic, all premium.",
+        more: "We study your niche, audience, and brand vibe to create a unique aesthetic that sets you apart.",
+        icon: "🎨",
+      },
+      {
+        title: "⚙️ Automated Systems",
+        desc: "We integrate bots, roles, and permission logic so your community runs on autopilot.",
+        more: "From welcome messages to advanced moderation — we make your job easier with automation.",
+        icon: "🤖",
+      },
+      {
+        title: "🚀 Growth Focused",
+        desc: "SEO-optimized setup, user onboarding, and monetization tools help you scale fast.",
+        more: "We optimize your server name, layout, and engagement tools to rank higher in Discord search.",
+        icon: "📈",
+      },
+      {
+        title: "🧩 Modular Setup",
+        desc: "Add or upgrade features anytime. Our systems are flexible and future-proof.",
+        more: "Need to add a shop or switch to tickets? No problem — your server grows with you.",
+        icon: "🛠️",
+      },
+      {
+        title: "💬 Ongoing Support",
+        desc: "From setup to scaling — we stay with you. Premium plans get 24/7 assistance.",
+        more: "You get dedicated help, even after delivery. Bugs? Edits? Add-ons? We've got you.",
+        icon: "📞",
+      },
+      {
+        title: "🌌 Aesthetic Experience",
+        desc: "We build not just servers but experiences — smooth, branded, and beautiful.",
+        more: "Subtle animations, theme-matched icons, and branding that makes your server unforgettable.",
+        icon: "🌠",
+      },
+    ].map((item, idx) => (
+      <div
+        key={idx}
+        onClick={() => setOpenCard(openCard === idx ? null : idx)}
+        className={`relative cursor-pointer bg-[#151527] hover:bg-[#1d1f3a] border border-blurple/20 shadow-md rounded-xl p-6 backdrop-blur-lg transition-all duration-300 hover:scale-[1.03] ${
+          openCard === idx ? "bg-[#1d1f3a]" : ""
+        }`}
       >
-        <div className="text-2xl sm:text-3xl font-bold text-blurple drop-shadow-sm">
-          <CountUp start={0} end={stat.value} delay={0.1} duration={3.9} />
-          {stat.suffix}
-        </div>
-        <p className="mt-1 text-xs sm:text-sm text-gray-300 font-medium">{stat.label}</p>
-      </motion.div>
+        <div className="absolute top-3 right-4 w-3 h-3 bg-blurple rounded-full animate-ping opacity-60"></div>
+        <div className="text-4xl mb-4">{item.icon}</div>
+        <h3 className="text-xl font-semibold text-white mb-2">{item.title}</h3>
+        <p className="text-sm text-gray-300">{item.desc}</p>
+        {openCard === idx && (
+          <motion.div
+            className="mt-3 text-sm text-gray-400"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {item.more}
+          </motion.div>
+        )}
+      </div>
     ))}
   </div>
+
+  {/* ✨ Extra floating glow background */}
+  <div className="absolute -top-10 -left-10 w-64 h-64 bg-blurple/30 blur-3xl rounded-full animate-pulse opacity-30 pointer-events-none"></div>
+  <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-blurple/30 blur-3xl rounded-full animate-pulse opacity-30 pointer-events-none"></div>
 </section>
 
 
