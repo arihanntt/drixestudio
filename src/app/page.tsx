@@ -35,17 +35,18 @@ export default function HomePage() {
     CAD: 0.017,
   };
 
-  const getCurrencySymbol = (cur) => {
-    const symbols = {
-      INR: "₹",
-      USD: "$",
-      EUR: "€",
-      GBP: "£",
-      AED: "د.إ",
-      CAD: "CA$",
-    };
-    return symbols[cur] || cur;
+type Currency = "INR" | "USD" | "EUR" | "GBP";
+
+const getCurrencySymbol = (cur: Currency): string => {
+  const symbols: Record<Currency, string> = {
+    INR: "₹",
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
   };
+  return symbols[cur];
+};
+
 
   const handleOpenModal = (planName) => {
     setSelectedPlan(planName);
