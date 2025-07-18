@@ -26,7 +26,7 @@ export default function HomePage() {
 
   const heroRef = useRef(null);
 
-  const exchangeRates = {
+  const exchangeRates: Record<string, number> = {
     INR: 1,
     USD: 0.012,
     EUR: 0.011,
@@ -48,19 +48,19 @@ const getCurrencySymbol = (cur: Currency): string => {
 };
 
 
-  const handleOpenModal = (planName) => {
-    setSelectedPlan(planName);
-    setShowModal(true);
-  };
+ const handleOpenModal = (planName: string) => {
+  setSelectedPlan(planName);
+  setShowModal(true);
+};
 
-  useEffect(() => {
-    fetch("https://ipapi.co/json/")
-      .then((res) => res.json())
-      .then((data) => {
-        const cc = data.currency;
-        if (exchangeRates[cc]) setCurrency(cc);
-      });
-  }, []);
+ useEffect(() => {
+  fetch("https://ipapi.co/json/")
+    .then((res) => res.json())
+    .then((data) => {
+      const cc = data.currency; // e.g. "USD"
+      if (exchangeRates[cc]) setCurrency(cc);
+    });
+}, []);
 
   useEffect(() => {
     if (heroRef.current) setScrollReady(true);
@@ -151,11 +151,7 @@ const getCurrencySymbol = (cur: Currency): string => {
   return (
     <SmoothScrollWrapper>
       <div className="min-h-screen bg-[#0f0f0f] text-white overflow-x-hidden">
-        <Navbar
-          currency={currency}
-          setCurrency={setCurrency}
-          onContactClick={() => setShowContactModal(true)}
-        />
+        
 
         <HeroSection />
         <StatsSection />
@@ -229,7 +225,6 @@ const getCurrencySymbol = (cur: Currency): string => {
         {chatOpen && <ChatBotModal onClose={() => setChatOpen(false)} />}
         {showModal && (
           <Modal
-            isOpen={showModal}
             onClose={() => setShowModal(false)}
             plan={selectedPlan}
           />
