@@ -39,14 +39,19 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   };
 }
 
-// ✅ Markdown custom components (fully typed)
+// ✅ Optional – for static generation support
+export async function generateStaticParams() {
+  return blogPosts.map((post) => ({
+    id: post.id,
+  }));
+}
+
+// ✅ Markdown custom components
 const markdownComponents: Components = {
   code({ node, inline, className, children, ...props }: any) {
     return (
       <code
-        className={`bg-black/40 px-2 py-1 rounded-md font-mono text-sm text-blue-300 ${
-          className || ''
-        }`}
+        className={`bg-black/40 px-2 py-1 rounded-md font-mono text-sm text-blue-300 ${className || ''}`}
         {...props}
       >
         {children}
@@ -88,7 +93,8 @@ const markdownComponents: Components = {
   ),
 };
 
-export default function SingleBlogPage({ params }: { params: { id: string } }) {
+// ✅ Final component
+export default async function SingleBlogPage({ params }: { params: { id: string } }) {
   const post = blogPosts.find((p) => p.id === params.id);
   if (!post) return notFound();
 
