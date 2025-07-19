@@ -8,6 +8,13 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Components } from 'react-markdown';
 
+// ✅ Define page props correctly
+type PageProps = {
+  params: {
+    id: string;
+  };
+};
+
 // ✅ Estimate reading time
 const estimateReadingTime = (text: string) => {
   const wordsPerMinute = 200;
@@ -16,7 +23,7 @@ const estimateReadingTime = (text: string) => {
 };
 
 // ✅ SEO metadata per blog post
-export async function generateMetadata({ params }: { params: { id: string } }) {
+export async function generateMetadata({ params }: PageProps) {
   const post = blogPosts.find((p) => p.id === params.id);
   if (!post) return { title: '404 Not Found' };
 
@@ -39,14 +46,14 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   };
 }
 
-// ✅ Optional – for static generation support
+// ✅ For static generation
 export async function generateStaticParams() {
   return blogPosts.map((post) => ({
     id: post.id,
   }));
 }
 
-// ✅ Markdown custom components
+// ✅ Markdown components
 const markdownComponents: Components = {
   code({ node, inline, className, children, ...props }: any) {
     return (
@@ -93,8 +100,8 @@ const markdownComponents: Components = {
   ),
 };
 
-// ✅ Final component
-export default async function SingleBlogPage({ params }: { params: { id: string } }) {
+// ✅ Final component with correct typing
+export default async function SingleBlogPage({ params }: PageProps) {
   const post = blogPosts.find((p) => p.id === params.id);
   if (!post) return notFound();
 
