@@ -6,10 +6,14 @@ import rehypeRaw from 'rehype-raw';
 import { blogPosts } from '@/components/blogData';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Components } from 'react-markdown';
 import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
+import type { Components } from 'react-markdown';
 
-// ✅ Estimate reading time
+type MarkdownComponentProps = {
+  children?: ReactNode;
+};
+
 const estimateReadingTime = (text: string) => {
   const wordsPerMinute = 200;
   const words = text.trim().split(/\s+/).length;
@@ -44,23 +48,33 @@ export async function generateMetadata({
   };
 }
 
-// ✅ For static generation
+// ✅ Static generation for blog IDs
 export async function generateStaticParams() {
   return blogPosts.map((post) => ({
     id: post.id,
   }));
 }
 
-// ✅ Markdown components
+// ✅ Markdown components with correct types
 const markdownComponents: Components = {
-  code({ node, inline, className, children, ...props }: any) {
-    return (
+  code({ inline, className, children, ...props }: {
+    inline?: boolean;
+    className?: string;
+    children?: ReactNode;
+  }) {
+    return inline ? (
       <code
-        className={`bg-black/40 px-2 py-1 rounded-md font-mono text-sm text-blue-300 ${className || ''}`}
+        className={`bg-black/40 px-1 py-0.5 rounded font-mono text-sm text-blue-300 ${className || ''}`}
         {...props}
       >
         {children}
       </code>
+    ) : (
+      <pre className="bg-black/50 p-4 rounded-md overflow-x-auto my-4">
+        <code className={`text-sm text-blue-300 ${className || ''}`} {...props}>
+          {children}
+        </code>
+      </pre>
     );
   },
   img({ ...props }) {
@@ -73,7 +87,7 @@ const markdownComponents: Components = {
       </div>
     );
   },
-  a({ href, children, ...props }) {
+  a({ href, children, ...props }: { href?: string; children?: ReactNode }) {
     return (
       <a
         href={href}
@@ -86,19 +100,31 @@ const markdownComponents: Components = {
       </a>
     );
   },
-  h1: ({ children }) => <h1 className="text-3xl font-bold mt-8 mb-4">{children}</h1>,
-  h2: ({ children }) => <h2 className="text-2xl font-semibold mt-6 mb-3">{children}</h2>,
-  h3: ({ children }) => <h3 className="text-xl font-semibold mt-5 mb-2">{children}</h3>,
-  ul: ({ children }) => <ul className="list-disc ml-6 my-4">{children}</ul>,
-  ol: ({ children }) => <ol className="list-decimal ml-6 my-4">{children}</ol>,
-  blockquote: ({ children }) => (
-    <blockquote className="border-l-4 border-blue-500 pl-4 italic text-white/80 my-6">
-      {children}
-    </blockquote>
-  ),
+  h1({ children }: MarkdownComponentProps) {
+    return <h1 className="text-3xl font-bold mt-8 mb-4">{children}</h1>;
+  },
+  h2({ children }: MarkdownComponentProps) {
+    return <h2 className="text-2xl font-semibold mt-6 mb-3">{children}</h2>;
+  },
+  h3({ children }: MarkdownComponentProps) {
+    return <h3 className="text-xl font-semibold mt-5 mb-2">{children}</h3>;
+  },
+  ul({ children }: MarkdownComponentProps) {
+    return <ul className="list-disc ml-6 my-4">{children}</ul>;
+  },
+  ol({ children }: MarkdownComponentProps) {
+    return <ol className="list-decimal ml-6 my-4">{children}</ol>;
+  },
+  blockquote({ children }: MarkdownComponentProps) {
+    return (
+      <blockquote className="border-l-4 border-blue-500 pl-4 italic text-white/80 my-6">
+        {children}
+      </blockquote>
+    );
+  },
 };
 
-// ✅ Final component – fixed typing
+// ✅ Final blog post page
 export default async function SingleBlogPage({
   params,
 }: {
