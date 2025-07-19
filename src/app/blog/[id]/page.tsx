@@ -7,13 +7,7 @@ import { blogPosts } from '@/components/blogData';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Components } from 'react-markdown';
-
-// ✅ Define page props correctly
-type PageProps = {
-  params: {
-    id: string;
-  };
-};
+import type { Metadata } from 'next';
 
 // ✅ Estimate reading time
 const estimateReadingTime = (text: string) => {
@@ -23,7 +17,11 @@ const estimateReadingTime = (text: string) => {
 };
 
 // ✅ SEO metadata per blog post
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
   const post = blogPosts.find((p) => p.id === params.id);
   if (!post) return { title: '404 Not Found' };
 
@@ -100,8 +98,12 @@ const markdownComponents: Components = {
   ),
 };
 
-// ✅ Final component with correct typing
-export default async function SingleBlogPage({ params }: PageProps) {
+// ✅ Final component – fixed typing
+export default async function SingleBlogPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const post = blogPosts.find((p) => p.id === params.id);
   if (!post) return notFound();
 
