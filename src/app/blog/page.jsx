@@ -1,24 +1,25 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import Tilt from 'react-parallax-tilt';
-import Link from 'next/link';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import Tilt from "react-parallax-tilt";
+import Link from "next/link";
 import {
   Sparkles,
   ShieldCheck,
   Rocket,
   Wrench,
   Gem,
-} from 'lucide-react';
-import { blogPosts } from '@/components/blogData'; // adjust path if needed
+} from "lucide-react";
+import { blogPosts } from "@/components/blogData";
+import Image from "next/image";
 
 const tagColors = {
-  Design: 'bg-pink-600',
-  Code: 'bg-indigo-600',
-  News: 'bg-green-600',
-  Update: 'bg-yellow-500',
-  Tips: 'bg-purple-500',
+  Design: "bg-pink-600",
+  Code: "bg-indigo-600",
+  News: "bg-green-600",
+  Update: "bg-yellow-500",
+  Tips: "bg-purple-500",
 };
 
 const tagIcons = {
@@ -30,8 +31,11 @@ const tagIcons = {
 };
 
 export default function BlogPage() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [selectedTag, setSelectedTag] = useState(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 6;
 
   const filteredPosts = blogPosts.filter((post) => {
     const matchesSearch =
@@ -42,6 +46,11 @@ export default function BlogPage() {
 
     return matchesSearch && matchesTag;
   });
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0f0f0f] via-[#111] to-[#181818] text-white px-4 pt-[120px] pb-10">
@@ -68,8 +77,8 @@ export default function BlogPage() {
 
       {/* Blog Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 px-2">
-        {filteredPosts.length > 0 ? (
-          filteredPosts.map((post, index) => (
+        {currentPosts.length > 0 ? (
+          currentPosts.map((post, index) => (
             <Tilt key={post.id} tiltMaxAngleX={4} tiltMaxAngleY={4}>
               <Link href={`/blog/${post.id}`} className="block h-full">
                 <motion.div
@@ -80,20 +89,22 @@ export default function BlogPage() {
                 >
                   {post.thumbnail && (
                     <div className="aspect-[3/2] w-full overflow-hidden rounded-t-xl">
-  <img
-    src={post.thumbnail}
-    alt={post.title}
-    className="w-full h-full object-cover"
-  />
-</div>
-
+                      <Image
+                        src={post.thumbnail}
+                        alt={post.title}
+                        width={400}
+                        height={300}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
                   )}
 
                   <div className="p-5 flex flex-col flex-grow justify-between">
                     <div>
                       <div className="flex items-center justify-between text-xs text-zinc-400 mb-2">
                         <span>{post.category}</span>
-                        <span>{post.readingTime || '3 min read'}</span>
+                        <span>{post.readingTime || "3 min read"}</span>
                       </div>
 
                       <div className="flex items-center gap-2 mb-3">
@@ -104,7 +115,7 @@ export default function BlogPage() {
                       </div>
 
                       <p className="text-zinc-300 text-sm mb-4 line-clamp-4">
-                        {post.content.replace(/[#>*`]/g, '').slice(0, 180)}...
+                        {post.content.replace(/[#>*`]/g, "").slice(0, 180)}...
                       </p>
                     </div>
 
@@ -113,7 +124,7 @@ export default function BlogPage() {
                         <span
                           key={tag}
                           className={`text-xs px-2 py-1 rounded-full flex items-center ${
-                            tagColors[tag] || 'bg-pink-600'
+                            tagColors[tag] || "bg-pink-600"
                           } text-white`}
                         >
                           {tagIcons[tag]} {tag}
@@ -135,6 +146,25 @@ export default function BlogPage() {
           </p>
         )}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-10 flex justify-center gap-2">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition border border-zinc-600 ${
+                currentPage === i + 1
+                  ? "bg-pink-600 text-white"
+                  : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

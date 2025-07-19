@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>Drixe Studio Blog</title>
+        <link>https://www.drixestudio.services</link>
+        <description>Explore our latest design and development insights, tips, and updates.</description>
+        <lastBuildDate>Sat, 19 Jul 2025 05:11:01 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <language>en</language>
+        <copyright>© 2025 Drixe Studio</copyright>
+        <item>
+            <title><![CDATA[Why a Custom Discord Server Is Worth It in 2025]]></title>
+            <link>https://www.drixestudio.services/blog/why-custom-discord-server-worth-it</link>
+            <guid isPermaLink="false">https://www.drixestudio.services/blog/why-custom-discord-server-worth-it</guid>
+            <pubDate>Wed, 16 Jul 2025 18:30:00 GMT</pubDate>
+            <description><![CDATA[Explore why custom-built Discord servers outperform templates and how Drixe Studio delivers unmatched engagement, branding, and automation.]]></description>
+            <enclosure url="https://www.drixestudio.services/assets/blog/custom-discord-2025.jpg" length="0" type="image/jpg"/>
+        </item>
+        <item>
+            <title><![CDATA[Top 10 Must-Have Bots for Your Discord Server in 2025]]></title>
+            <link>https://www.drixestudio.services/blog/top-bots-for-discord-2025</link>
+            <guid isPermaLink="false">https://www.drixestudio.services/blog/top-bots-for-discord-2025</guid>
+            <pubDate>Thu, 17 Jul 2025 18:30:00 GMT</pubDate>
+            <description><![CDATA[Here’s a curated list of the most powerful Discord bots in 2025 — from moderation to member experience and automation.]]></description>
+            <enclosure url="https://www.drixestudio.services/assets/blog/top-bots-2025.jpg" length="0" type="image/jpg"/>
+        </item>
+        <item>
+            <title><![CDATA[How to Build a Paid Discord Community in 2025]]></title>
+            <link>https://www.drixestudio.services/blog/paid-community-on-discord</link>
+            <guid isPermaLink="false">https://www.drixestudio.services/blog/paid-community-on-discord</guid>
+            <pubDate>Tue, 22 Jul 2025 18:30:00 GMT</pubDate>
+            <description><![CDATA[Unlock the blueprint to launch and scale a premium paid community using Discord tools, bots, and structure in 2025.]]></description>
+            <enclosure url="https://www.drixestudio.services/assets/blog/paid-discord-community-2025.jpg" length="0" type="image/jpg"/>
+        </item>
+        <item>
+            <title><![CDATA[The Ultimate Guide to Launching Your Discord Brand in 2025]]></title>
+            <link>https://www.drixestudio.services/blog/launching-your-discord-brand-2025</link>
+            <guid isPermaLink="false">https://www.drixestudio.services/blog/launching-your-discord-brand-2025</guid>
+            <pubDate>Fri, 18 Jul 2025 18:30:00 GMT</pubDate>
+            <description><![CDATA[Ready to turn your Discord into a professional brand hub? Learn how to build, grow, and monetize a server that truly stands out in 2025.]]></description>
+            <enclosure url="https://www.drixestudio.services/assets/blog/discord-brand-guide-2025.jpg" length="0" type="image/jpg"/>
+        </item>
+        <item>
+            <title><![CDATA[Top Discord Trends to Watch in 2025]]></title>
+            <link>https://www.drixestudio.services/blog/discord-trends-2025</link>
+            <guid isPermaLink="false">https://www.drixestudio.services/blog/discord-trends-2025</guid>
+            <pubDate>Mon, 21 Jul 2025 18:30:00 GMT</pubDate>
+            <description><![CDATA[From AI mod bots to Web3 integrations, discover the game-changing trends shaping Discord communities in 2025.]]></description>
+            <enclosure url="https://www.drixestudio.services/assets/blog/discord-trends-2025.jpg" length="0" type="image/jpg"/>
+        </item>
+        <item>
+            <title><![CDATA[7 Proven Hacks to Boost Discord Engagement in 2025]]></title>
+            <link>https://www.drixestudio.services/blog/discord-engagement-hacks-2025</link>
+            <guid isPermaLink="false">https://www.drixestudio.services/blog/discord-engagement-hacks-2025</guid>
+            <pubDate>Wed, 23 Jul 2025 18:30:00 GMT</pubDate>
+            <description><![CDATA[Struggling with low activity? Use these battle-tested hacks to spark real conversations, build loyalty, and grow your Discord server in 2025.]]></description>
+            <enclosure url="https://www.drixestudio.services/assets/blog/engagement-hacks-2025.jpg" length="0" type="image/jpg"/>
+        </item>
+        <item>
+            <title><![CDATA[How to Build a Thriving Discord Community from Scratch]]></title>
+            <link>https://www.drixestudio.services/blog/build-thriving-discord-community</link>
+            <guid isPermaLink="false">https://www.drixestudio.services/blog/build-thriving-discord-community</guid>
+            <pubDate>Sun, 20 Jul 2025 18:30:00 GMT</pubDate>
+            <description><![CDATA[New to Discord? Learn how to build a buzzing server from zero members to a vibrant, active hub.]]></description>
+            <enclosure url="https://www.drixestudio.services/assets/blog/build-discord-community.jpg" length="0" type="image/jpg"/>
+        </item>
+        <item>
+            <title><![CDATA[Moderation Mastery: Keeping Your Discord Safe]]></title>
+            <link>https://www.drixestudio.services/blog/discord-moderation-2025</link>
+            <guid isPermaLink="false">https://www.drixestudio.services/blog/discord-moderation-2025</guid>
+            <pubDate>Tue, 22 Jul 2025 18:30:00 GMT</pubDate>
+            <description><![CDATA[Trolls, raids, and spam are evolving. Learn modern strategies and tools to keep your Discord safe in 2025.]]></description>
+            <enclosure url="https://www.drixestudio.services/assets/blog/discord-moderation-guide.jpg" length="0" type="image/jpg"/>
+        </item>
+        <item>
+            <title><![CDATA[How to Create Viral Discord Events That Boost Engagement]]></title>
+            <link>https://www.drixestudio.services/blog/how-to-create-viral-discord-events</link>
+            <guid isPermaLink="false">https://www.drixestudio.services/blog/how-to-create-viral-discord-events</guid>
+            <pubDate>Sun, 20 Jul 2025 18:30:00 GMT</pubDate>
+            <description><![CDATA[Want your server to explode with activity? Learn the secrets behind creating Discord events that people can’t stop talking about.]]></description>
+            <enclosure url="https://www.drixestudio.services/assets/blog/viral-discord-events.jpg" length="0" type="image/jpg"/>
+        </item>
+    </channel>
+</rss>
