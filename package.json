@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/generate-rss.mjs && next build",
+    "build": "NODE_OPTIONS=--no-warnings node scripts/generate-rss.mjs && next build",
 
     "postbuild": "node scripts/generate-rss.mjs",
     "start": "next start",
