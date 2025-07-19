@@ -1,17 +1,18 @@
-// ✅ Server Component – no 'use client'
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import { blogPosts } from '@/components/blogData';
+import { blogPosts } from '@/components/blogData'; // Correct reference to blogdata.js
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
 import type { Components } from 'react-markdown';
 
-type MarkdownComponentProps = {
-  children?: ReactNode;
+// ✅ Mark the route as static (keep this, but we'll also await params)
+export const dynamic = 'force-static';
+
+type PageParams = {
+  params: Promise<{ id: string }>; // Update type to reflect async params
 };
 
 const estimateReadingTime = (text: string) => {
@@ -20,13 +21,10 @@ const estimateReadingTime = (text: string) => {
   return `${Math.ceil(words / wordsPerMinute)} min read`;
 };
 
-// ✅ SEO metadata per blog post
-export async function generateMetadata({
-  params,
-}: {
-  params: { id: string };
-}): Promise<Metadata> {
-  const post = blogPosts.find((p) => p.id === params.id);
+// ✅ Dynamic metadata (made async to await params)
+export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
+  const { id } = await params; // Await params
+  const post = blogPosts.find((p) => p.id === id);
   if (!post) return { title: '404 Not Found' };
 
   return {
@@ -48,20 +46,16 @@ export async function generateMetadata({
   };
 }
 
-// ✅ Static generation for blog IDs
-export async function generateStaticParams() {
+// ✅ Static routes
+export function generateStaticParams() {
   return blogPosts.map((post) => ({
     id: post.id,
   }));
 }
 
-// ✅ Markdown components with correct types
+// ✅ Markdown styling
 const markdownComponents: Components = {
-  code({ inline, className, children, ...props }: {
-    inline?: boolean;
-    className?: string;
-    children?: ReactNode;
-  }) {
+  code({ inline, className, children, ...props }: any) {
     return inline ? (
       <code
         className={`bg-black/40 px-1 py-0.5 rounded font-mono text-sm text-blue-300 ${className || ''}`}
@@ -87,7 +81,7 @@ const markdownComponents: Components = {
       </div>
     );
   },
-  a({ href, children, ...props }: { href?: string; children?: ReactNode }) {
+  a({ href, children, ...props }) {
     return (
       <a
         href={href}
@@ -100,22 +94,22 @@ const markdownComponents: Components = {
       </a>
     );
   },
-  h1({ children }: MarkdownComponentProps) {
+  h1({ children }) {
     return <h1 className="text-3xl font-bold mt-8 mb-4">{children}</h1>;
   },
-  h2({ children }: MarkdownComponentProps) {
+  h2({ children }) {
     return <h2 className="text-2xl font-semibold mt-6 mb-3">{children}</h2>;
   },
-  h3({ children }: MarkdownComponentProps) {
+  h3({ children }) {
     return <h3 className="text-xl font-semibold mt-5 mb-2">{children}</h3>;
   },
-  ul({ children }: MarkdownComponentProps) {
+  ul({ children }) {
     return <ul className="list-disc ml-6 my-4">{children}</ul>;
   },
-  ol({ children }: MarkdownComponentProps) {
+  ol({ children }) {
     return <ol className="list-decimal ml-6 my-4">{children}</ol>;
   },
-  blockquote({ children }: MarkdownComponentProps) {
+  blockquote({ children }) {
     return (
       <blockquote className="border-l-4 border-blue-500 pl-4 italic text-white/80 my-6">
         {children}
@@ -124,18 +118,15 @@ const markdownComponents: Components = {
   },
 };
 
-// ✅ Final blog post page
-export default async function SingleBlogPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const post = blogPosts.find((p) => p.id === params.id);
+// ✅ Blog page (made async to await params)
+export default async function SingleBlogPage({ params }: PageParams) {
+  const { id } = await params; // Await params
+  const post = blogPosts.find((p) => p.id === id);
   if (!post) return notFound();
 
   return (
     <div className="min-h-screen px-4 pt-32 pb-16 max-w-3xl mx-auto text-white animate-fadeIn">
-      {/* 🧠 Blog Header */}
+      {/* 🧠 Header */}
       <div className="relative mb-10 rounded-3xl p-8 md:p-10 bg-gradient-to-br from-[#141b2b] to-[#1f2a3f] shadow-lg border border-white/10">
         <div className="mb-2">
           <span className="bg-blue-600/80 text-white text-xs uppercase font-semibold tracking-wide px-3 py-1 rounded-full shadow-md">
@@ -152,7 +143,7 @@ export default async function SingleBlogPage({
         </div>
       </div>
 
-      {/* 📄 Blog Content */}
+      {/* 📄 Content */}
       <div className="bg-[#101522]/80 rounded-2xl p-6 md:p-8 border border-white/10 backdrop-blur-md shadow-lg">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
