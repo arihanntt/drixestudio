@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/generate-rss.js && next build",
+    "build": "node scripts/generate-rss.mjs && next build",
 
-    "postbuild": "node scripts/generate-rss.js",
+    "postbuild": "node scripts/generate-rss.mjs",
     "start": "next start",
     "lint": "next lint",
-    "generate:rss": "node scripts/generate-rss.js"
+    "generate:rss": "node scripts/generate-rss.mjs"
   },
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",
