@@ -4,6 +4,7 @@
 import { usePathname } from 'next/navigation';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import SmoothScrollWrapper from './SmoothScrollWrapper';
 
 export default function LayoutWrapper({ children }) {
   const pathname = usePathname();

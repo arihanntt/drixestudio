@@ -1,130 +1,161 @@
-"use client";
+'use client';
 
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { FaTimes } from "react-icons/fa";
 
-const dropdownVariants = {
-  hidden: { opacity: 0, y: -20, scaleY: 0.95, transformOrigin: "top" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scaleY: 1,
-    transformOrigin: "top",
-    transition: { duration: 0.3 },
-  },
-  exit: {
-    opacity: 0,
-    y: -20,
-    scaleY: 0.95,
-    transformOrigin: "top",
-    transition: { duration: 0.2 },
-  },
-};
-
-const MobileMenu = ({ setMobileOpen, onContactClick, currency, setCurrency }) => {
+const MobileMenu = ({ setMobileOpen, activeLink, navLinks }) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const currencies = ["INR", "USD", "EUR", "GBP", "AED", "CAD"];
-
-  const handleScroll = (id) => {
-    const section = document.getElementById(id);
-    if (section) {
-      window.scrollTo({
-        top: section.offsetTop - 80,
-        behavior: "smooth",
-      });
+  const containerVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        staggerChildren: 0.05,
+        delayChildren: 0.1,
+        duration: 0.5,
+        ease: [0.16, 1, 0.3, 1]
+      }
+    },
+    exit: {
+      opacity: 0,
+      y: -20,
+      transition: {
+        staggerChildren: 0.05,
+        staggerDirection: -1,
+        duration: 0.3,
+        ease: "easeIn"
+      }
     }
-    setMobileOpen(false);
   };
 
-  const handleNavigation = (path, sectionId = null) => {
+  const itemVariants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        delay: i * 0.05,
+        ease: [0.16, 1, 0.3, 1]
+      }
+    }),
+    exit: { opacity: 0, y: -10 }
+  };
+
+  const handleNavigation = (path) => {
     if (pathname !== path) {
       router.push(path);
-      setMobileOpen(false);
-      if (sectionId) {
-        setTimeout(() => handleScroll(sectionId), 600); // Give time for DOM to load
-      }
-    } else {
-      if (sectionId) handleScroll(sectionId);
-      setMobileOpen(false);
     }
+    setMobileOpen(false);
   };
 
   return (
     <AnimatePresence>
       <motion.div
-        key="dropdown"
-        variants={dropdownVariants}
+        key="mobileMenu"
+        variants={containerVariants}
         initial="hidden"
         animate="visible"
         exit="exit"
-        className="fixed top-[65.1px] left-0 w-full z-50 md:hidden"
+        className="fixed top-0 left-0 w-full z-50 md:hidden h-screen"
       >
-        <div className="w-full rounded-b-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-lg px-6 py-6">
-          <ul className="space-y-5 text-base text-white font-semibold text-center">
-            <li
-              onClick={() => handleNavigation("/plans")}
-              className="cursor-pointer hover:text-indigo-400 transition"
+        {/* Backdrop that closes menu when clicked */}
+        <div 
+          className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+          onClick={() => setMobileOpen(false)}
+        />
+        
+        {/* Menu Content */}
+        <div className="relative w-full h-full bg-gradient-to-b from-gray-900/95 to-gray-950/95 backdrop-blur-2xl border-b border-white/5 shadow-2xl overflow-y-auto">
+          {/* Close Button - Fixed in top left corner */}
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="absolute top-4 left-4 z-50 p-2 text-white text-2xl"
+            aria-label="Close menu"
+          >
+            <FaTimes />
+          </button>
+          
+          {/* Logo - Centered at top */}
+          <div className="pt-16 pb-4 flex justify-center">
+            <div 
+              onClick={() => {
+                router.push("/");
+                setMobileOpen(false);
+              }}
+              className="text-xl font-extrabold tracking-wider text-white cursor-pointer"
             >
-              💸 PLANS
-            </li>
-            <li
-              onClick={() => handleNavigation("/whyus")}
-              className="cursor-pointer hover:text-purple-400 transition"
-            >
-              🌟 WHY US
-            </li>
-            <li
-              onClick={() => handleNavigation("/faq")}
-              className="cursor-pointer hover:text-blue-400 transition"
-            >
-              ❓ FAQ
-            </li>
-            <li
-              onClick={() => handleNavigation("/blog")}
-              className="cursor-pointer hover:text-yellow-400 transition"
-            >
-              📚 BLOGS
-            </li>
-            <li
-              onClick={() => handleNavigation("/contact")}
-              className="cursor-pointer hover:text-indigo-400 transition"
-            >
-              📞 CONTACT
-            </li>
+              DRIXE STUDIO
+            </div>
+          </div>
 
-            {/* Currency selector only on homepage */}
-            {pathname === "/" && (
-              <li>
-                <select
-                  className="w-full bg-[#1a1a1a] border border-gray-700 rounded-md p-2 text-white text-center hover:border-indigo-500 transition-all duration-300"
-                  value={currency}
-                  onChange={(e) => setCurrency(e.target.value)}
-                >
-                  {currencies.map((cur) => (
-                    <option key={cur} value={cur} className="bg-black text-white">
-                      {cur}
-                    </option>
-                  ))}
-                </select>
-              </li>
-            )}
-          </ul>
+          {/* Menu Items */}
+          <motion.ul 
+            variants={containerVariants}
+            className="space-y-2 px-6 py-6"
+          >
+            {navLinks.map(({ label, path, icon, color }, i) => (
+              <motion.li
+                key={label}
+                custom={i}
+                variants={itemVariants}
+                onClick={() => handleNavigation(path)}
+                className={`relative overflow-hidden rounded-xl ${
+                  activeLink === path.slice(1)
+                    ? "bg-white/5"
+                    : "hover:bg-white/5"
+                }`}
+              >
+                <div className="flex items-center px-4 py-4 cursor-pointer">
+                  <span className="text-xl mr-3">{icon}</span>
+                  <span className="font-medium text-white">{label}</span>
+                  
+                  {activeLink === path.slice(1) && (
+                    <motion.div
+                      layoutId="mobileActiveIndicator"
+                      className="absolute inset-0 -z-10 bg-gradient-to-r opacity-20"
+                      style={{ background: `linear-gradient(to right, ${color.replace('from-', '').replace('to-', '').replace(' ', ', ')})` }}
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                  
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    className="ml-auto w-2 h-2 rounded-full"
+                    style={{ 
+                      background: `linear-gradient(to right, ${color.replace('from-', '').replace('to-', '').replace(' ', ', ')})`,
+                      opacity: activeLink === path.slice(1) ? 1 : 0.5
+                    }}
+                  />
+                </div>
+              </motion.li>
+            ))}
+          </motion.ul>
 
-          <div className="mt-6 flex justify-center">
+          <motion.div 
+            variants={itemVariants}
+            custom={navLinks.length + 1}
+            className="mt-6 pt-4 border-t border-white/5 text-center"
+          >
             <button
               onClick={() => setMobileOpen(false)}
-              className="text-sm text-gray-400 hover:text-white transition"
+              className="text-sm text-gray-400 hover:text-white transition px-6 py-2 rounded-full border border-white/10 hover:bg-white/5 hover:border-white/20"
             >
               Close Menu
             </button>
-          </div>
+          </motion.div>
 
-          <div className="mt-8 text-xs text-center text-gray-500">
+          <motion.div 
+            variants={itemVariants}
+            custom={navLinks.length + 2}
+            className="mt-6 text-xs text-center text-gray-500"
+          >
             Drixe Studio © {new Date().getFullYear()}
-          </div>
+          </motion.div>
         </div>
       </motion.div>
     </AnimatePresence>

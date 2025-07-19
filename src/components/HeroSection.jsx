@@ -1,98 +1,141 @@
+"use client"; // Required for useState & interactivity in Next.js App Router
+
 import React, { useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const HeroSection = () => {
   const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+
+  // Lightweight parallax with capped range
+  const yText = useTransform(scrollYProgress, [0, 0.5], ["0%", "10%"]);
 
   return (
     <section
       ref={heroRef}
-      className="relative z-10 overflow-hidden flex flex-col justify-center items-center text-center min-h-screen px-6 py-24 sm:py-28 bg-[#0f0f1c]"
+      className="relative overflow-hidden flex flex-col justify-center items-center text-center min-h-screen px-4 py-16 sm:py-24 bg-[#0f0f1c] will-change-transform"
+      style={{ touchAction: "manipulation" }}
     >
-      {/* ✨ Background Effects */}
-      <div className="absolute inset-0 -z-20 pointer-events-none">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.035]" />
-        <div className="absolute top-1/2 left-1/2 w-[700px] h-[700px] -translate-x-1/2 -translate-y-1/2 bg-blurple/20 blur-[160px] rounded-full opacity-10 animate-pulse" />
-        {/* Grid */}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-          className="absolute inset-0 w-full h-full opacity-5 mask-vignette"
-        >
-          {[...Array(12)].map((_, i) => (
-            <line key={`h-${i}`} x1="0" y1={(i + 1) * 8} x2="100" y2={(i + 1) * 8} stroke="white" strokeWidth="0.2" />
-          ))}
-          {[...Array(12)].map((_, i) => (
-            <line key={`v-${i}`} y1="0" x1={(i + 1) * 8} y2="100" x2={(i + 1) * 8} stroke="white" strokeWidth="0.2" />
-          ))}
-        </svg>
+      {/* Background Images with Overlay */}
+      <div className="absolute inset-0 -z-10 pointer-events-none">
+        {/* Desktop Image (hidden on mobile) */}
+        <img
+          src="/background-hero-desktop.jpg" // Replace with your desktop image path
+          alt="Hero Background Desktop"
+          className="w-full h-full object-cover opacity-80 hidden md:block"
+          loading="lazy"
+        />
+        {/* Mobile Image (hidden on desktop) */}
+        <img
+          src="/background-hero-mobile.jpg" // Replace with your mobile image path
+          alt="Hero Background Mobile"
+          className="w-full h-full object-cover opacity-80 md:hidden"
+          loading="lazy"
+        />
+        {/* Overlay for contrast */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f1c]/95 via-[#0f0f1c]/70 to-transparent" />
       </div>
 
-      <style>
-        {`
-          .mask-vignette {
-            mask-image: radial-gradient(circle at center, white 25%, transparent 85%);
-            -webkit-mask-image: radial-gradient(circle at center, white 25%, transparent 85%);
-          }
-        `}
-      </style>
+      {/* Content with enhanced styling */}
+      <motion.div
+        className="relative z-10 max-w-3xl mx-auto text-center"
+        style={{ y: yText }}
+        whileInView={{ opacity: 1 }}
+        initial={{ opacity: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mb-4"
+        >
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-indigo-400 drop-shadow-lg">
+            Drixe Studio
+          </h2>
+        </motion.div>
 
-      {/* Hidden SEO H1 */}
-      <h1 className="sr-only">Drixe Studio — Premium Discord Server Design & Setup</h1>
-
-      {/* Content */}
-     <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
-  <motion.h2
-    initial={{ opacity: 0, y: -30 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6, ease: "easeOut" }}
-    className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-snug"
-  >
-    <span className="text-3xl sm:text-5xl md:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-indigo-400 block mb-2">
-      Drixe Studio
-    </span>
-    <span className="block text-base sm:text-lg md:text-xl font-semibold text-white/90">
-      Professional Discord Server Setup & Customization
-    </span>
-  </motion.h2>
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+          className="h-[2px] bg-gradient-to-r from-transparent via-indigo-500 to-transparent mx-auto mb-6 w-1/2 sm:w-3/4"
+        />
 
         <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-          className="mt-6 text-gray-300 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed"
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="text-lg sm:text-xl text-white/90 font-medium mb-4"
         >
-          Premium Discord setups, uniquely styled and infused with community systems, automation, and engagement design.
+          Professional Discord Server Setup & Customization
         </motion.p>
 
         <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.45, duration: 0.6 }}
-          className="mt-3 text-sm sm:text-base text-gray-400 max-w-xl mx-auto"
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="text-sm sm:text-base text-gray-400 max-w-xl mx-auto mb-6 leading-relaxed"
         >
-          Designed by <span className="text-white font-semibold">Drixe</span>, inspired by <span className="italic font-semibold text-white">Lua</span>. Trusted by gamers, brands & creators worldwide.
+          Designed by <span className="text-white font-semibold">Drixe</span>, inspired by{" "}
+          <span className="italic font-semibold text-white">Lua</span>. Trusted by gamers, brands & creators worldwide.
         </motion.p>
 
-        {/* CTA Button */}
-       <motion.button
-  onClick={() => {
-    const el = document.getElementById("plans");
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  }}
-  initial={{ opacity: 0, y: 12 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ delay: 0.6, duration: 0.5 }}
-  className="mt-12 sm:mt-14 px-8 py-4 sm:py-5 rounded-full font-semibold text-white bg-white/5 border border-white/20 backdrop-blur-sm transition-all relative group text-sm sm:text-base hover:shadow-lg hover:shadow-blurple/30"
->
-  <span className="relative z-10">↓ Explore Plans</span>
-  <div className="absolute top-0 left-0 w-full h-full overflow-hidden rounded-full pointer-events-none">
-    <div className="w-2/3 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent absolute left-0 top-0 animate-slideShimmer" />
-  </div>
-</motion.button>
+        <motion.div
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+        >
+          <button
+            onClick={() => {
+              const el = document.getElementById("plans");
+              el?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-medium text-white bg-white/5 border border-white/20 hover:border-white/40 transition-all duration-300 relative overflow-hidden group focus:outline-none touch-manipulation"
+          >
+            <span className="relative z-10 flex items-center justify-center gap-2">
+              <span className="group-hover:-translate-y-1 transition-transform duration-300">↓</span>
+              Explore Plans
+            </span>
+            <span className="absolute inset-0 rounded-full overflow-hidden">
+              <span className="absolute inset-0 bg-gradient-to-r from-violet-600/0 via-violet-600/20 to-indigo-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
+            </span>
+          </button>
+        </motion.div>
+      </motion.div>
 
+      {/* Scroll indicator with CSS animation */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce sm:bottom-8">
+        <div className="w-3 h-6 rounded-full border-2 border-white/30 flex justify-center p-0.5 sm:w-3.5 sm:h-7">
+          <div className="w-1 h-2 rounded-full bg-white/80 animate-scrollIndicator sm:w-1.5 sm:h-3" />
+        </div>
       </div>
+
+      <style jsx global>{`
+        @keyframes bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+        @keyframes scrollIndicator {
+          0% { transform: translateY(0); opacity: 1; }
+          50% { transform: translateY(3px); opacity: 0.5; }
+          100% { transform: translateY(0); opacity: 1; }
+        }
+        .animate-bounce { animation: bounce 1.8s infinite ease-in-out; }
+        .animate-scrollIndicator { animation: scrollIndicator 1.2s infinite ease-in-out; }
+        @media (max-width: 640px) {
+          .min-h-screen { min-height: 100vh; }
+          .px-4 { padding-left: 0.75rem; padding-right: 0.75rem; }
+          .text-4xl { font-size: 2rem; }
+          .text-5xl { font-size: 2.5rem; }
+          .text-6xl { font-size: 2.75rem; }
+          .max-w-3xl { max-width: 100%; }
+          .mb-6 { margin-bottom: 1rem; }
+        }
+      `}</style>
     </section>
   );
 };

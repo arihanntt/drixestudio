@@ -1,108 +1,173 @@
 'use client';
 
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaChevronDown, FaChevronUp, FaDiscord } from "react-icons/fa";
-import Link from "next/link";
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaChevronDown, FaQuestionCircle } from 'react-icons/fa';
+import Link from 'next/link';
 
-const previewFaqs = [
-  {
-    question: "❓ What is Drixe Studio?",
-    answer:
-      "Drixe Studio is your go-to service for premium Discord server orders — offering UI design, bot setup, security, and full customization.",
-  },
-  {
-    question: "📦 What services do you offer?",
-    answer:
-      "We build full Discord communities: setups, bot systems, role management, UI design, branding, moderation tools, and more.",
-  },
-  {
-    question: "💸 What payment methods are accepted?",
-    answer:
-      "We accept UPI, PayPal, and crypto — all payments are secure and handled directly.",
-  },
-  {
-    question: "⏱️ How long does an order take?",
-    answer:
-      "Depending on complexity, 1–3 days is standard. You'll get live updates throughout via Discord.",
-  },
-];
-
-const FAQPreview = () => {
+const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState(null);
+  
+  const faqs = [
+    {
+      question: "What makes your service unique?",
+      answer: "We combine premium design with functional automation to create living Discord ecosystems, not just pretty interfaces.",
+      emoji: "✨",
+      gradient: "from-violet-600/20 to-indigo-600/20"
+    },
+    {
+      question: "How does the process work?",
+      answer: "After purchase, we schedule a consultation call to understand your needs before designing your perfect server.",
+      emoji: "⚙️",
+      gradient: "from-blue-600/20 to-cyan-600/20"
+    },
+    {
+      question: "Can I request custom features?",
+      answer: "Absolutely! Our Pro and Enterprise plans include fully customized solutions tailored to your community.",
+      emoji: "🔧", 
+      gradient: "from-emerald-600/20 to-teal-600/20"
+    },
+    {
+      question: "Do you offer ongoing support?",
+      answer: "All plans include 30 days of support, with extended maintenance options available.",
+      emoji: "🛡️",
+      gradient: "from-amber-600/20 to-orange-600/20"
+    }
+  ];
 
   const toggleFAQ = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
-    <section className="relative z-10 py-24 px-4 sm:px-6 bg-[#0f0f0f] text-white overflow-hidden border-t border-neutral-800">
-      {/* Background Glow */}
+    <section className="relative py-24 px-4 sm:px-6 overflow-hidden bg-[#0f0f1c] border-t border-neutral-800">
+      {/* Static background (no animations) */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0f0f1c] via-[#1a1a30] to-[#12101f]" />
-        <div className="absolute -top-32 left-1/3 w-[900px] h-[900px] bg-violet-700/25 blur-[200px] rounded-full opacity-25 animate-pulse" />
-        <div className="absolute top-[-15vw] -right-[15vw] w-[800px] h-[800px] bg-indigo-400/20 blur-[160px] rounded-full" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a12] via-[#0f0c24] to-[#0a0618]" />
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-violet-600/10" />
+        <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] rounded-full bg-indigo-600/10" />
       </div>
 
-      {/* Heading */}
-      <h2 className="text-3xl md:text-5xl font-extrabold text-center mb-12 text-transparent bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text">
-        ✨ Frequently Asked Questions
-      </h2>
-
-      {/* FAQs */}
-      <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-        {previewFaqs.map((faq, index) => (
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-16">
           <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
-            className="bg-[#1a1a1a]/60 border border-blurple/30 rounded-2xl shadow-xl p-5 backdrop-blur-md"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="inline-block"
           >
-            <button
-              onClick={() => toggleFAQ(index)}
-              className="flex justify-between items-center w-full text-left text-lg font-semibold"
-            >
-              {faq.question}
-              <motion.span
-                initial={false}
-                animate={{ rotate: openIndex === index ? 180 : 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                {openIndex === index ? <FaChevronUp /> : <FaChevronDown />}
-              </motion.span>
-            </button>
-
-            <AnimatePresence>
-              {openIndex === index && (
-                <motion.div
-                  className="mt-3 text-sm text-gray-300"
-                  initial={{ opacity: 0, scaleY: 0 }}
-                  animate={{ opacity: 1, scaleY: 1 }}
-                  exit={{ opacity: 0, scaleY: 0 }}
-                  transition={{ duration: 0.2 }}
-                  style={{ transformOrigin: "top" }}
-                >
-                  {faq.answer}
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <span className="text-xs sm:text-sm font-mono text-violet-400 mb-2 block">
+              NEED ANSWERS?
+            </span>
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-violet-300">
+                Frequently
+              </span>{' '}
+              <span className="relative inline-block">
+                <span className="relative z-10">Asked</span>
+                <span className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-violet-400 to-indigo-400 rounded-full" />
+              </span>{' '}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-indigo-400">
+                Questions
+              </span>
+            </h2>
           </motion.div>
-        ))}
-      </div>
 
-      {/* View All Button */}
-      <div className="mt-14 text-center">
-        <Link
-          href="/faq"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-blurple text-white font-semibold shadow hover:scale-105 transition-all duration-200"
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-gray-400 text-base sm:text-lg mt-6 max-w-3xl mx-auto"
+          >
+            Quick answers to common questions about our services and process.
+          </motion.p>
+        </div>
+
+        {/* FAQ Items - Optimized accordion */}
+        <div className="grid md:grid-cols-2 gap-4">
+          {faqs.map((faq, index) => (
+            <div key={index} className="relative">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className={`bg-white/5 border border-white/10 rounded-xl overflow-hidden ${openIndex === index ? 'shadow-lg' : 'shadow-md'}`}
+              >
+                <button
+                  onClick={() => toggleFAQ(index)}
+                  className="w-full flex items-center justify-between p-5 text-left hover:bg-white/5 transition-colors"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-xl bg-gradient-to-br ${faq.gradient}`}>
+                      {faq.emoji}
+                    </div>
+                    <h3 className="font-semibold text-gray-100">{faq.question}</h3>
+                  </div>
+                  <motion.div
+                    animate={{ rotate: openIndex === index ? 180 : 0 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    className="text-gray-400"
+                  >
+                    <FaChevronDown />
+                  </motion.div>
+                </button>
+
+                <AnimatePresence>
+                  {openIndex === index && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{
+                        height: "auto",
+                        opacity: 1,
+                        transition: {
+                          height: { type: "spring", stiffness: 300, damping: 25 },
+                          opacity: { duration: 0.2 }
+                        }
+                      }}
+                      exit={{
+                        height: 0,
+                        opacity: 0,
+                        transition: {
+                          height: { type: "spring", stiffness: 300, damping: 25 },
+                          opacity: { duration: 0.15 }
+                        }
+                      }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-5 pb-5 text-gray-300 text-sm">
+                        {faq.answer}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="mt-16 text-center"
         >
-          <FaDiscord className="text-lg" />
-          View All FAQs
-        </Link>
+          <Link
+            href="/faq"
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold hover:from-indigo-700 hover:to-violet-700 transition-colors"
+          >
+            <FaQuestionCircle className="text-xl" />
+            <span>View Full FAQ</span>
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
 };
 
-export default FAQPreview;
+export default FAQSection;

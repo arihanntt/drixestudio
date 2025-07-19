@@ -1,20 +1,25 @@
 'use client';
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { MdCurrencyExchange } from "react-icons/md";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import MobileMenu from "./MobileMenu";
 import { usePathname, useRouter } from "next/navigation";
 
-const Navbar = ({ currency, setCurrency }) => {
+const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const currencies = ["INR", "USD", "EUR", "GBP", "AED", "CAD"];
+  const [activeLink, setActiveLink] = useState("");
+  const [hoveredLink, setHoveredLink] = useState(null);
+  const navbarRef = useRef(null);
 
   const pathname = usePathname();
   const router = useRouter();
-  const isHome = pathname === "/";
+
+  // Enhanced scroll effects
+  const { scrollY } = useScroll();
+  const backgroundOpacity = useTransform(scrollY, [0, 100], [0.7, 0.95]);
+  const backgroundBlur = useTransform(scrollY, [0, 100], [8, 16]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -22,13 +27,26 @@ const Navbar = ({ currency, setCurrency }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const currentPath = pathname.split('/')[1] || 'home';
+    setActiveLink(currentPath);
+  }, [pathname]);
+
+  const navLinks = [
+    { label: "PLANS", path: "/plans", icon: "💸", color: "from-indigo-400 to-purple-500" },
+    { label: "WHY US", path: "/whyus", icon: "🌟", color: "from-amber-400 to-orange-500" },
+    { label: "FAQ", path: "/faq", icon: "❓", color: "from-blue-400 to-cyan-500" },
+    { label: "BLOGS", path: "/blog", icon: "📚", color: "from-emerald-400 to-teal-500" },
+    { label: "CONTACT", path: "/contact", icon: "📞", color: "from-pink-400 to-rose-500" },
+  ];
+
   return (
     <>
       {/* Backdrop for mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-40 bg-black/80 backdrop-blur-xl"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -39,82 +57,147 @@ const Navbar = ({ currency, setCurrency }) => {
 
       {/* Main Navbar */}
       <motion.nav
-        initial={{ y: -80, opacity: 0 }}
+        ref={navbarRef}
+        initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`fixed top-6 inset-x-0 mx-auto z-50 w-[95%] max-w-7xl px-6 py-5 rounded-2xl flex items-center justify-between backdrop-blur-lg border bg-white/5 shadow-lg transition-all duration-500
-        ${
-          mobileOpen
-            ? "border-0 rounded-t-2xl rounded-b-none"
-            : scrolled
-            ? "border border-white/10 rounded-2xl"
-            : "border border-transparent rounded-2xl"
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        style={{
+          backgroundColor: useTransform(
+            scrollY,
+            [0, 100],
+            ['rgba(15, 15, 18, 0.85)', 'rgba(10, 10, 12, 0.95)']
+          ),
+          backdropFilter: backgroundBlur,
+          borderBottom: useTransform(
+            scrollY,
+            [0, 100],
+            ['1px solid rgba(255,255,255,0.05)', '1px solid rgba(255,255,255,0.1)']
+          )
+        }}
+        className={`fixed top-0 inset-x-0 z-50 w-full px-4 py-3 flex items-center justify-between transition-all duration-500 ${
+          mobileOpen ? "bg-gray-900/95" : ""
         }`}
       >
-        {/* Left: Navigation Buttons */}
-        <div className="hidden md:flex items-center gap-8">
-          {[
-            { label: "PLANS", path: "/plans", gradient: "from-indigo-400 to-pink-500" },
-            { label: "WHY US", path: "/whyus", gradient: "from-violet-400 to-purple-500" },
-            { label: "FAQ", path: "/faq", gradient: "from-blue-400 to-indigo-500" },
-            { label: "BLOGS", path: "/blog", gradient: "from-yellow-400 to-red-500" },
-            { label: "CONTACT", path: "/contact", gradient: "from-pink-400 to-indigo-500" },
-          ].map(({ label, path, gradient }) => (
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-1 relative">
+          {navLinks.map(({ label, path, color }) => (
             <motion.button
               key={label}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.96 }}
+              onHoverStart={() => setHoveredLink(label)}
+              onHoverEnd={() => setHoveredLink(null)}
+              whileTap={{ scale: 0.95 }}
               onClick={() => router.push(path)}
-              className="group relative text-sm font-semibold text-gray-300 hover:text-white tracking-wide transition"
+              className={`relative px-5 py-3 text-sm font-semibold transition-all z-10 ${
+                activeLink === path.slice(1) 
+                  ? "text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
+                  : "text-gray-200 hover:text-white"
+              }`}
             >
               {label}
-              <span
-                className={`absolute left-0 -bottom-1 h-[2px] w-0 group-hover:w-full bg-gradient-to-r ${gradient} transition-all duration-300 rounded-full`}
-              />
+              
+              {activeLink === path.slice(1) && (
+                <motion.span 
+                  layoutId="navActiveIndicator"
+                  className="absolute left-0 right-0 bottom-1 h-[2px] bg-gradient-to-r via-80%"
+                  style={{ background: `linear-gradient(to right, ${color.replace('from-', '').replace('to-', '').replace(' ', ', ')})` }}
+                  transition={{ type: "spring", bounce: 0.25, duration: 0.6 }}
+                />
+              )}
             </motion.button>
           ))}
+          
+          <AnimatePresence>
+            {hoveredLink && (
+              <motion.div
+                layoutId="hoverBg"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                className="absolute inset-0 rounded-xl bg-white/5 backdrop-blur-sm"
+                style={{
+                  width: '100px',
+                  left: navLinks.findIndex(link => link.label === hoveredLink) * 100 + 'px'
+                }}
+              />
+            )}
+          </AnimatePresence>
         </div>
 
-        {/* Center: Logo */}
-        <div
+        {/* Optimized Logo for Mobile */}
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={() => router.push("/")}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap cursor-pointer"
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
         >
-          <h1 className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-widest bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent select-none">
-            DRIXE STUDIO
-          </h1>
-        </div>
+          <div className="relative whitespace-nowrap">
+            {/* Responsive logo text */}
+            <h1 className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] select-none px-1">
+              DRIXE STUDIO
+            </h1>
+            
+            {/* Preserved hover effects */}
+            <motion.span 
+              className="absolute inset-0 bg-gradient-to-r from-purple-500 to-indigo-600 opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 -z-10"
+              initial={{ opacity: 0 }}
+            />
+            
+            {/* Preserved particle effects - reduced for mobile */}
+            <div className="absolute -inset-2 overflow-hidden pointer-events-none">
+              {[...Array(2)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0 }}
+                  animate={{
+                    opacity: [0, 0.3, 0],
+                    x: Math.random() * 30 - 15,
+                    y: Math.random() * 30 - 15,
+                    transition: {
+                      duration: Math.random() * 3 + 2,
+                      repeat: Infinity,
+                      repeatType: 'reverse',
+                      delay: Math.random() * 2
+                    }
+                  }}
+                  className="absolute w-0.5 h-0.5 rounded-full bg-white"
+                />
+              ))}
+            </div>
+          </div>
+        </motion.div>
 
-        {/* Right: Currency Selector + Mobile Toggle */}
-        <div className="flex items-center space-x-4">
-          {isHome && (
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              className="hidden md:flex items-center bg-[#1a1a1a] border border-gray-700 rounded-lg px-3 py-[6px] gap-2 text-gray-300 hover:border-indigo-500 transition-all duration-300"
-            >
-              <MdCurrencyExchange className="text-indigo-400 text-lg" />
-              <select
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                className="bg-transparent outline-none text-sm uppercase"
-              >
-                {currencies.map((cur) => (
-                  <option key={cur} value={cur} className="bg-black text-white">
-                    {cur}
-                  </option>
-                ))}
-              </select>
-            </motion.div>
-          )}
-
-          {/* Mobile Menu Toggle */}
-          <button
-            className="md:hidden text-white text-2xl z-50"
+        {/* Mobile Toggle */}
+        <div className="flex items-center md:hidden">
+          <motion.button
+            initial={false}
+            animate={mobileOpen ? "open" : "closed"}
             onClick={() => setMobileOpen(!mobileOpen)}
+            className="relative z-50 p-2 space-y-1.5"
             aria-label="Toggle Menu"
           >
-            {mobileOpen ? <FaTimes /> : <FaBars />}
-          </button>
+            <motion.span
+              variants={{
+                closed: { rotate: 0, y: 0, width: "20px" },
+                open: { rotate: 45, y: 6, width: "20px" }
+              }}
+              className="block h-0.5 bg-white origin-center"
+            />
+            <motion.span
+              variants={{
+                closed: { opacity: 1, width: "20px" },
+                open: { opacity: 0, width: 0 }
+              }}
+              className="block h-0.5 bg-white"
+            />
+            <motion.span
+              variants={{
+                closed: { rotate: 0, y: 0, width: "20px" },
+                open: { rotate: -45, y: -6, width: "20px" }
+              }}
+              className="block h-0.5 bg-white origin-center"
+            />
+          </motion.button>
         </div>
 
         {/* Mobile Menu */}
@@ -122,9 +205,8 @@ const Navbar = ({ currency, setCurrency }) => {
           {mobileOpen && (
             <MobileMenu
               setMobileOpen={setMobileOpen}
-              currency={currency}
-              setCurrency={setCurrency}
-              isHome={isHome}
+              activeLink={activeLink}
+              navLinks={navLinks}
             />
           )}
         </AnimatePresence>

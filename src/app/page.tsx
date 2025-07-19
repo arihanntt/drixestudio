@@ -1,23 +1,23 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { useScroll, useTransform } from 'framer-motion';
+import { useEffect, useRef, useState } from "react";
+import { useScroll, useTransform } from "framer-motion";
 
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import PlanCard from '@/components/PlanCard';
-import Modal from '@/components/Modal';
-import ContactModal from '@/components/ContactModal';
-import FAQ from '@/components/FAQ';
-import StatsSection from '@/components/StatsSection';
-import ChatBotModal from '@/components/ChatBotModal';
-import SmoothScrollWrapper from '@/components/SmoothScrollWrapper';
-import HeroSection from '@/components/HeroSection';
-import WhyUs from '@/components/WhyUs';
-import ReviewStrip from '@/components/ReviewStrip';
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import PlanCard from "@/components/PlanCard";
+import Modal from "@/components/Modal";
+import ContactModal from "@/components/ContactModal";
+import FAQ from "@/components/FAQ";
+import StatsSection from "@/components/StatsSection";
+import ChatBotModal from "@/components/ChatBotModal";
+import SmoothScrollWrapper from "@/components/SmoothScrollWrapper";
+import HeroSection from "@/components/HeroSection";
+import WhyUs from "@/components/WhyUs";
+import ReviewStrip from "@/components/ReviewStrip";
+import PlansSection from "@/components/PlansSection";
 
 export default function HomePage() {
-  const [currency, setCurrency] = useState("INR");
   const [showModal, setShowModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("");
   const [showContactModal, setShowContactModal] = useState(false);
@@ -26,40 +26,15 @@ export default function HomePage() {
 
   const heroRef = useRef(null);
 
-  const exchangeRates: Record<string, number> = {
-    INR: 1,
-    USD: 0.012,
-    EUR: 0.011,
-    GBP: 0.0095,
-    AED: 0.044,
-    CAD: 0.017,
-  };
-
-  type Currency = "INR" | "USD" | "EUR" | "GBP";
-
-  const getCurrencySymbol = (cur: Currency): string => {
-    const symbols: Record<Currency, string> = {
-      INR: "₹",
-      USD: "$",
-      EUR: "€",
-      GBP: "£",
-    };
-    return symbols[cur];
-  };
+  // Removed currency-related state and functions since they're no longer needed in Navbar
+  // const [currency, setCurrency] = useState("INR");
+  // const exchangeRates: Record<string, number> = { ... };
+  // const getCurrencySymbol = (cur: Currency): string => { ... };
 
   const handleOpenModal = (planName: string) => {
     setSelectedPlan(planName);
     setShowModal(true);
   };
-
-  useEffect(() => {
-    fetch("https://ipapi.co/json/")
-      .then((res) => res.json())
-      .then((data) => {
-        const cc = data.currency; // e.g. "USD"
-        if (exchangeRates[cc]) setCurrency(cc);
-      });
-  }, []);
 
   useEffect(() => {
     if (heroRef.current) setScrollReady(true);
@@ -71,60 +46,13 @@ export default function HomePage() {
 
   return (
     <SmoothScrollWrapper>
-      {/* ✅ Navbar added here */}
-      <Navbar currency={currency} setCurrency={setCurrency} />
+      <Navbar /> {/* Removed currency and setCurrency props */}
 
       <div className="min-h-screen bg-[#0f0f0f] text-white overflow-x-hidden">
         <HeroSection />
-        <StatsSection />
         <WhyUs />
-
-        {/* PLANS SECTION AS REDIRECT CTA */}
-        <section
-          id="plans"
-          className="relative z-10 py-24 sm:py-32 px-4 sm:px-6 bg-[#0f0f0f] text-white border-t border-neutral-800 overflow-hidden"
-        >
-          {/* BACKGROUND EFFECTS */}
-          <div className="absolute inset-0 -z-10">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#0f0f1c] via-[#1a1a30] to-[#12101f]" />
-            <div className="absolute -top-32 left-1/3 w-[900px] h-[900px] bg-violet-700/25 blur-[200px] rounded-full opacity-25 animate-pulse" />
-            <div className="absolute top-[-15vw] -right-[15vw] w-[800px] h-[800px] bg-indigo-400/20 blur-[160px] rounded-full" />
-          </div>
-
-          {/* HEADLINE */}
-          <div className="text-center mb-12">
-            <p className="text-sm font-medium text-white/60 tracking-wider uppercase mb-2">
-              Pricing Plans
-            </p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center max-w-2xl mx-auto leading-tight">
-              <span className="bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
-                Choose a Plan That Fits You
-              </span>
-            </h2>
-            <p className="text-sm sm:text-base text-white/50 mt-4 italic">
-              👉 Click below to view all plans in detail
-            </p>
-          </div>
-
-          {/* REDIRECT BOX */}
-          <div className="flex justify-center">
-            <div
-              onClick={() => window.location.href = "/plans"}
-              className="cursor-pointer w-full max-w-3xl mx-auto bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 text-white rounded-2xl p-10 shadow-xl hover:shadow-2xl text-center"
-            >
-              <h3 className="text-2xl sm:text-3xl font-bold mb-2">View All Plans</h3>
-              <p className="text-base sm:text-lg opacity-80">
-                Explore features, pricing, and everything you need to pick the best package.
-              </p>
-              <div className="mt-6">
-                <button className="px-6 py-3 bg-white text-black font-semibold rounded-full hover:scale-105 transition">
-                  Go to Plans →
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-
+        <StatsSection />
+        <PlansSection />
         <FAQ />
         <ReviewStrip />
         <Footer />
@@ -145,10 +73,7 @@ export default function HomePage() {
         {/* MODALS */}
         {chatOpen && <ChatBotModal onClose={() => setChatOpen(false)} />}
         {showModal && (
-          <Modal
-            onClose={() => setShowModal(false)}
-            plan={selectedPlan}
-          />
+          <Modal isOpen={showModal} onClose={() => setShowModal(false)} plan={selectedPlan} />
         )}
         {showContactModal && (
           <ContactModal onClose={() => setShowContactModal(false)} />

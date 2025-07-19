@@ -7,81 +7,115 @@ import { useRouter } from "next/navigation";
 const WhyUs = () => {
   const router = useRouter();
 
+  const features = [
+    {
+      title: "Modular Design",
+      description: "Customizable components that grow with your community",
+      icon: "🧩"
+    },
+    {
+      title: "AI Integration",
+      description: "Smart bots that learn and adapt to your server's needs",
+      icon: "🤖"
+    },
+    {
+      title: "24/7 Support",
+      description: "Dedicated experts always available to assist you",
+      icon: "🛡️"
+    },
+    {
+      title: "Premium Assets",
+      description: "Exclusive emojis, banners, and custom artwork",
+      icon: "🎨"
+    }
+  ];
+
   return (
-    <section className="relative z-10 py-24 sm:py-32 px-4 sm:px-6 overflow-hidden bg-[#0f0f0f] text-white border-t border-neutral-800">
-      {/* Background Gradient */}
+    <section 
+      className="relative z-10 py-24 sm:py-32 px-4 sm:px-6 overflow-hidden min-h-[80vh] flex items-center justify-center border-t border-neutral-800"
+    >
+      {/* Simplified Background */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0f0f1c] via-[#1a1a30] to-[#12101f]" />
-        <div className="absolute -top-32 left-1/3 w-[900px] h-[900px] bg-violet-700/25 blur-[200px] rounded-full opacity-25 animate-pulse" />
-        <div className="absolute top-[-15vw] -right-[15vw] w-[800px] h-[800px] bg-indigo-400/20 blur-[160px] rounded-full" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a12] via-[#0f0c24] to-[#0a0618]" />
+        <div className="absolute -left-[200px] -top-[200px] w-[600px] h-[600px] rounded-full bg-violet-600/20 blur-[120px] opacity-20" />
+        <div className="absolute -right-[200px] -bottom-[200px] w-[600px] h-[600px] rounded-full bg-indigo-600/20 blur-[120px] opacity-20" />
       </div>
 
-      {/* Header */}
-      <div className="text-center mb-12">
-        <motion.h2
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          viewport={{ once: true }}
-          className="text-3xl sm:text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-indigo-400"
-        >
-          Why <span className="drop-shadow text-white">Drixe Studio</span>?
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-gray-400 text-sm mt-4 max-w-xl mx-auto"
-        >
-          We don’t just build servers — we craft scalable ecosystems for your brand.
-        </motion.p>
-      </div>
+      {/* Content Container */}
+      <div className="max-w-7xl mx-auto w-full relative">
+        {/* Header */}
+        <div className="text-center mb-12 sm:mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="inline-block"
+          >
+            <span className="text-xs sm:text-sm font-mono text-violet-400 mb-2 block">
+              WHY CHOOSE US
+            </span>
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-violet-300">
+                Style +
+              </span>{' '}
+              <span className="relative inline-block">
+                <span className="relative z-10">Systems +</span>
+                <span className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-violet-400 to-indigo-400 rounded-full" />
+              </span>{' '}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-indigo-400">
+                Support
+              </span>
+            </h2>
+          </motion.div>
 
-      {/* Animated Text Block */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 1.2, ease: "easeOut" }}
-        viewport={{ once: true }}
-        className="relative max-w-3xl mx-auto text-center"
-      >
-        <div className="inline-block text-lg sm:text-xl text-gray-300 leading-relaxed">
-          <p className="bg-clip-text text-transparent bg-gradient-to-r from-white/80 via-violet-400 to-white/70 bg-[length:200%_auto] animate-text-reveal">
-            Modular automation, smart permissions, blazing-fast delivery — and a lifetime of reliable support.
-          </p>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-gray-400 text-base sm:text-lg mt-4 sm:mt-6 max-w-3xl mx-auto"
+          >
+            We architect <span className="text-violet-300">next-generation</span> Discord ecosystems that 
+            drive engagement, foster communities, and elevate brands.
+          </motion.p>
         </div>
-      </motion.div>
 
-      {/* CTA Button */}
-      <div className="text-center mt-14">
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          onClick={() => router.push("/whyus")}
-          className="px-6 py-2.5 rounded-full bg-gradient-to-r from-violet-600 to-indigo-500 text-white font-semibold hover:opacity-90 transition shadow-lg"
+        {/* Features Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-24">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+              viewport={{ once: true }}
+              className="p-4 sm:p-6 rounded-xl bg-gradient-to-br from-black/40 to-gray-900/30 border border-gray-700/50 backdrop-blur-sm"
+            >
+              <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">{feature.icon}</div>
+              <h3 className="text-lg sm:text-xl font-bold mb-1 sm:mb-2 text-white">{feature.title}</h3>
+              <p className="text-sm sm:text-base text-gray-400">{feature.description}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center"
         >
-          Explore More →
-        </motion.button>
+          <button
+            onClick={() => router.push("/whyus")}
+            className="relative px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold text-base sm:text-lg overflow-hidden group hover:shadow-lg hover:shadow-violet-500/30 transition-all"
+          >
+            <span className="relative z-10">Discover Why We're Different</span>
+            <span className="absolute inset-0 bg-gradient-to-r from-violet-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          </button>
+        </motion.div>
       </div>
-
-      {/* Glow Bubbles */}
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-violet-500/20 blur-3xl rounded-full animate-pulse opacity-30 pointer-events-none" />
-      <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-400/20 blur-3xl rounded-full animate-pulse opacity-30 pointer-events-none" />
-
-      {/* Reveal Animation */}
-      <style>
-        {`
-          .animate-text-reveal {
-            background-position: 200% center;
-            animation: gradientReveal 6s ease-in-out forwards;
-          }
-
-          @keyframes gradientReveal {
-            0% { background-position: 200% center; opacity: 0; }
-            100% { background-position: 0% center; opacity: 1; }
-          }
-        `}
-      </style>
     </section>
   );
 };
