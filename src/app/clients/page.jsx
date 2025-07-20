@@ -97,7 +97,7 @@ export default function ClientsPage() {
           className="max-w-md w-full bg-white/10 backdrop-blur-sm rounded-2xl shadow-xl p-8 text-center border border-white/20"
         >
           <div className="text-white text-5xl mb-6">🔐</div>
-          <h1 className="text-2xl font-bold text-white mb-2">Admin Portal</h1>
+          <h1 className="text-2xl font-bold text-white mb-2">Clients launch portal</h1>
           <p className="text-white/80 mb-8">Enter the admin password to continue</p>
           
           <motion.div whileHover={{ scale: 1.02 }}>
