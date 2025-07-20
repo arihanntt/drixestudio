@@ -1,11 +1,26 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FEATURES } from '../../../data/featuresData';
 
-const ClientLaunchSubPage = () => {
+// Loading spinner component for the Suspense fallback
+const LoadingSpinner = () => (
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-gray-50">
+    <div className="text-center">
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
+        className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full mx-auto mb-4"
+      />
+      <h2 className="text-xl font-semibold text-gray-700">Loading your launch guide...</h2>
+    </div>
+  </div>
+);
+
+// Main component
+const ClientLaunchSubPageContent = () => {
   const searchParams = useSearchParams();
   const sectionRef = useRef(null);
   const [html2pdf, setHtml2pdf] = useState(null);
@@ -532,6 +547,15 @@ const ClientLaunchSubPage = () => {
         </motion.div>
       </div>
     </div>
+  );
+};
+
+// Wrapper component with Suspense boundary
+const ClientLaunchSubPage = () => {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <ClientLaunchSubPageContent />
+    </Suspense>
   );
 };
 
