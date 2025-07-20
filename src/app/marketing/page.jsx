@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 export default function Marketing() {
   const [message, setMessage] = useState('');
   const [emails, setEmails] = useState('');
-  const [subject, setSubject] = useState('Message from Your Website');
+  const [subject, setSubject] = useState('');
   const [status, setStatus] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
@@ -31,7 +31,6 @@ export default function Marketing() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Load templates, email lists, and history from localStorage
         const savedTemplates = JSON.parse(localStorage.getItem('emailTemplates') || '[]');
         const savedEmailLists = JSON.parse(localStorage.getItem('emailLists') || '[]');
         const savedHistory = JSON.parse(localStorage.getItem('sendHistory') || '[]');
@@ -39,7 +38,6 @@ export default function Marketing() {
         if (Array.isArray(savedEmailLists)) setEmailLists(savedEmailLists);
         if (Array.isArray(savedHistory)) setSendHistory(savedHistory);
 
-        // Load scheduled emails from MongoDB
         const response = await fetch('/api/schedule-emails', { method: 'GET' });
         const result = await response.json();
         if (response.ok) {
@@ -55,7 +53,6 @@ export default function Marketing() {
     loadData();
   }, []);
 
-  // Password protection
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
     if (passwordInput === process.env.NEXT_PUBLIC_MAIN_PAGE_PASSWORD) {
@@ -68,7 +65,6 @@ export default function Marketing() {
     }
   };
 
-  // Save template
   const handleSaveTemplate = () => {
     if (!templateName || !message) {
       setStatus('Error: Enter a template name and message');
@@ -94,7 +90,6 @@ export default function Marketing() {
     }
   };
 
-  // Edit template
   const handleEditTemplate = (template) => {
     setEditTemplate(template);
     setTemplateName(template.name);
@@ -102,7 +97,6 @@ export default function Marketing() {
     setActiveTab('compose');
   };
 
-  // Save edited template
   const handleSaveEditedTemplate = () => {
     if (!templateName || !message) {
       setStatus('Error: Enter a template name and message');
@@ -125,7 +119,6 @@ export default function Marketing() {
     }
   };
 
-  // Delete template
   const handleDeleteTemplate = (name) => {
     if (!confirm(`Are you sure you want to delete the template "${name}"?`)) return;
     try {
@@ -138,7 +131,6 @@ export default function Marketing() {
     }
   };
 
-  // Duplicate template
   const handleDuplicateTemplate = (template) => {
     const newName = `${template.name} (Copy)`;
     if (templates.some((t) => t.name === newName)) {
@@ -160,7 +152,6 @@ export default function Marketing() {
     }
   };
 
-  // Save email list
   const handleSaveEmailList = () => {
     if (!emailListName || !emails) {
       setStatus('Error: Enter a list name and emails');
@@ -191,7 +182,6 @@ export default function Marketing() {
     }
   };
 
-  // Edit email list
   const handleEditEmailList = (list) => {
     setEditEmailList(list);
     setEmailListName(list.name);
@@ -199,7 +189,6 @@ export default function Marketing() {
     setActiveTab('compose');
   };
 
-  // Save edited email list
   const handleSaveEditedEmailList = () => {
     if (!emailListName || !emails) {
       setStatus('Error: Enter a list name and emails');
@@ -232,7 +221,6 @@ export default function Marketing() {
     }
   };
 
-  // Delete email list
   const handleDeleteEmailList = (name) => {
     if (!confirm(`Are you sure you want to delete the email list "${name}"?`)) return;
     try {
@@ -246,7 +234,6 @@ export default function Marketing() {
     }
   };
 
-  // Duplicate email list
   const handleDuplicateEmailList = (list) => {
     const newName = `${list.name} (Copy)`;
     if (emailLists.some((l) => l.name === newName)) {
@@ -268,7 +255,6 @@ export default function Marketing() {
     }
   };
 
-  // Delete scheduled email
   const handleDeleteScheduledEmail = async (id) => {
     if (!confirm('Are you sure you want to delete this scheduled email?')) return;
     try {
@@ -290,13 +276,11 @@ export default function Marketing() {
     }
   };
 
-  // Load template
   const handleLoadTemplate = (templateContent) => {
     setMessage(templateContent);
     setActiveTab('compose');
   };
 
-  // Load email list
   const handleLoadEmailList = (listName) => {
     const list = emailLists.find((l) => l.name === listName);
     if (list) {
@@ -306,7 +290,6 @@ export default function Marketing() {
     }
   };
 
-  // Add single email
   const handleAddSingleEmail = () => {
     if (!singleEmail) return;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -319,7 +302,6 @@ export default function Marketing() {
     setEmailValidation('');
   };
 
-  // Validate emails in textarea
   const handleEmailChange = (value) => {
     setEmails(value);
     const validation = validateEmails(value);
@@ -330,7 +312,6 @@ export default function Marketing() {
     );
   };
 
-  // Validate emails
   const validateEmails = (emailString) => {
     const emailArray = emailString
       .split('\n')
@@ -346,11 +327,10 @@ export default function Marketing() {
     };
   };
 
-  // Clear form
   const handleClearForm = () => {
     setMessage('');
     setEmails('');
-    setSubject('Message from Your Website');
+    setSubject('');
     setSingleEmail('');
     setTemplateName('');
     setEmailListName('');
@@ -361,7 +341,6 @@ export default function Marketing() {
     setStatus('Form cleared');
   };
 
-  // Clear history
   const handleClearHistory = () => {
     if (!confirm('Are you sure you want to clear send history?')) return;
     try {
@@ -373,7 +352,6 @@ export default function Marketing() {
     }
   };
 
-  // Export data
   const handleExportData = async () => {
     try {
       const response = await fetch('/api/schedule-emails', { method: 'GET' });
@@ -400,7 +378,6 @@ export default function Marketing() {
     }
   };
 
-  // Import data
   const handleImportData = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -427,13 +404,11 @@ export default function Marketing() {
           localStorage.setItem('sendHistory', JSON.stringify(data.sendHistory));
         }
         if (data.scheduledEmails) {
-          // Clear existing schedules in MongoDB
           await fetch('/api/schedule-emails', {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ all: true }),
           });
-          // Save imported schedules
           for (const email of data.scheduledEmails) {
             await fetch('/api/schedule-emails', {
               method: 'POST',
@@ -455,7 +430,6 @@ export default function Marketing() {
     fileInputRef.current.value = '';
   };
 
-  // Send or schedule emails
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validation = validateEmails(emails);
@@ -467,7 +441,7 @@ export default function Marketing() {
       setStatus('Error: Maximum 50 email addresses allowed.');
       return;
     }
-    if (!message || !subject) {
+    if (!message || !subject.trim()) {
       setStatus('Error: Message and subject are required');
       return;
     }
@@ -481,7 +455,6 @@ export default function Marketing() {
     setShowModal(true);
   };
 
-  // Confirm send or schedule
   const handleConfirmSend = async () => {
     setShowModal(false);
     const emailArray = emails
@@ -489,18 +462,19 @@ export default function Marketing() {
       .map((email) => email.trim())
       .filter((email) => email);
     if (scheduleTime) {
-      // Schedule email
       try {
         const newScheduledEmail = {
           id: Date.now().toString(),
           template: templateName || 'Custom',
           recipients: selectedList || `${emailArray.length} emails`,
           emails: emailArray,
-          subject,
+          subject: subject.trim(),
           message,
           scheduleTime: new Date(scheduleTime).toISOString(),
           status: 'pending',
+          createdAt: new Date().toISOString(),
         };
+        console.log('Scheduling email with subject:', subject.trim());
         const response = await fetch('/api/schedule-emails', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -518,16 +492,16 @@ export default function Marketing() {
         setStatus('Error: Failed to schedule email');
       }
     } else {
-      // Immediate send
       setStatus('Sending...');
       try {
+        console.log('Sending email with subject:', subject.trim());
         const response = await fetch('/api/send-emails', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             message,
             emails: emailArray,
-            subject,
+            subject: subject.trim(),
             timestamp: new Date().toISOString(),
           }),
         });
@@ -537,7 +511,7 @@ export default function Marketing() {
             {
               timestamp: new Date().toISOString(),
               recipients: emailArray.length,
-              subject,
+              subject: subject.trim(),
               messagePreview: message.substring(0, 50) + (message.length > 50 ? '...' : ''),
               status: 'Success',
             },
@@ -552,7 +526,7 @@ export default function Marketing() {
             {
               timestamp: new Date().toISOString(),
               recipients: emailArray.length,
-              subject,
+              subject: subject.trim(),
               messagePreview: message.substring(0, 50) + (message.length > 50 ? '...' : ''),
               status: 'Failed',
               error: result.error || 'Unknown error',
@@ -568,7 +542,7 @@ export default function Marketing() {
           {
             timestamp: new Date().toISOString(),
             recipients: emailArray.length,
-            subject,
+            subject: subject.trim(),
             messagePreview: message.substring(0, 50) + (message.length > 50 ? '...' : ''),
             status: 'Failed',
             error: error.message || 'Connection error',
@@ -582,7 +556,6 @@ export default function Marketing() {
     }
   };
 
-  // Filter templates, lists, and scheduled emails
   const filteredTemplates = templates.filter(
     (template) =>
       template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -641,7 +614,6 @@ export default function Marketing() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex pt-16">
-      {/* Sidebar */}
       <div
         className={`fixed ${
           isSidebarCollapsed ? 'w-16' : 'w-80'
@@ -671,7 +643,6 @@ export default function Marketing() {
         )}
 
         <div className="space-y-6">
-          {/* Templates Section */}
           <div>
             {!isSidebarCollapsed && (
               <h3 className="text-lg font-semibold text-indigo-300 mb-2">Saved Templates</h3>
@@ -731,7 +702,6 @@ export default function Marketing() {
             )}
           </div>
 
-          {/* Email Lists Section */}
           <div>
             {!isSidebarCollapsed && (
               <h3 className="text-lg font-semibold text-indigo-300 mb-2">Saved Email Lists</h3>
@@ -782,7 +752,6 @@ export default function Marketing() {
             )}
           </div>
 
-          {/* Scheduled Emails Section */}
           <div>
             {!isSidebarCollapsed && (
               <h3 className="text-lg font-semibold text-indigo-300 mb-2">Scheduled Emails</h3>
@@ -823,7 +792,6 @@ export default function Marketing() {
             )}
           </div>
 
-          {/* History Section */}
           <div>
             {!isSidebarCollapsed && (
               <div className="flex justify-between items-center">
@@ -871,7 +839,6 @@ export default function Marketing() {
         </div>
       </div>
 
-      {/* Main Content */}
       <div
         className={`flex-1 transition-all duration-300 ${isSidebarCollapsed ? 'ml-16' : 'ml-80'} p-6`}
       >
@@ -1038,7 +1005,7 @@ export default function Marketing() {
                   id="schedule"
                   value={scheduleTime}
                   onChange={(e) => setScheduleTime(e.target.value)}
-                  min={new Date().toISOString().slice(0, 16)} // Prevent past dates
+                  min={new Date().toISOString().slice(0, 16)}
                   className="mt-1 block w-full border-gray-600 rounded-md shadow-sm bg-gray-700 text-white focus:ring-indigo-500 focus:border-indigo-500 transition duration-200"
                 />
                 <p className="text-sm text-gray-400 mt-1">
@@ -1119,7 +1086,7 @@ export default function Marketing() {
                 <button
                   type="submit"
                   className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-200 disabled:bg-gray-600"
-                  disabled={!message || !emails || !subject}
+                  disabled={!message || !emails || !subject.trim()}
                 >
                   {scheduleTime ? 'Schedule Email' : 'Send Emails'}
                 </button>
@@ -1194,7 +1161,6 @@ export default function Marketing() {
         </div>
       </div>
 
-      {/* Confirmation Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
@@ -1207,7 +1173,7 @@ export default function Marketing() {
                 : `Send email to ${validateEmails(emails).count} recipients?`}
             </p>
             <div className="bg-gray-700 p-3 rounded-md mb-4">
-              <p className="font-medium text-white">{subject}</p>
+              <p className="font-medium text-white">{subject.trim()}</p>
               <p className="text-gray-300 text-sm mt-1 line-clamp-3">
                 {message.substring(0, 150)}
                 {message.length > 150 ? '...' : ''}
