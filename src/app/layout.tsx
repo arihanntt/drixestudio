@@ -5,6 +5,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import ClientHelmetProvider from '../components/ClientHelmetProvider';
 import LayoutWrapper from '../components/LayoutWrapper';
 import type { Metadata } from 'next';
+import SmoothScrollWrapper from "@/components/SmoothScrollWrapper"; 
 
 export const metadata: Metadata = {
   title: 'Drixe Studio | Premium Discord Server Setups',
@@ -122,8 +123,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-black text-white">
         <ClientHelmetProvider>
+          <SmoothScrollWrapper>
           <LayoutWrapper>{children}</LayoutWrapper>
           <SpeedInsights />
+          </SmoothScrollWrapper>
         </ClientHelmetProvider>
       </body>
     </html>

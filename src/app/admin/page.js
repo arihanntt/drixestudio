@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Lock, Eye, EyeOff, ArrowRight, Mail, User, Clock, Search, 
-  Download, Trash2, ChevronDown, ChevronUp, Loader2, Check, X, RefreshCw 
+  Download, Trash2, ChevronDown, ChevronUp, Loader2, Check, X, RefreshCw, Link 
 } from 'lucide-react';
 
 export default function AdminPortal() {
@@ -12,22 +12,28 @@ export default function AdminPortal() {
   const [accessGranted, setAccessGranted] = useState(false);
   const [shake, setShake] = useState(false);
   const [submissions, setSubmissions] = useState([]);
+  const [launchPages, setLaunchPages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [initLoad, setInitLoad] = useState(true);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('submissions');
 
   const handleAuth = useCallback(() => {
     if (pass === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
       setAccessGranted(true);
-      fetchData();
+      if (activeTab === 'submissions') {
+        fetchSubmissions();
+      } else {
+        fetchLaunchPages();
+      }
     } else {
       setShake(true);
       setError('Invalid password');
       setTimeout(() => setShake(false), 500);
     }
-  }, [pass]);
+  }, [pass, activeTab]);
 
-  const fetchData = useCallback(async () => {
+  const fetchSubmissions = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -35,12 +41,11 @@ export default function AdminPortal() {
         headers: { 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_ADMIN_TOKEN}` },
         cache: 'no-store'
       });
-      
       if (!res.ok) throw new Error('Failed to fetch submissions');
       const data = await res.json();
       setSubmissions(data);
     } catch (error) {
-      console.error('Fetch error:', error);
+      console.error('Fetch submissions error:', error);
       setError('Failed to load submissions');
     } finally {
       setLoading(false);
@@ -48,11 +53,35 @@ export default function AdminPortal() {
     }
   }, []);
 
-  useEffect(() => {
-    if (accessGranted && submissions.length === 0) {
-      fetchData();
+  const fetchLaunchPages = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/launch-pages', {
+        headers: { 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_ADMIN_TOKEN}` },
+        cache: 'no-store'
+      });
+      if (!res.ok) throw new Error('Failed to fetch launch pages');
+      const data = await res.json();
+      setLaunchPages(data);
+    } catch (error) {
+      console.error('Fetch launch pages error:', error);
+      setError('Failed to load launch pages');
+    } finally {
+      setLoading(false);
+      setInitLoad(false);
     }
-  }, [accessGranted, fetchData, submissions.length]);
+  }, []);
+
+  useEffect(() => {
+    if (accessGranted) {
+      if (activeTab === 'submissions' && submissions.length === 0) {
+        fetchSubmissions();
+      } else if (activeTab === 'launch_pages' && launchPages.length === 0) {
+        fetchLaunchPages();
+      }
+    }
+  }, [accessGranted, activeTab, submissions.length, launchPages.length, fetchSubmissions, fetchLaunchPages]);
 
   if (!accessGranted) {
     return (
@@ -69,14 +98,43 @@ export default function AdminPortal() {
   }
 
   return (
-    <Dashboard 
-      submissions={submissions} 
-      loading={loading}
-      initLoad={initLoad}
-      refreshData={fetchData}
-      setError={setError}
-      error={error} // Added error prop
-    />
+    <div className="min-h-screen bg-gray-900 text-white p-15 sm:p-20">
+      <div className="mb-6">
+        <div className="flex gap-4 border-b border-indigo-500/20">
+          <button
+            className={`pb-2 px-4 text-sm font-medium ${activeTab === 'submissions' ? 'text-indigo-400 border-b-2 border-indigo-400' : 'text-gray-400 hover:text-indigo-300'}`}
+            onClick={() => setActiveTab('submissions')}
+          >
+            Contact Submissions
+          </button>
+          <button
+            className={`pb-2 px-4 text-sm font-medium ${activeTab === 'launch_pages' ? 'text-indigo-400 border-b-2 border-indigo-400' : 'text-gray-400 hover:text-indigo-300'}`}
+            onClick={() => setActiveTab('launch_pages')}
+          >
+            Launch Pages
+          </button>
+        </div>
+      </div>
+      {activeTab === 'submissions' ? (
+        <Dashboard 
+          submissions={submissions} 
+          loading={loading}
+          initLoad={initLoad}
+          refreshData={fetchSubmissions}
+          setError={setError}
+          error={error}
+        />
+      ) : (
+        <LaunchPagesDashboard 
+          launchPages={launchPages}
+          loading={loading}
+          initLoad={initLoad}
+          refreshData={fetchLaunchPages}
+          setError={setError}
+          error={error}
+        />
+      )}
+    </div>
   );
 }
 
@@ -244,7 +302,7 @@ const Dashboard = ({ submissions, loading, initLoad, refreshData, setError, erro
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-15 sm:p-20">
+    <div>
       <header className="mb-8">
         <h1 className="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500 mb-3">
           Contact Submissions Dashboard
@@ -475,6 +533,365 @@ const Dashboard = ({ submissions, loading, initLoad, refreshData, setError, erro
       <div className="mt-4 text-sm text-gray-400 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div>
           Showing {processedData.length} of {submissions.length} submissions
+          {searchTerm && ` (filtered)`}
+        </div>
+        <div className="flex items-center gap-4">
+          {loading && (
+            <div className="flex items-center gap-2">
+              <Loader2 size={16} className="animate-spin text-indigo-400" />
+              <span>Loading...</span>
+            </div>
+          )}
+          <div>
+            Sorted by: <span className="text-indigo-300">{sortConfig.key} ({sortConfig.direction})</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const LaunchPagesDashboard = ({ launchPages, loading, initLoad, refreshData, setError, error }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selected, setSelected] = useState([]);
+  const [sortConfig, setSortConfig] = useState({ key: 'createdAt', direction: 'desc' });
+  const [expandedRow, setExpandedRow] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const processedData = useMemo(() => {
+    let filtered = launchPages;
+
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(page =>
+        page.owner?.toLowerCase().includes(term) ||
+        page.discord?.toLowerCase().includes(term) ||
+        page.pageId?.toLowerCase().includes(term)
+      );
+    }
+
+    return [...filtered].sort((a, b) => {
+      const aValue = a[sortConfig.key] || '';
+      const bValue = b[sortConfig.key] || '';
+
+      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [launchPages, searchTerm, sortConfig]);
+
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const exportCSV = () => {
+    const headers = "Owner,Discord,Page ID,URL,Has Password,Date\n";
+    const csv = processedData.map(page => 
+      `"${page.owner || ''}","${page.discord || ''}","${page.pageId || ''}","${window.location.origin}/clients/launch?pageId=${page.pageId}","${page.password ? 'Yes' : 'No'}","${new Date(page.createdAt).toLocaleString()}"`
+    ).join('\n');
+    
+    const blob = new Blob([headers + csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `launch_pages_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const toggleExpand = (id) => {
+    setExpandedRow(expandedRow === id ? null : id);
+  };
+
+  const deleteSelected = async () => {
+    if (!selected.length || isDeleting) return;
+    
+    setIsDeleting(true);
+    setError(null);
+    try {
+      const response = await fetch('/api/delete-launch-pages', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-admin-token': process.env.NEXT_PUBLIC_ADMIN_TOKEN
+        },
+        body: JSON.stringify({ ids: selected })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete launch pages');
+      }
+
+      await refreshData();
+      setSelected([]);
+    } catch (error) {
+      console.error('Delete launch pages error:', error.message);
+      setError(`Failed to delete launch pages: ${error.message}`);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  return (
+    <div>
+      <header className="mb-8">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500 mb-3">
+          Launch Pages Dashboard
+        </h1>
+        <div className="flex flex-col sm:flex-row justify-between gap-4">
+          <div className="relative flex-grow max-w-xl">
+            <Search className="absolute left-3 top-3 text-gray-400" size={20} />
+            <input
+              type="text"
+              placeholder="Search launch pages..."
+              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-indigo-500/30 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-transparent text-gray-100 placeholder-gray-500"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <div className="flex gap-3 flex-wrap">
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={exportCSV}
+              className="flex items-center gap-2 px-4 py-2 bg-indigo-500 hover:bg-indigo-600 rounded-lg transition-colors text-sm font-medium"
+              disabled={!processedData.length}
+            >
+              <Download size={18} />
+              <span className="hidden sm:inline">Export CSV</span>
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={deleteSelected}
+              className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg transition-colors disabled:opacity-50 text-sm font-medium"
+              disabled={!selected.length || isDeleting}
+            >
+              {isDeleting ? (
+                <Loader2 size={18} className="animate-spin" />
+              ) : (
+                <Trash2 size={18} />
+              )}
+              <span className="hidden sm:inline">Delete Selected</span>
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={refreshData}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium"
+            >
+              {loading ? (
+                <Loader2 size={18} className="animate-spin" />
+              ) : (
+                <RefreshCw size={18} />
+              )}
+              <span className="hidden sm:inline">Refresh</span>
+            </motion.button>
+          </div>
+        </div>
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-4 p-3 bg-red-500/20 text-red-300 rounded-lg text-sm flex items-center gap-2"
+          >
+            <X size={16} />
+            {error}
+          </motion.div>
+        )}
+      </header>
+
+      {initLoad ? (
+        <div className="flex justify-center items-center h-64">
+          <Loader2 className="animate-spin text-indigo-400" size={40} />
+        </div>
+      ) : (
+        <div className="bg-gray-800/50 border border-indigo-500/20 rounded-xl overflow-x-auto shadow-lg">
+          <div className="min-w-[800px] sm:min-w-full">
+            <div className="grid grid-cols-12 gap-4 p-4 bg-gray-800/70 border-b border-indigo-500/20 font-medium text-sm text-gray-300">
+              <div className="col-span-1 flex items-center">
+                <input
+                  type="checkbox"
+                  checked={selected.length === processedData.length && processedData.length > 0}
+                  onChange={() => {
+                    if (selected.length === processedData.length) {
+                      setSelected([]);
+                    } else {
+                      setSelected(processedData.map(item => item._id));
+                    }
+                  }}
+                  className="rounded border-indigo-500/50 focus:ring-indigo-400 h-4 w-4 text-indigo-400"
+                />
+              </div>
+              <div 
+                className="col-span-2 flex items-center cursor-pointer hover:text-indigo-300 transition-colors"
+                onClick={() => requestSort('owner')}
+              >
+                <span>Owner</span>
+                {sortConfig.key === 'owner' && (
+                  <span className="ml-1">
+                    {sortConfig.direction === 'asc' ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                  </span>
+                )}
+              </div>
+              <div 
+                className="col-span-2 flex items-center cursor-pointer hover:text-indigo-300 transition-colors"
+                onClick={() => requestSort('discord')}
+              >
+                <span>Discord</span>
+                {sortConfig.key === 'discord' && (
+                  <span className="ml-1">
+                    {sortConfig.direction === 'asc' ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                  </span>
+                )}
+              </div>
+              <div 
+                className="col-span-3 flex items-center cursor-pointer hover:text-indigo-300 transition-colors"
+                onClick={() => requestSort('pageId')}
+              >
+                <span>Page ID</span>
+                {sortConfig.key === 'pageId' && (
+                  <span className="ml-1">
+                    {sortConfig.direction === 'asc' ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                  </span>
+                )}
+              </div>
+              <div className="col-span-3 flex items-center">
+                <span>URL</span>
+              </div>
+              <div 
+                className="col-span-1 flex items-center cursor-pointer hover:text-indigo-300 transition-colors"
+                onClick={() => requestSort('createdAt')}
+              >
+                <span>Date</span>
+                {sortConfig.key === 'createdAt' && (
+                  <span className="ml-1">
+                    {sortConfig.direction === 'asc' ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {processedData.length === 0 ? (
+              <div className="p-8 text-center text-gray-400">
+                {searchTerm ? 'No matching launch pages found' : 'No launch pages yet'}
+              </div>
+            ) : (
+              <div className="divide-y divide-indigo-500/10">
+                {processedData.map((page) => (
+                  <div key={page._id} className="hover:bg-gray-800/70 transition-colors duration-200">
+                    <div 
+                      className="grid grid-cols-12 gap-4 p-4 items-center cursor-pointer text-sm"
+                      onClick={() => toggleExpand(page._id)}
+                    >
+                      <div className="col-span-1 flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selected.includes(page._id)}
+                          onChange={(e) => {
+                            e.stopPropagation();
+                            setSelected(prev => 
+                              prev.includes(page._id)
+                                ? prev.filter(id => id !== page._id)
+                                : [...prev, page._id]
+                            );
+                          }}
+                          className="rounded border-indigo-500/50 focus:ring-indigo-400 h-4 w-4 text-indigo-400"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      </div>
+                      <div className="col-span-2 flex items-center gap-2 truncate">
+                        <User size={14} className="text-gray-400 flex-shrink-0" />
+                        <span className="truncate">{page.owner || 'N/A'}</span>
+                      </div>
+                      <div className="col-span-2 flex items-center gap-2 truncate">
+                        <Mail size={14} className="text-gray-400 flex-shrink-0" />
+                        <span className="truncate">{page.discord || 'N/A'}</span>
+                      </div>
+                      <div className="col-span-3 truncate">
+                        <span className="font-mono text-xs">{page.pageId || 'N/A'}</span>
+                      </div>
+                      <div className="col-span-3 flex items-center gap-2 truncate">
+                        <Link size={14} className="text-gray-400 flex-shrink-0" />
+                        <a 
+                          href={`/clients/launch?pageId=${page.pageId}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="truncate text-indigo-400 hover:text-indigo-300"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {`/clients/launch?pageId=${page.pageId}`}
+                        </a>
+                      </div>
+                      <div className="col-span-1 flex items-center justify-end gap-2">
+                        <span className="text-xs text-gray-400 truncate">
+                          {new Date(page.createdAt).toLocaleDateString()}
+                        </span>
+                        <motion.div
+                          animate={{ rotate: expandedRow === page._id ? 180 : 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <ChevronDown size={14} />
+                        </motion.div>
+                      </div>
+                    </div>
+
+                    <AnimatePresence>
+                      {expandedRow === page._id && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3, ease: 'easeInOut' }}
+                          className="overflow-hidden"
+                        >
+                          <div className="p-4 pl-12 bg-gray-800/30 text-sm border-t border-indigo-500/20">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                              <div>
+                                <span className="text-gray-400">Owner:</span>{' '}
+                                <span className="text-gray-200">{page.owner || 'N/A'}</span>
+                              </div>
+                              <div>
+                                <span className="text-gray-400">Discord:</span>{' '}
+                                <span className="text-gray-200">{page.discord || 'N/A'}</span>
+                              </div>
+                              <div>
+                                <span className="text-gray-400">Has Password:</span>{' '}
+                                <span className="text-gray-200">{page.password ? 'Yes' : 'No'}</span>
+                              </div>
+                              <div>
+                                <span className="text-gray-400">Created:</span>{' '}
+                                <span className="text-gray-200">{new Date(page.createdAt).toLocaleString()}</span>
+                              </div>
+                              <div className="truncate">
+                                <span className="text-gray-400">Page ID:</span>{' '}
+                                <span className="font-mono text-xs text-gray-200">{page.pageId}</span>
+                              </div>
+                              <div>
+                                <span className="text-gray-400">Features:</span>{' '}
+                                <span className="text-gray-200">{page.features?.join(', ') || 'None'}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      <div className="mt-4 text-sm text-gray-400 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div>
+          Showing {processedData.length} of {launchPages.length} launch pages
           {searchTerm && ` (filtered)`}
         </div>
         <div className="flex items-center gap-4">
