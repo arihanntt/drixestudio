@@ -27,11 +27,11 @@ const Footer = () => {
   };
 
   const navLinks = [
-    { label: "💼 PLANS", path: "/plans", gradient: "from-indigo-400 to-purple-500" },
-    { label: "📩 CONTACT", path: "/contact", gradient: "from-blue-400 to-cyan-500" },
-    { label: "💖 WHY US", path: "/whyus", gradient: "from-pink-400 to-rose-500" },
-    { label: "⭐ BLOGS", path: "/blog", gradient: "from-pink-400 to-rose-500" },
-    { label: "❓ FAQ", path: "/faq", gradient: "from-emerald-400 to-teal-500" }
+    { label: "PLANS", path: "/plans", gradient: "from-indigo-400 to-purple-500" },
+    { label: "CONTACT", path: "/contact", gradient: "from-blue-400 to-cyan-500" },
+    { label: "WHY US", path: "/whyus", gradient: "from-pink-400 to-rose-500" },
+    { label: "BLOGS", path: "/blog", gradient: "from-pink-400 to-rose-500" },
+    { label: "FAQ", path: "/faq", gradient: "from-emerald-400 to-teal-500" }
   ];
 
   const socialLinks = [
