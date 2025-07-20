@@ -13,6 +13,7 @@
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",
     "@vercel/speed-insights": "^1.2.0",
+    "axios": "^1.10.0",
     "canvas-confetti": "^1.9.3",
     "feed": "^5.1.0",
     "framer-motion": "^12.23.6",

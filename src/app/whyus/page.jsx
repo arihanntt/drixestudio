@@ -348,6 +348,21 @@ const WhyUsPage = () => {
             View Pricing & Packages
           </span>
         </Link>
+        {/* Trust Indicators */}
+        <div className="mt-8 flex flex-wrap justify-center gap-4 text-xs md:text-sm text-gray-400">
+          <div className="flex items-center gap-2">
+            <ShieldCheck size={14} className="text-emerald-400" />
+            <span>Advanced Security Setup</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Users size={14} className="text-blue-400" />
+            <span>100+ servers optimized</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Rocket size={14} className="text-purple-400" />
+            <span>24-hour express setup</span>
+          </div>
+        </div>
       </motion.div>
     </section>
   );

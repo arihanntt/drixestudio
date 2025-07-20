@@ -1,10 +1,9 @@
-"use client";
-
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useAnimation } from "framer-motion";
-import Lottie from "lottie-react";
-import confetti from "canvas-confetti";
-import successAnim from "@/components/successAnim.json";
+'use client';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import Lottie from 'lottie-react';
+import confetti from 'canvas-confetti';
+import successAnim from '@/components/successAnim.json';
 import {
   CheckCircle,
   Loader2,
@@ -18,7 +17,8 @@ import {
   Smartphone,
   X,
   ChevronDown,
-} from "lucide-react";
+} from 'lucide-react';
+import axios from 'axios';
 
 const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -27,13 +27,13 @@ const useIsMobile = () => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    
+
     // Initial check
     checkIfMobile();
-    
+
     // Event listener for resize
     window.addEventListener('resize', checkIfMobile);
-    
+
     // Cleanup
     return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
@@ -49,10 +49,10 @@ const ContactPage = () => {
   const [showMethodOptions, setShowMethodOptions] = useState(false);
 
   const [formData, setFormData] = useState({
-    name: "",
-    method: "Telegram",
-    contact: "",
-    reason: "",
+    name: '',
+    method: 'Telegram',
+    contact: '',
+    reason: '',
   });
 
   const isMobile = useIsMobile();
@@ -68,9 +68,9 @@ const ContactPage = () => {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -80,118 +80,101 @@ const ContactPage = () => {
       spread: 120,
       origin: { y: 0.6 },
       zIndex: 9999,
-      colors: ["#7289da", "#ffffff", "#a0c4ff", "#43b581", "#faa61a"],
+      colors: ['#7289da', '#ffffff', '#a0c4ff', '#43b581', '#faa61a'],
     });
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleMethodChange = (method) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       method,
-      contact: ""
+      contact: '',
     }));
     setShowMethodOptions(false);
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (loading || submitted) return;
+  e.preventDefault();
+  if (loading || submitted) return;
 
-    // Enhanced validation
-    if (formData.method === "Email") {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.contact)) {
-        await controls.start({
-          x: [0, -10, 10, -10, 10, 0],
-          transition: { duration: 0.6 }
-        });
-        return;
-      }
-    } else if (formData.method === "Discord" && !formData.contact.includes("#")) {
-      await controls.start({
-        x: [0, -10, 10, -10, 10, 0],
-        transition: { duration: 0.6 }
-      });
-      return;
-    }
+  // Method-specific validation
+  if (formData.method === 'Email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.contact)) {
+    await controls.start({ x: [0, -10, 10, -10, 10, 0] });
+    return;
+  }
 
-    setLoading(true);
-    
-    try {
-      const res = await fetch("https://submit-form.com/J8bwGvLum", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-        redirect: "manual",
-      });
+  if (formData.method === 'Discord' && !formData.contact.includes('#')) {
+    await controls.start({ x: [0, -10, 10, -10, 10, 0] });
+    return;
+  }
 
-      if (res.status < 400) {
-        new Audio("/success.mp3").play().catch(() => {});
-        
-        await Promise.all([
-          controls.start({
-            scale: [1, 1.05, 1],
-            transition: { duration: 0.6 }
-          }),
-          fireConfetti()
-        ]);
-        
-        setSubmitted(true);
-        setShowSuccessBox(true);
+  setLoading(true);
 
+  try {
+    const response = await axios.post('/api/contact', {
+      name: formData.name,
+      contactMethod: formData.method,
+      contactInfo: formData.contact,
+      message: formData.reason
+    });
+
+    if (response.data.success) {
+      // Success handling (confetti, etc.)
+      new Audio('/success.mp3').play().catch(() => {});
+      await controls.start({ scale: [1, 1.05, 1] });
+      fireConfetti();
+      setSubmitted(true);
+      setShowSuccessBox(true);
+      
+      setTimeout(() => {
+        setShowSuccessBox(false);
         setTimeout(() => {
-          setShowSuccessBox(false);
-          setTimeout(() => {
-            setSubmitted(false);
-            setFormData({
-              name: "",
-              method: "Telegram",
-              contact: "",
-              reason: "",
-            });
-          }, 500);
-        }, 3500);
-      } else {
-        throw new Error("Failed to submit");
-      }
-    } catch (err) {
-      await controls.start({
-        backgroundColor: ["#0c0c10", "#ff000020", "#0c0c10"],
-        transition: { duration: 1 }
-      });
-    } finally {
-      setLoading(false);
+          setSubmitted(false);
+          setFormData({
+            name: '',
+            method: 'Telegram',
+            contact: '',
+            reason: '',
+          });
+        }, 500);
+      }, 3500);
     }
-  };
+  } catch (error) {
+    console.error('Error:', error.response?.data);
+    // Error handling
+  } finally {
+    setLoading(false);
+  }
+};
 
   const getContactPlaceholder = () => {
     switch (formData.method) {
-      case "Email":
-        return "you@example.com";
-      case "Discord":
-        return "username#1234";
-      case "Phone":
-        return "+1 (555) 123-4567";
+      case 'Email':
+        return 'you@example.com';
+      case 'Discord':
+        return 'username#1234';
+      case 'Phone':
+        return '+1 (555) 123-4567';
       default:
-        return "@telegram_handle";
+        return '@telegram_handle';
     }
   };
 
   const MethodIcon = () => {
     switch (formData.method) {
-      case "Email":
+      case 'Email':
         return <Mail size={16} className="text-blurple" />;
-      case "Discord":
+      case 'Discord':
         return <MessageSquare size={16} className="text-indigo-400" />;
-      case "Phone":
+      case 'Phone':
         return <Smartphone size={16} className="text-green-400" />;
       default:
         return <Send size={16} className="text-blue-400" />;
@@ -199,35 +182,35 @@ const ContactPage = () => {
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="w-full min-h-screen bg-gradient-to-br from-[#0c0c10] via-[#10131c] to-[#0c0c10] text-white px-4 sm:px-6 py-20 md:py-32 relative scroll-mt-20"
       animate={controls}
       ref={formRef}
     >
       <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
-        <motion.div 
+        <motion.div
           className="absolute top-1/4 left-[10%] w-72 h-72 bg-blurple/20 blur-[120px] rounded-full opacity-40"
           animate={{
             y: [0, 20, 0],
-            opacity: [0.4, 0.6, 0.4]
+            opacity: [0.4, 0.6, 0.4],
           }}
           transition={{
             duration: 8,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: 'easeInOut',
           }}
         />
-        <motion.div 
+        <motion.div
           className="absolute bottom-0 right-[5%] w-96 h-96 bg-indigo-600/10 blur-[150px] rounded-full opacity-20"
           animate={{
             y: [0, -30, 0],
-            opacity: [0.2, 0.4, 0.2]
+            opacity: [0.2, 0.4, 0.2],
           }}
           transition={{
             duration: 10,
             repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2
+            ease: 'easeInOut',
+            delay: 2,
           }}
         />
       </div>
@@ -240,7 +223,7 @@ const ContactPage = () => {
           className="space-y-6 w-full"
         >
           <div className="text-center md:text-left">
-            <motion.h1 
+            <motion.h1
               className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white via-blurple to-white bg-clip-text text-transparent"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -248,7 +231,7 @@ const ContactPage = () => {
             >
               Let's Connect
             </motion.h1>
-            <motion.p 
+            <motion.p
               className="text-gray-400 text-sm md:text-base mt-3 mb-6 max-w-md mx-auto md:mx-0"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -265,11 +248,11 @@ const ContactPage = () => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              onFocus={() => setActiveField("name")}
+              onFocus={() => setActiveField('name')}
               onBlur={() => setActiveField(null)}
               placeholder="e.g. Alex Johnson"
               required
-              isActive={activeField === "name"}
+              isActive={activeField === 'name'}
             />
 
             <div className="relative" ref={methodOptionsRef}>
@@ -283,9 +266,12 @@ const ContactPage = () => {
                   <MethodIcon />
                   <span>{formData.method}</span>
                 </div>
-                <ChevronDown size={16} className={`transition-transform ${showMethodOptions ? "rotate-180" : ""}`} />
+                <ChevronDown
+                  size={16}
+                  className={`transition-transform ${showMethodOptions ? 'rotate-180' : ''}`}
+                />
               </button>
-              
+
               <AnimatePresence>
                 {showMethodOptions && (
                   <motion.div
@@ -295,18 +281,18 @@ const ContactPage = () => {
                     transition={{ duration: 0.2 }}
                     className="absolute z-10 mt-1 w-full bg-[#0c0c10] border border-gray-700 rounded-xl overflow-hidden shadow-lg"
                   >
-                    {["Telegram", "Discord", "Email", "Phone"].map((option) => (
+                    {['Telegram', 'Discord', 'Email', 'Phone'].map((option) => (
                       <div
                         key={option}
                         onClick={() => handleMethodChange(option)}
                         className={`px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-gray-800 transition-colors ${
-                          formData.method === option ? "bg-blurple/10" : ""
+                          formData.method === option ? 'bg-blurple/10' : ''
                         }`}
                       >
-                        {option === "Email" && <Mail size={16} className="text-blurple" />}
-                        {option === "Discord" && <MessageSquare size={16} className="text-indigo-400" />}
-                        {option === "Phone" && <Smartphone size={16} className="text-green-400" />}
-                        {option === "Telegram" && <Send size={16} className="text-blue-400" />}
+                        {option === 'Email' && <Mail size={16} className="text-blurple" />}
+                        {option === 'Discord' && <MessageSquare size={16} className="text-indigo-400" />}
+                        {option === 'Phone' && <Smartphone size={16} className="text-green-400" />}
+                        {option === 'Telegram' && <Send size={16} className="text-blue-400" />}
                         <span>{option}</span>
                       </div>
                     ))}
@@ -321,12 +307,12 @@ const ContactPage = () => {
               name="contact"
               value={formData.contact}
               onChange={handleChange}
-              onFocus={() => setActiveField("contact")}
+              onFocus={() => setActiveField('contact')}
               onBlur={() => setActiveField(null)}
               placeholder={getContactPlaceholder()}
               required
-              isActive={activeField === "contact"}
-              type={formData.method === "Phone" ? "tel" : "text"}
+              isActive={activeField === 'contact'}
+              type={formData.method === 'Phone' ? 'tel' : 'text'}
             />
 
             <InputField
@@ -335,11 +321,11 @@ const ContactPage = () => {
               name="reason"
               value={formData.reason}
               onChange={handleChange}
-              onFocus={() => setActiveField("reason")}
+              onFocus={() => setActiveField('reason')}
               onBlur={() => setActiveField(null)}
               placeholder="e.g. Partnership, Support, Custom Bot Development..."
               required
-              isActive={activeField === "reason"}
+              isActive={activeField === 'reason'}
               textarea
               rows={3}
             />
@@ -351,10 +337,10 @@ const ContactPage = () => {
               disabled={loading || submitted}
               className={`w-full py-4 font-semibold flex items-center justify-center gap-2 rounded-xl transition-all duration-300 relative overflow-hidden ${
                 loading
-                  ? "bg-gray-700 cursor-not-allowed"
+                  ? 'bg-gray-700 cursor-not-allowed'
                   : submitted
-                  ? "bg-green-600/20 border border-green-400/30"
-                  : "bg-gradient-to-r from-blurple to-indigo-600 hover:shadow-lg hover:shadow-blurple/30"
+                  ? 'bg-green-600/20 border border-green-400/30'
+                  : 'bg-gradient-to-r from-blurple to-indigo-600 hover:shadow-lg hover:shadow-blurple/30'
               }`}
             >
               {loading ? (
@@ -401,7 +387,7 @@ const ContactPage = () => {
             desc="Custom bots with machine learning capabilities for your unique requirements."
             delay={0.5}
           />
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -439,7 +425,7 @@ const ContactPage = () => {
           className="fixed bottom-6 right-6 md:hidden z-40"
         >
           <button
-            onClick={() => window.location.href = "tel:+15551234567"}
+            onClick={() => (window.location.href = 'tel:+15551234567')}
             className="p-4 bg-blurple rounded-full shadow-lg hover:bg-indigo-600 transition-colors flex items-center justify-center"
           >
             <Smartphone size={24} />
@@ -461,21 +447,17 @@ const ContactPage = () => {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 300 }}
+              transition={{ type: 'spring', stiffness: 300 }}
             >
-              <button 
+              <button
                 onClick={() => setShowSuccessBox(false)}
                 className="self-end p-1 rounded-full hover:bg-gray-800 transition-colors"
               >
                 <X size={18} />
               </button>
-              
-              <Lottie 
-                animationData={successAnim} 
-                loop={false} 
-                className="w-24 h-24" 
-              />
-              
+
+              <Lottie animationData={successAnim} loop={false} className="w-24 h-24" />
+
               <motion.h3
                 className="mt-3 text-center text-white text-lg font-semibold"
                 initial={{ opacity: 0, y: 10 }}
@@ -485,7 +467,7 @@ const ContactPage = () => {
                 <CheckCircle className="inline mr-2 text-green-400" size={20} />
                 Message sent successfully!
               </motion.h3>
-              
+
               <motion.p
                 className="text-center text-gray-400 text-sm mt-2"
                 initial={{ opacity: 0, y: 10 }}
@@ -494,7 +476,7 @@ const ContactPage = () => {
               >
                 We'll get back to you within 24 hours. Check your {formData.method.toLowerCase()} for updates.
               </motion.p>
-              
+
               <motion.button
                 onClick={() => setShowSuccessBox(false)}
                 className="mt-6 px-6 py-2 bg-blurple/10 hover:bg-blurple/20 border border-blurple/40 rounded-lg text-sm transition-colors"
@@ -514,29 +496,27 @@ const ContactPage = () => {
   );
 };
 
-const InputField = ({ 
-  label, 
-  icon, 
-  textarea = false, 
-  isActive = false, 
-  ...props 
-}) => {
+const InputField = ({ label, icon, textarea = false, isActive = false, ...props }) => {
   return (
     <motion.div
       animate={{
-        borderColor: isActive ? "rgba(114, 137, 218, 0.5)" : "rgba(55, 65, 81, 0.7)"
+        borderColor: isActive ? 'rgba(114, 137, 218, 0.5)' : 'rgba(55, 65, 81, 0.7)',
       }}
       transition={{ duration: 0.2 }}
       className="relative"
     >
       <label className="text-sm text-gray-300">{label}</label>
-      <div className={`flex items-center mt-1 px-4 py-3 rounded-xl bg-black border ${
-        isActive ? "border-blurple/50" : "border-gray-700"
-      } text-white text-sm focus-within:ring-2 focus-within:ring-blurple/50`}>
-        <span className={`mr-3 transition-colors ${
-          isActive ? "text-blurple" : "text-gray-400"
-        }`}>{icon}</span>
-        
+      <div
+        className={`flex items-center mt-1 px-4 py-3 rounded-xl bg-black border ${
+          isActive ? 'border-blurple/50' : 'border-gray-700'
+        } text-white text-sm focus-within:ring-2 focus-within:ring-blurple/50`}
+      >
+        <span
+          className={`mr-3 transition-colors ${isActive ? 'text-blurple' : 'text-gray-400'}`}
+        >
+          {icon}
+        </span>
+
         {textarea ? (
           <textarea
             {...props}
@@ -560,9 +540,7 @@ const InfoBlock = ({ icon, title, desc, delay = 0 }) => (
     animate={{ opacity: 1, x: 0 }}
     transition={{ delay }}
   >
-    <div className="p-3 rounded-xl bg-white/5 border border-white/10">
-      {icon}
-    </div>
+    <div className="p-3 rounded-xl bg-white/5 border border-white/10">{icon}</div>
     <div>
       <h3 className="text-lg font-semibold">{title}</h3>
       <p className="text-sm text-gray-400 mt-1">{desc}</p>
