@@ -1,5 +1,5 @@
 import dbConnect from '../../../lib/mongodb';
-import Transaction from '../../../models/transaction';
+import Transaction from '../../../models/Transaction';
 
 export async function POST(request) {
   try {
