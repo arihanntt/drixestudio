@@ -38,6 +38,14 @@ const Navbar = () => {
     { label: "FAQ", path: "/faq", icon: "❓", color: "from-blue-400 to-cyan-500" },
     { label: "BLOGS", path: "/blog", icon: "📚", color: "from-emerald-400 to-teal-500" },
     { label: "CONTACT", path: "/contact", icon: "📞", color: "from-pink-400 to-rose-500" },
+    // Added Support link
+    { 
+      label: "SUPPORT", 
+      path: "/support", 
+      icon: "❤️", 
+      color: "from-red-400 to-pink-500",
+      special: true // Mark this as a special button
+    },
   ];
 
   return (
@@ -80,7 +88,7 @@ const Navbar = () => {
       >
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-1 relative">
-          {navLinks.map(({ label, path, color }) => (
+          {navLinks.map(({ label, path, color, special }) => (
             <motion.button
               key={label}
               onHoverStart={() => setHoveredLink(label)}
@@ -89,13 +97,17 @@ const Navbar = () => {
               onClick={() => router.push(path)}
               className={`relative px-5 py-3 text-sm font-semibold transition-all z-10 ${
                 activeLink === path.slice(1) 
-                  ? "text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
-                  : "text-gray-200 hover:text-white"
+                  ? special
+                    ? "text-white bg-gradient-to-r from-red-500/20 to-pink-500/20 border border-red-400/30 rounded-lg"
+                    : "text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
+                  : special
+                    ? "text-white bg-gradient-to-r from-red-500/10 to-pink-500/10 hover:from-red-500/20 hover:to-pink-500/20 border border-red-400/20 hover:border-red-400/30 rounded-lg"
+                    : "text-gray-200 hover:text-white"
               }`}
             >
               {label}
               
-              {activeLink === path.slice(1) && (
+              {activeLink === path.slice(1) && !special && (
                 <motion.span 
                   layoutId="navActiveIndicator"
                   className="absolute left-0 right-0 bottom-1 h-[2px] bg-gradient-to-r via-80%"
@@ -107,7 +119,7 @@ const Navbar = () => {
           ))}
           
           <AnimatePresence>
-            {hoveredLink && (
+            {hoveredLink && !navLinks.find(link => link.label === hoveredLink)?.special && (
               <motion.div
                 layoutId="hoverBg"
                 initial={{ opacity: 0 }}

@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaPhone, FaWhatsapp } from "react-icons/fa";
 
 const MobileMenu = ({ setMobileOpen, activeLink, navLinks }) => {
   const router = useRouter();
@@ -51,6 +51,14 @@ const MobileMenu = ({ setMobileOpen, activeLink, navLinks }) => {
       router.push(path);
     }
     setMobileOpen(false);
+  };
+
+  const handlePhoneClick = () => {
+    window.location.href = "tel:+917889386542"; // Replace with your actual phone number
+  };
+
+  const handleWhatsAppClick = () => {
+    window.open("https://wa.me/7889386542", "_blank"); // Replace with your actual WhatsApp number
   };
 
   return (
@@ -134,6 +142,39 @@ const MobileMenu = ({ setMobileOpen, activeLink, navLinks }) => {
                 </div>
               </motion.li>
             ))}
+
+            {/* Phone Contact Options */}
+            <motion.li
+              custom={navLinks.length}
+              variants={itemVariants}
+              className="relative overflow-hidden rounded-xl hover:bg-white/5"
+            >
+              <div className="flex flex-col space-y-2 px-4 py-4">
+                <div className="flex items-center">
+                  <FaPhone className="text-xl mr-3 text-blue-400" />
+                  <span className="font-medium text-white">Call Us</span>
+                </div>
+                <div className="flex space-x-3 mt-2">
+                  <button
+                    onClick={handlePhoneClick}
+                    className="flex-1 flex items-center justify-center px-4 py-2 bg-blue-600/20 hover:bg-blue-600/30 rounded-lg border border-blue-500/30 text-sm text-blue-100 transition-all"
+                  >
+                    <FaPhone className="mr-2" />
+                    Phone
+                  </button>
+                  <button
+                    onClick={handleWhatsAppClick}
+                    className="flex-1 flex items-center justify-center px-4 py-2 bg-green-600/20 hover:bg-green-600/30 rounded-lg border border-green-500/30 text-sm text-green-100 transition-all"
+                  >
+                    <FaWhatsapp className="mr-2" />
+                    WhatsApp
+                  </button>
+                </div>
+                <p className="text-xs text-gray-400 mt-2">
+                  Available 9AM - 5PM, Mon-Fri
+                </p>
+              </div>
+            </motion.li>
           </motion.ul>
 
           <motion.div 
