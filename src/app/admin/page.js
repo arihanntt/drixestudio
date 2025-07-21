@@ -1,9 +1,10 @@
 "use client";
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Lock, Eye, EyeOff, ArrowRight, Mail, User, Clock, Search, 
-  Download, Trash2, ChevronDown, ChevronUp, Loader2, Check, X, RefreshCw, Link 
+  Download, Trash2, ChevronDown, ChevronUp, Loader2, Check, X, RefreshCw, Link,
+  HardDrive, LayoutDashboard, CreditCard, Settings, HelpCircle, Terminal, MailIcon
 } from 'lucide-react';
 
 export default function AdminPortal() {
@@ -18,6 +19,8 @@ export default function AdminPortal() {
   const [initLoad, setInitLoad] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('submissions');
+  const [jarvisActive, setJarvisActive] = useState(false);
+  const [command, setCommand] = useState('');
 
   const handleAuth = useCallback(() => {
     if (pass === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
@@ -31,7 +34,7 @@ export default function AdminPortal() {
       }
     } else {
       setShake(true);
-      setError('Invalid password');
+      setError('Invalid credentials. Authentication failed.');
       setTimeout(() => setShake(false), 500);
     }
   }, [pass, activeTab]);
@@ -49,7 +52,7 @@ export default function AdminPortal() {
       setSubmissions(data);
     } catch (error) {
       console.error('Fetch submissions error:', error);
-      setError('Failed to load submissions');
+      setError('System error. Unable to retrieve submissions.');
     } finally {
       setLoading(false);
       setInitLoad(false);
@@ -69,7 +72,7 @@ export default function AdminPortal() {
       setLaunchPages(data);
     } catch (error) {
       console.error('Fetch launch pages error:', error);
-      setError('Failed to load launch pages');
+      setError('System error. Unable to retrieve launch pages.');
     } finally {
       setLoading(false);
       setInitLoad(false);
@@ -89,7 +92,7 @@ export default function AdminPortal() {
       setTransactions(data);
     } catch (error) {
       console.error('Fetch transactions error:', error);
-      setError('Failed to load transactions');
+      setError('System error. Unable to retrieve transactions.');
     } finally {
       setLoading(false);
       setInitLoad(false);
@@ -108,6 +111,21 @@ export default function AdminPortal() {
     }
   }, [accessGranted, activeTab, submissions.length, launchPages.length, transactions.length, fetchSubmissions, fetchLaunchPages, fetchTransactions]);
 
+  const handleCommand = (e) => {
+    if (e.key === 'Enter' && command.trim()) {
+      if (command.toLowerCase().includes('refresh')) {
+        if (activeTab === 'submissions') fetchSubmissions();
+        else if (activeTab === 'launch_pages') fetchLaunchPages();
+        else if (activeTab === 'transactions') fetchTransactions();
+      } else if (command.toLowerCase().includes('logout')) {
+        setAccessGranted(false);
+        setPass('');
+      }
+      setCommand('');
+      setJarvisActive(false);
+    }
+  };
+
   if (!accessGranted) {
     return (
       <SmoothAuthGate 
@@ -123,71 +141,165 @@ export default function AdminPortal() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-15 sm:p-20">
-      <div className="mb-6">
-        <div className="flex gap-4 border-b border-indigo-500/20">
-          <button
-            className={`pb-2 px-4 text-sm font-medium ${activeTab === 'submissions' ? 'text-indigo-400 border-b-2 border-indigo-400' : 'text-gray-400 hover:text-indigo-300'}`}
+    <div className="min-h-screen bg-gray-950 text-blue-100 p-0 overflow-hidden relative">
+      <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none"></div>
+      
+      <AnimatePresence>
+        {jarvisActive && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-2xl px-4"
+          >
+            <div className="bg-gray-900/90 backdrop-blur-lg border border-blue-500/30 rounded-xl p-4 shadow-2xl shadow-blue-500/20">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="h-3 w-3 rounded-full bg-blue-500 animate-pulse"></div>
+                <span className="text-blue-400 font-mono text-sm">JARVIS COMMAND INTERFACE</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-blue-300">{">"}</span>
+                <input
+                  type="text"
+                  value={command}
+                  onChange={(e) => setCommand(e.target.value)}
+                  onKeyDown={handleCommand}
+                  className="flex-grow bg-transparent border-none outline-none text-blue-100 font-mono placeholder-blue-500/50"
+                  placeholder="Enter command..."
+                  autoFocus
+                />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="fixed left-0 top-0 h-full w-16 md:w-20 bg-gray-900/80 backdrop-blur-lg border-r border-blue-500/10 z-10 flex flex-col items-center py-6">
+        <div className="flex flex-col items-center gap-8">
+          <motion.div 
+            whileHover={{ scale: 1.1 }}
+            className="p-2 bg-blue-500/10 rounded-lg cursor-pointer"
+            onClick={() => setJarvisActive(!jarvisActive)}
+          >
+            <Terminal className="text-blue-400" size={24} />
+          </motion.div>
+          
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            className={`p-2 rounded-lg ${activeTab === 'submissions' ? 'bg-blue-500/20 text-blue-400' : 'text-gray-400 hover:text-blue-300'}`}
             onClick={() => setActiveTab('submissions')}
           >
-            Contact Submissions
-          </button>
-          <button
-            className={`pb-2 px-4 text-sm font-medium ${activeTab === 'launch_pages' ? 'text-indigo-400 border-b-2 border-indigo-400' : 'text-gray-400 hover:text-indigo-300'}`}
+            <LayoutDashboard size={24} />
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            className={`p-2 rounded-lg ${activeTab === 'launch_pages' ? 'bg-blue-500/20 text-blue-400' : 'text-gray-400 hover:text-blue-300'}`}
             onClick={() => setActiveTab('launch_pages')}
           >
-            Launch Pages
-          </button>
-          <button
-            className={`pb-2 px-4 text-sm font-medium ${activeTab === 'transactions' ? 'text-indigo-400 border-b-2 border-indigo-400' : 'text-gray-400 hover:text-indigo-300'}`}
+            <HardDrive size={24} />
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            className={`p-2 rounded-lg ${activeTab === 'transactions' ? 'bg-blue-500/20 text-blue-400' : 'text-gray-400 hover:text-blue-300'}`}
             onClick={() => setActiveTab('transactions')}
           >
-            Support Transactions
-          </button>
+            <CreditCard size={24} />
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            className={`p-2 rounded-lg ${activeTab === 'marketing' ? 'bg-blue-500/20 text-blue-400' : 'text-gray-400 hover:text-blue-300'}`}
+            onClick={() => setActiveTab('marketing')}
+          >
+            <MailIcon size={24} />
+          </motion.button>
+        </div>
+        
+        <div className="mt-auto flex flex-col items-center gap-4">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            className="p-2 text-gray-400 hover:text-blue-300"
+          >
+            <Settings size={24} />
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            className="p-2 text-gray-400 hover:text-blue-300"
+            onClick={() => setAccessGranted(false)}
+          >
+            <Lock size={24} />
+          </motion.button>
         </div>
       </div>
-      {activeTab === 'submissions' ? (
-        <Dashboard 
-          submissions={submissions} 
-          loading={loading}
-          initLoad={initLoad}
-          refreshData={fetchSubmissions}
-          setError={setError}
-          error={error}
-        />
-      ) : activeTab === 'launch_pages' ? (
-        <LaunchPagesDashboard 
-          launchPages={launchPages}
-          loading={loading}
-          initLoad={initLoad}
-          refreshData={fetchLaunchPages}
-          setError={setError}
-          error={error}
-        />
-      ) : (
-        <SupportTransactionsDashboard 
-          transactions={transactions}
-          loading={loading}
-          initLoad={initLoad}
-          refreshData={fetchTransactions}
-          setError={setError}
-          error={error}
-        />
-      )}
+
+      <div className="ml-16 md:ml-20 p-6">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-2">
+            <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></div>
+            <span className="text-xs font-mono text-blue-400">SYSTEM STATUS: ONLINE</span>
+          </div>
+          <div className="text-xs font-mono text-gray-500">
+            {new Date().toLocaleString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true
+            }).toUpperCase()}
+          </div>
+        </div>
+
+        <div className="bg-gray-900/70 backdrop-blur-lg rounded-xl border border-blue-500/20 shadow-2xl shadow-blue-500/10 overflow-hidden">
+          {activeTab === 'submissions' ? (
+            <Dashboard 
+              submissions={submissions} 
+              loading={loading}
+              initLoad={initLoad}
+              refreshData={fetchSubmissions}
+              setError={setError}
+              error={error}
+            />
+          ) : activeTab === 'launch_pages' ? (
+            <LaunchPagesDashboard 
+              launchPages={launchPages}
+              loading={loading}
+              initLoad={initLoad}
+              refreshData={fetchLaunchPages}
+              setError={setError}
+              error={error}
+            />
+          ) : activeTab === 'transactions' ? (
+            <SupportTransactionsDashboard 
+              transactions={transactions}
+              loading={loading}
+              initLoad={initLoad}
+              refreshData={fetchTransactions}
+              setError={setError}
+              error={error}
+            />
+          ) : (
+            <Marketing />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
 
 const SmoothAuthGate = ({ pass, setPass, showPass, setShowPass, handleAuth, shake, error }) => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-indigo-900 p-4 pt-20">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-950 to-blue-950 p-4 pt-20">
       <motion.div
         key="auth-gate"
         initial={{ opacity: 0, y: 20 }}
         animate={{ 
           opacity: 1,
           y: 0,
-          boxShadow: shake ? '0 0 25px rgba(239, 68, 68, 0.7)' : '0 0 25px rgba(124, 58, 237, 0.4)',
+          boxShadow: shake ? '0 0 25px rgba(239, 68, 68, 0.7)' : '0 0 25px rgba(56, 182, 255, 0.4)',
           y: shake ? [0, -10, 10, -10, 0] : 0
         }}
         transition={{ 
@@ -196,26 +308,26 @@ const SmoothAuthGate = ({ pass, setPass, showPass, setShowPass, handleAuth, shak
           stiffness: 500,
           damping: 15
         }}
-        className="bg-gray-800/90 backdrop-blur-xl border border-indigo-500/20 rounded-3xl p-10 w-full max-w-lg shadow-2xl"
+        className="bg-gray-900/90 backdrop-blur-xl border border-blue-500/30 rounded-3xl p-10 w-full max-w-lg shadow-2xl"
       >
         <div className="text-center mb-8">
           <motion.div
             animate={{ rotate: shake ? [0, -5, 5, -5, 0] : 0 }}
-            className="inline-flex items-center justify-center p-4 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full mb-4"
+            className="inline-flex items-center justify-center p-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full mb-4"
           >
             <Lock size={32} className="text-white" />
           </motion.div>
-          <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-purple-400 mb-2">
-            Admin Control Center
+          <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-blue-400 mb-2">
+            SECURE ADMIN PORTAL
           </h1>
-          <p className="text-gray-300 text-sm">Enter your security credentials</p>
+          <p className="text-blue-300/80 text-sm font-mono">ENTER CREDENTIALS TO PROCEED</p>
         </div>
 
         {error && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-4 p-3 bg-red-500/20 text-red-300 rounded-lg text-sm flex items-center gap-2"
+            className="mb-4 p-3 bg-red-500/20 text-red-300 rounded-lg text-sm flex items-center gap-2 font-mono"
           >
             <X size={16} />
             {error}
@@ -228,13 +340,13 @@ const SmoothAuthGate = ({ pass, setPass, showPass, setShowPass, handleAuth, shak
             value={pass}
             onChange={(e) => setPass(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleAuth()}
-            className="w-full px-4 py-3 pl-12 bg-gray-900/50 border border-indigo-500/30 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-transparent text-gray-100 placeholder-gray-500"
-            placeholder="Enter password"
+            className="w-full px-4 py-3 pl-12 bg-gray-900/50 border border-blue-500/30 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent text-blue-100 placeholder-blue-500/50 font-mono"
+            placeholder="SECURITY PASSCODE"
           />
-          <Lock className="absolute left-4 top-3.5 text-gray-400" size={20} />
+          <Lock className="absolute left-4 top-3.5 text-blue-400/50" size={20} />
           <button 
             onClick={() => setShowPass(!showPass)}
-            className="absolute right-4 top-3.5 text-gray-400 hover:text-indigo-300 transition-colors"
+            className="absolute right-4 top-3.5 text-blue-400/50 hover:text-blue-300 transition-colors"
             aria-label={showPass ? "Hide password" : "Show password"}
           >
             {showPass ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -242,13 +354,17 @@ const SmoothAuthGate = ({ pass, setPass, showPass, setShowPass, handleAuth, shak
         </div>
 
         <motion.button
-          whileHover={{ scale: 1.03, boxShadow: '0 0 15px rgba(124, 58, 237, 0.5)' }}
+          whileHover={{ scale: 1.03, boxShadow: '0 0 15px rgba(56, 182, 255, 0.5)' }}
           whileTap={{ scale: 0.97 }}
           onClick={handleAuth}
-          className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-3 px-6 rounded-lg transition-all font-medium"
+          className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3 px-6 rounded-lg transition-all font-medium"
         >
-          Authenticate <ArrowRight size={20} />
+          AUTHENTICATE <ArrowRight size={20} />
         </motion.button>
+
+        <div className="mt-6 text-center">
+          <p className="text-xs text-blue-500/50 font-mono">SYSTEM PROTECTED BY ADVANCED ENCRYPTION</p>
+        </div>
       </motion.div>
     </div>
   );
@@ -331,7 +447,7 @@ const Dashboard = ({ submissions, loading, initLoad, refreshData, setError, erro
         throw new Error(errorData.error || 'Failed to delete submissions');
       }
 
-      await refreshData();
+      await idly();
       setSelected([]);
     } catch (error) {
       console.error('Delete error:', error.message);
@@ -343,37 +459,30 @@ const Dashboard = ({ submissions, loading, initLoad, refreshData, setError, erro
 
   return (
     <div>
-      <header className="mb-8">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500 mb-3">
-          Contact Submissions Dashboard
-        </h1>
+      <header className="mb-8 p-6 border-b border-blue-500/20">
         <div className="flex flex-col sm:flex-row justify-between gap-4">
-          <div className="relative flex-grow max-w-xl">
-            <Search className="absolute left-3 top-3 text-gray-400" size={20} />
-            <input
-              type="text"
-              placeholder="Search submissions..."
-              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-indigo-500/30 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-transparent text-gray-100 placeholder-gray-500"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-300 mb-2">
+              CONTACT SUBMISSIONS
+            </h1>
+            <p className="text-blue-400/70 text-sm font-mono">{processedData.length} RECORDS FOUND</p>
           </div>
           <div className="flex gap-3 flex-wrap">
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={exportCSV}
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-500 hover:bg-indigo-600 rounded-lg transition-colors text-sm font-medium"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 rounded-lg transition-colors text-sm font-medium text-blue-300"
               disabled={!processedData.length}
             >
               <Download size={18} />
-              <span className="hidden sm:inline">Export CSV</span>
+              <span className="hidden sm:inline">EXPORT</span>
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={deleteSelected}
-              className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg transition-colors disabled:opacity-50 text-sm font-medium"
+              className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg transition-colors disabled:opacity-50 text-sm font-medium text-red-300"
               disabled={!selected.length || isDeleting}
             >
               {isDeleting ? (
@@ -381,20 +490,20 @@ const Dashboard = ({ submissions, loading, initLoad, refreshData, setError, erro
               ) : (
                 <Trash2 size={18} />
               )}
-              <span className="hidden sm:inline">Delete Selected</span>
+              <span className="hidden sm:inline">DELETE</span>
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={refreshData}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-700/10 hover:bg-gray-700/20 border border-gray-700/30 rounded-lg transition-colors text-sm font-medium text-gray-300"
             >
               {loading ? (
                 <Loader2 size={18} className="animate-spin" />
               ) : (
                 <RefreshCw size={18} />
               )}
-              <span className="hidden sm:inline">Refresh</span>
+              <span className="hidden sm:inline">REFRESH</span>
             </motion.button>
           </div>
         </div>
@@ -402,7 +511,7 @@ const Dashboard = ({ submissions, loading, initLoad, refreshData, setError, erro
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-4 p-3 bg-red-500/20 text-red-300 rounded-lg text-sm flex items-center gap-2"
+            className="mt-4 p-3 bg-red-500/20 text-red-300 rounded-lg text-sm flex items-center gap-2 font-mono"
           >
             <X size={16} />
             {error}
@@ -412,12 +521,12 @@ const Dashboard = ({ submissions, loading, initLoad, refreshData, setError, erro
 
       {initLoad ? (
         <div className="flex justify-center items-center h-64">
-          <Loader2 className="animate-spin text-indigo-400" size={40} />
+          <Loader2 className="animate-spin text-blue-400" size={40} />
         </div>
       ) : (
-        <div className="bg-gray-800/50 border border-indigo-500/20 rounded-xl overflow-x-auto shadow-lg">
+        <div className="bg-gray-800/50 border border-blue-500/20 rounded-xl overflow-x-auto shadow-lg">
           <div className="min-w-[800px] sm:min-w-full">
-            <div className="grid grid-cols-12 gap-4 p-4 bg-gray-800/70 border-b border-indigo-500/20 font-medium text-sm text-gray-300">
+            <div className="grid grid-cols-12 gap-4 p-4 bg-gray-800/70 border-b border-blue-500/20 font-medium text-sm text-gray-300">
               <div className="col-span-1 flex items-center">
                 <input
                   type="checkbox"
@@ -429,11 +538,11 @@ const Dashboard = ({ submissions, loading, initLoad, refreshData, setError, erro
                       setSelected(processedData.map(item => item._id));
                     }
                   }}
-                  className="rounded border-indigo-500/50 focus:ring-indigo-400 h-4 w-4 text-indigo-400"
+                  className="rounded border-blue-500/50 focus:ring-blue-400 h-4 w-4 text-blue-400"
                 />
               </div>
               <div 
-                className="col-span-3 flex items-center cursor-pointer hover:text-indigo-300 transition-colors"
+                className="col-span-3 flex items-center cursor-pointer hover:text-blue-300 transition-colors"
                 onClick={() => requestSort('name')}
               >
                 <span>Name</span>
@@ -444,7 +553,7 @@ const Dashboard = ({ submissions, loading, initLoad, refreshData, setError, erro
                 )}
               </div>
               <div 
-                className="col-span-4 flex items-center cursor-pointer hover:text-indigo-300 transition-colors"
+                className="col-span-4 flex items-center cursor-pointer hover:text-blue-300 transition-colors"
                 onClick={() => requestSort('contactInfo')}
               >
                 <span>Contact Info</span>
@@ -455,7 +564,7 @@ const Dashboard = ({ submissions, loading, initLoad, refreshData, setError, erro
                 )}
               </div>
               <div 
-                className="col-span-2 flex items-center cursor-pointer hover:text-indigo-300 transition-colors"
+                className="col-span-2 flex items-center cursor-pointer hover:text-blue-300 transition-colors"
                 onClick={() => requestSort('contactMethod')}
               >
                 <span>Method</span>
@@ -466,7 +575,7 @@ const Dashboard = ({ submissions, loading, initLoad, refreshData, setError, erro
                 )}
               </div>
               <div 
-                className="col-span-2 flex items-center justify-end cursor-pointer hover:text-indigo-300 transition-colors"
+                className="col-span-2 flex items-center justify-end cursor-pointer hover:text-blue-300 transition-colors"
                 onClick={() => requestSort('createdAt')}
               >
                 <span>Date</span>
@@ -483,7 +592,7 @@ const Dashboard = ({ submissions, loading, initLoad, refreshData, setError, erro
                 {searchTerm ? 'No matching submissions found' : 'No submissions yet'}
               </div>
             ) : (
-              <div className="divide-y divide-indigo-500/10">
+              <div className="divide-y divide-blue-500/10">
                 {processedData.map((submission) => (
                   <div key={submission._id} className="hover:bg-gray-800/70 transition-colors duration-200">
                     <div 
@@ -502,7 +611,7 @@ const Dashboard = ({ submissions, loading, initLoad, refreshData, setError, erro
                                 : [...prev, submission._id]
                             );
                           }}
-                          className="rounded border-indigo-500/50 focus:ring-indigo-400 h-4 w-4 text-indigo-400"
+                          className="rounded border-blue-500/50 focus:ring-blue-400 h-4 w-4 text-blue-400"
                           onClick={(e) => e.stopPropagation()}
                         />
                       </div>
@@ -539,7 +648,7 @@ const Dashboard = ({ submissions, loading, initLoad, refreshData, setError, erro
                           transition={{ duration: 0.3, ease: 'easeInOut' }}
                           className="overflow-hidden"
                         >
-                          <div className="p-4 pl-12 bg-gray-800/30 text-sm border-t border-indigo-500/20">
+                          <div className="p-4 pl-12 bg-gray-800/30 text-sm border-t border-blue-500/20">
                             <div className="mb-4">
                               <h4 className="text-xs font-medium text-gray-300 mb-2">Full Message</h4>
                               <p className="whitespace-pre-line break-words text-gray-200">{submission.message || 'No message'}</p>
@@ -578,12 +687,12 @@ const Dashboard = ({ submissions, loading, initLoad, refreshData, setError, erro
         <div className="flex items-center gap-4">
           {loading && (
             <div className="flex items-center gap-2">
-              <Loader2 size={16} className="animate-spin text-indigo-400" />
+              <Loader2 size={16} className="animate-spin text-blue-400" />
               <span>Loading...</span>
             </div>
           )}
           <div>
-            Sorted by: <span className="text-indigo-300">{sortConfig.key} ({sortConfig.direction})</span>
+            Sorted by: <span className="text-blue-300">{sortConfig.key} ({sortConfig.direction})</span>
           </div>
         </div>
       </div>
@@ -679,37 +788,30 @@ const LaunchPagesDashboard = ({ launchPages, loading, initLoad, refreshData, set
 
   return (
     <div>
-      <header className="mb-8">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500 mb-3">
-          Launch Pages Dashboard
-        </h1>
+      <header className="mb-8 p-6 border-b border-blue-500/20">
         <div className="flex flex-col sm:flex-row justify-between gap-4">
-          <div className="relative flex-grow max-w-xl">
-            <Search className="absolute left-3 top-3 text-gray-400" size={20} />
-            <input
-              type="text"
-              placeholder="Search launch pages..."
-              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-indigo-500/30 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-transparent text-gray-100 placeholder-gray-500"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-300 mb-2">
+              LAUNCH PAGES
+            </h1>
+            <p className="text-blue-400/70 text-sm font-mono">{processedData.length} RECORDS FOUND</p>
           </div>
           <div className="flex gap-3 flex-wrap">
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={exportCSV}
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-500 hover:bg-indigo-600 rounded-lg transition-colors text-sm font-medium"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 rounded-lg transition-colors text-sm font-medium text-blue-300"
               disabled={!processedData.length}
             >
               <Download size={18} />
-              <span className="hidden sm:inline">Export CSV</span>
+              <span className="hidden sm:inline">EXPORT</span>
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={deleteSelected}
-              className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg transition-colors disabled:opacity-50 text-sm font-medium"
+              className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg transition-colors disabled:opacity-50 text-sm font-medium text-red-300"
               disabled={!selected.length || isDeleting}
             >
               {isDeleting ? (
@@ -717,20 +819,20 @@ const LaunchPagesDashboard = ({ launchPages, loading, initLoad, refreshData, set
               ) : (
                 <Trash2 size={18} />
               )}
-              <span className="hidden sm:inline">Delete Selected</span>
+              <span className="hidden sm:inline">DELETE</span>
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={refreshData}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-700/10 hover:bg-gray-700/20 border border-gray-700/30 rounded-lg transition-colors text-sm font-medium text-gray-300"
             >
               {loading ? (
                 <Loader2 size={18} className="animate-spin" />
               ) : (
                 <RefreshCw size={18} />
               )}
-              <span className="hidden sm:inline">Refresh</span>
+              <span className="hidden sm:inline">REFRESH</span>
             </motion.button>
           </div>
         </div>
@@ -738,7 +840,7 @@ const LaunchPagesDashboard = ({ launchPages, loading, initLoad, refreshData, set
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-4 p-3 bg-red-500/20 text-red-300 rounded-lg text-sm flex items-center gap-2"
+            className="mt-4 p-3 bg-red-500/20 text-red-300 rounded-lg text-sm flex items-center gap-2 font-mono"
           >
             <X size={16} />
             {error}
@@ -748,12 +850,12 @@ const LaunchPagesDashboard = ({ launchPages, loading, initLoad, refreshData, set
 
       {initLoad ? (
         <div className="flex justify-center items-center h-64">
-          <Loader2 className="animate-spin text-indigo-400" size={40} />
+          <Loader2 className="animate-spin text-blue-400" size={40} />
         </div>
       ) : (
-        <div className="bg-gray-800/50 border border-indigo-500/20 rounded-xl overflow-x-auto shadow-lg">
+        <div className="bg-gray-800/50 border border-blue-500/20 rounded-xl overflow-x-auto shadow-lg">
           <div className="min-w-[800px] sm:min-w-full">
-            <div className="grid grid-cols-12 gap-4 p-4 bg-gray-800/70 border-b border-indigo-500/20 font-medium text-sm text-gray-300">
+            <div className="grid grid-cols-12 gap-4 p-4 bg-gray-800/70 border-b border-blue-500/20 font-medium text-sm text-gray-300">
               <div className="col-span-1 flex items-center">
                 <input
                   type="checkbox"
@@ -765,11 +867,11 @@ const LaunchPagesDashboard = ({ launchPages, loading, initLoad, refreshData, set
                       setSelected(processedData.map(item => item._id));
                     }
                   }}
-                  className="rounded border-indigo-500/50 focus:ring-indigo-400 h-4 w-4 text-indigo-400"
+                  className="rounded border-blue-500/50 focus:ring-blue-400 h-4 w-4 text-blue-400"
                 />
               </div>
               <div 
-                className="col-span-2 flex items-center cursor-pointer hover:text-indigo-300 transition-colors"
+                className="col-span-2 flex items-center cursor-pointer hover:text-blue-300 transition-colors"
                 onClick={() => requestSort('owner')}
               >
                 <span>Owner</span>
@@ -780,7 +882,7 @@ const LaunchPagesDashboard = ({ launchPages, loading, initLoad, refreshData, set
                 )}
               </div>
               <div 
-                className="col-span-2 flex items-center cursor-pointer hover:text-indigo-300 transition-colors"
+                className="col-span-2 flex items-center cursor-pointer hover:text-blue-300 transition-colors"
                 onClick={() => requestSort('discord')}
               >
                 <span>Discord</span>
@@ -791,7 +893,7 @@ const LaunchPagesDashboard = ({ launchPages, loading, initLoad, refreshData, set
                 )}
               </div>
               <div 
-                className="col-span-3 flex items-center cursor-pointer hover:text-indigo-300 transition-colors"
+                className="col-span-3 flex items-center cursor-pointer hover:text-blue-300 transition-colors"
                 onClick={() => requestSort('pageId')}
               >
                 <span>Page ID</span>
@@ -805,7 +907,7 @@ const LaunchPagesDashboard = ({ launchPages, loading, initLoad, refreshData, set
                 <span>URL</span>
               </div>
               <div 
-                className="col-span-1 flex items-center cursor-pointer hover:text-indigo-300 transition-colors"
+                className="col-span-1 flex items-center cursor-pointer hover:text-blue-300 transition-colors"
                 onClick={() => requestSort('createdAt')}
               >
                 <span>Date</span>
@@ -822,7 +924,7 @@ const LaunchPagesDashboard = ({ launchPages, loading, initLoad, refreshData, set
                 {searchTerm ? 'No matching launch pages found' : 'No launch pages yet'}
               </div>
             ) : (
-              <div className="divide-y divide-indigo-500/10">
+              <div className="divide-y divide-blue-500/10">
                 {processedData.map((page) => (
                   <div key={page._id} className="hover:bg-gray-800/70 transition-colors duration-200">
                     <div 
@@ -841,7 +943,7 @@ const LaunchPagesDashboard = ({ launchPages, loading, initLoad, refreshData, set
                                 : [...prev, page._id]
                             );
                           }}
-                          className="rounded border-indigo-500/50 focus:ring-indigo-400 h-4 w-4 text-indigo-400"
+                          className="rounded border-blue-500/50 focus:ring-blue-400 h-4 w-4 text-blue-400"
                           onClick={(e) => e.stopPropagation()}
                         />
                       </div>
@@ -862,7 +964,7 @@ const LaunchPagesDashboard = ({ launchPages, loading, initLoad, refreshData, set
                           href={`/clients/launch?pageId=${page.pageId}`} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="truncate text-indigo-400 hover:text-indigo-300"
+                          className="truncate text-blue-400 hover:text-blue-300"
                           onClick={(e) => e.stopPropagation()}
                         >
                           {`/clients/launch?pageId=${page.pageId}`}
@@ -890,7 +992,7 @@ const LaunchPagesDashboard = ({ launchPages, loading, initLoad, refreshData, set
                           transition={{ duration: 0.3, ease: 'easeInOut' }}
                           className="overflow-hidden"
                         >
-                          <div className="p-4 pl-12 bg-gray-800/30 text-sm border-t border-indigo-500/20">
+                          <div className="p-4 pl-12 bg-gray-800/30 text-sm border-t border-blue-500/20">
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                               <div>
                                 <span className="text-gray-400">Owner:</span>{' '}
@@ -937,12 +1039,12 @@ const LaunchPagesDashboard = ({ launchPages, loading, initLoad, refreshData, set
         <div className="flex items-center gap-4">
           {loading && (
             <div className="flex items-center gap-2">
-              <Loader2 size={16} className="animate-spin text-indigo-400" />
+              <Loader2 size={16} className="animate-spin text-blue-400" />
               <span>Loading...</span>
             </div>
           )}
           <div>
-            Sorted by: <span className="text-indigo-300">{sortConfig.key} ({sortConfig.direction})</span>
+            Sorted by: <span className="text-blue-300">{sortConfig.key} ({sortConfig.direction})</span>
           </div>
         </div>
       </div>
@@ -1040,37 +1142,30 @@ const SupportTransactionsDashboard = ({ transactions, loading, initLoad, refresh
 
   return (
     <div>
-      <header className="mb-8">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500 mb-3">
-          Support Transactions Dashboard
-        </h1>
+      <header className="mb-8 p-6 border-b border-blue-500/20">
         <div className="flex flex-col sm:flex-row justify-between gap-4">
-          <div className="relative flex-grow max-w-xl">
-            <Search className="absolute left-3 top-3 text-gray-400" size={20} />
-            <input
-              type="text"
-              placeholder="Search transactions..."
-              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-indigo-500/30 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-transparent text-gray-100 placeholder-gray-500"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-300 mb-2">
+              SUPPORT TRANSACTIONS
+            </h1>
+            <p className="text-blue-400/70 text-sm font-mono">{processedData.length} RECORDS FOUND</p>
           </div>
           <div className="flex gap-3 flex-wrap">
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={exportCSV}
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-500 hover:bg-indigo-600 rounded-lg transition-colors text-sm font-medium"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 rounded-lg transition-colors text-sm font-medium text-blue-300"
               disabled={!processedData.length}
             >
               <Download size={18} />
-              <span className="hidden sm:inline">Export CSV</span>
+              <span className="hidden sm:inline">EXPORT</span>
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={deleteSelected}
-              className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg transition-colors disabled:opacity-50 text-sm font-medium"
+              className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg transition-colors disabled:opacity-50 text-sm font-medium text-red-300"
               disabled={!selected.length || isDeleting}
             >
               {isDeleting ? (
@@ -1078,20 +1173,20 @@ const SupportTransactionsDashboard = ({ transactions, loading, initLoad, refresh
               ) : (
                 <Trash2 size={18} />
               )}
-              <span className="hidden sm:inline">Delete Selected</span>
+              <span className="hidden sm:inline">DELETE</span>
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={refreshData}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-700/10 hover:bg-gray-700/20 border border-gray-700/30 rounded-lg transition-colors text-sm font-medium text-gray-300"
             >
               {loading ? (
                 <Loader2 size={18} className="animate-spin" />
               ) : (
                 <RefreshCw size={18} />
               )}
-              <span className="hidden sm:inline">Refresh</span>
+              <span className="hidden sm:inline">REFRESH</span>
             </motion.button>
           </div>
         </div>
@@ -1099,7 +1194,7 @@ const SupportTransactionsDashboard = ({ transactions, loading, initLoad, refresh
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-4 p-3 bg-red-500/20 text-red-300 rounded-lg text-sm flex items-center gap-2"
+            className="mt-4 p-3 bg-red-500/20 text-red-300 rounded-lg text-sm flex items-center gap-2 font-mono"
           >
             <X size={16} />
             {error}
@@ -1109,12 +1204,12 @@ const SupportTransactionsDashboard = ({ transactions, loading, initLoad, refresh
 
       {initLoad ? (
         <div className="flex justify-center items-center h-64">
-          <Loader2 className="animate-spin text-indigo-400" size={40} />
+          <Loader2 className="animate-spin text-blue-400" size={40} />
         </div>
       ) : (
-        <div className="bg-gray-800/50 border border-indigo-500/20 rounded-xl overflow-x-auto shadow-lg">
+        <div className="bg-gray-800/50 border border-blue-500/20 rounded-xl overflow-x-auto shadow-lg">
           <div className="min-w-[1000px] sm:min-w-full">
-            <div className="grid grid-cols-12 gap-4 p-4 bg-gray-800/70 border-b border-indigo-500/20 font-medium text-sm text-gray-300">
+            <div className="grid grid-cols-12 gap-4 p-4 bg-gray-800/70 border-b border-blue-500/20 font-medium text-sm text-gray-300">
               <div className="col-span-1 flex items-center">
                 <input
                   type="checkbox"
@@ -1126,11 +1221,11 @@ const SupportTransactionsDashboard = ({ transactions, loading, initLoad, refresh
                       setSelected(processedData.map(item => item._id));
                     }
                   }}
-                  className="rounded border-indigo-500/50 focus:ring-indigo-400 h-4 w-4 text-indigo-400"
+                  className="rounded border-blue-500/50 focus:ring-blue-400 h-4 w-4 text-blue-400"
                 />
               </div>
               <div 
-                className="col-span-2 flex items-center cursor-pointer hover:text-indigo-300 transition-colors"
+                className="col-span-2 flex items-center cursor-pointer hover:text-blue-300 transition-colors"
                 onClick={() => requestSort('planName')}
               >
                 <span>Plan</span>
@@ -1141,7 +1236,7 @@ const SupportTransactionsDashboard = ({ transactions, loading, initLoad, refresh
                 )}
               </div>
               <div 
-                className="col-span-2 flex items-center cursor-pointer hover:text-indigo-300 transition-colors"
+                className="col-span-2 flex items-center cursor-pointer hover:text-blue-300 transition-colors"
                 onClick={() => requestSort('amount')}
               >
                 <span>Amount</span>
@@ -1161,7 +1256,7 @@ const SupportTransactionsDashboard = ({ transactions, loading, initLoad, refresh
                 <span>Contact Details</span>
               </div>
               <div 
-                className="col-span-1 flex items-center justify-end cursor-pointer hover:text-indigo-300 transition-colors"
+                className="col-span-1 flex items-center justify-end cursor-pointer hover:text-blue-300 transition-colors"
                 onClick={() => requestSort('createdAt')}
               >
                 <span>Date</span>
@@ -1178,7 +1273,7 @@ const SupportTransactionsDashboard = ({ transactions, loading, initLoad, refresh
                 {searchTerm ? 'No matching transactions found' : 'No transactions yet'}
               </div>
             ) : (
-              <div className="divide-y divide-indigo-500/10">
+              <div className="divide-y divide-blue-500/10">
                 {processedData.map((tx) => (
                   <div key={tx._id} className="hover:bg-gray-800/70 transition-colors duration-200">
                     <div 
@@ -1197,7 +1292,7 @@ const SupportTransactionsDashboard = ({ transactions, loading, initLoad, refresh
                                 : [...prev, tx._id]
                             );
                           }}
-                          className="rounded border-indigo-500/50 focus:ring-indigo-400 h-4 w-4 text-indigo-400"
+                          className="rounded border-blue-500/50 focus:ring-blue-400 h-4 w-4 text-blue-400"
                           onClick={(e) => e.stopPropagation()}
                         />
                       </div>
@@ -1238,7 +1333,7 @@ const SupportTransactionsDashboard = ({ transactions, loading, initLoad, refresh
                           transition={{ duration: 0.3, ease: 'easeInOut' }}
                           className="overflow-hidden"
                         >
-                          <div className="p-4 pl-12 bg-gray-800/30 text-sm border-t border-indigo-500/20">
+                          <div className="p-4 pl-12 bg-gray-800/30 text-sm border-t border-blue-500/20">
                             <div className="mb-4">
                               <h4 className="text-xs font-medium text-gray-300 mb-2">Message</h4>
                               <p className="whitespace-pre-line break-words text-gray-200">{tx.message || 'No message'}</p>
@@ -1297,15 +1392,848 @@ const SupportTransactionsDashboard = ({ transactions, loading, initLoad, refresh
         <div className="flex items-center gap-4">
           {loading && (
             <div className="flex items-center gap-2">
-              <Loader2 size={16} className="animate-spin text-indigo-400" />
+              <Loader2 size={16} className="animate-spin text-blue-400" />
               <span>Loading...</span>
             </div>
           )}
           <div>
-            Sorted by: <span className="text-indigo-300">{sortConfig.key} ({sortConfig.direction})</span>
+            Sorted by: <span className="text-blue-300">{sortConfig.key} ({sortConfig.direction})</span>
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const Marketing = () => {
+  const [message, setMessage] = useState('');
+  const [emails, setEmails] = useState('');
+  const [subject, setSubject] = useState('');
+  const [status, setStatus] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [templateName, setTemplateName] = useState('');
+  const [templates, setTemplates] = useState([]);
+  const [emailLists, setEmailLists] = useState([]);
+  const [emailListName, setEmailListName] = useState('');
+  const [singleEmail, setSingleEmail] = useState('');
+  const [selectedList, setSelectedList] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [sendHistory, setSendHistory] = useState([]);
+  const [emailValidation, setEmailValidation] = useState('');
+  const [activeTab, setActiveTab] = useState('compose');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [editTemplate, setEditTemplate] = useState(null);
+  const [editEmailList, setEditEmailList] = useState(null);
+  const [scheduleTime, setScheduleTime] = useState('');
+  const [scheduledEmails, setScheduledEmails] = useState([]);
+  const fileInputRef = useRef(null);
+
+  // Load data from localStorage and MongoDB
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const savedTemplates = JSON.parse(localStorage.getItem('emailTemplates') || '[]');
+        const savedEmailLists = JSON.parse(localStorage.getItem('emailLists') || '[]');
+        const savedHistory = JSON.parse(localStorage.getItem('sendHistory') || '[]');
+        if (Array.isArray(savedTemplates)) setTemplates(savedTemplates);
+        if (Array.isArray(savedEmailLists)) setEmailLists(savedEmailLists);
+        if (Array.isArray(savedHistory)) setSendHistory(savedHistory);
+
+        const response = await fetch('/api/schedule-emails', { method: 'GET' });
+        const result = await response.json();
+        if (response.ok) {
+          setScheduledEmails(result.scheduledEmails || []);
+        } else {
+          setStatus('Error: Failed to load scheduled emails');
+        }
+      } catch (error) {
+        console.error('Error loading data:', error);
+        setStatus('Error: Failed to load data');
+      }
+    };
+    loadData();
+  }, []);
+
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    if (passwordInput === process.env.NEXT_PUBLIC_MAIN_PAGE_PASSWORD) {
+      setIsAuthenticated(true);
+      setPasswordInput('');
+      setStatus('');
+    } else {
+      setStatus('Error: Incorrect password');
+      setPasswordInput('');
+    }
+  };
+
+  const handleSaveTemplate = () => {
+    if (!templateName || !message) {
+      setStatus('Error: Enter a template name and message');
+      return;
+    }
+    if (templates.some((t) => t.name === templateName)) {
+      setStatus('Error: Template name already exists');
+      return;
+    }
+    try {
+      const newTemplate = {
+        name: templateName,
+        content: message,
+        createdAt: new Date().toISOString(),
+      };
+      const updatedTemplates = [...templates, newTemplate];
+      setTemplates(updatedTemplates);
+      localStorage.setItem('emailTemplates', JSON.stringify(updatedTemplates));
+      setTemplateName('');
+      setStatus('Template saved successfully!');
+    } catch (error) {
+      setStatus('Error: Failed to save template');
+    }
+  };
+
+  const handleEditTemplate = (template) => {
+    setEditTemplate(template);
+    setTemplateName(template.name);
+    setMessage(template.content);
+    setActiveTab('compose');
+  };
+
+  const handleSaveEditedTemplate = () => {
+    if (!templateName || !message) {
+      setStatus('Error: Enter a template name and message');
+      return;
+    }
+    try {
+      const updatedTemplates = templates.map((t) =>
+        t.name === editTemplate.name
+          ? { ...t, name: templateName, content: message, updatedAt: new Date().toISOString() }
+          : t
+      );
+      setTemplates(updatedTemplates);
+      localStorage.setItem('emailTemplates', JSON.stringify(updatedTemplates));
+      setEditTemplate(null);
+      setTemplateName('');
+      setMessage('');
+      setStatus('Template updated successfully!');
+    } catch (error) {
+      setStatus('Error: Failed to update template');
+    }
+  };
+
+  const handleDeleteTemplate = (name) => {
+    if (!confirm(`Are you sure you want to delete the template "${name}"?`)) return;
+    try {
+      const updatedTemplates = templates.filter((t) => t.name !== name);
+      setTemplates(updatedTemplates);
+      localStorage.setItem('emailTemplates', JSON.stringify(updatedTemplates));
+      setStatus('Template deleted successfully!');
+    } catch (error) {
+      setStatus('Error: Failed to delete template');
+    }
+  };
+
+  const handleDuplicateTemplate = (template) => {
+    const newName = `${template.name} (Copy)`;
+    if (templates.some((t) => t.name === newName)) {
+      setStatus('Error: Duplicate template name already exists');
+      return;
+    }
+    try {
+      const newTemplate = {
+        ...template,
+        name: newName,
+        createdAt: new Date().toISOString(),
+      };
+      const updatedTemplates = [...templates, newTemplate];
+      setTemplates(updatedTemplates);
+      localStorage.setItem('emailTemplates', JSON.stringify(updatedTemplates));
+      setStatus('Template duplicated successfully!');
+    } catch (error) {
+      setStatus('Error: Failed to duplicate template');
+    }
+  };
+
+  const handleSaveEmailList = () => {
+    if (!emailListName || !emails) {
+      setStatus('Error: Enter a list name and emails');
+      return;
+    }
+    if (emailLists.some((l) => l.name === emailListName)) {
+      setStatus('Error: List name already exists');
+      return;
+    }
+    try {
+      const emailArray = emails
+        .split('\n')
+        .map((email) => email.trim())
+        .filter((email) => email);
+      const newList = {
+        name: emailListName,
+        emails: emailArray,
+        createdAt: new Date().toISOString(),
+        count: emailArray.length,
+      };
+      const updatedLists = [...emailLists, newList];
+      setEmailLists(updatedLists);
+      localStorage.setItem('emailLists', JSON.stringify(updatedLists));
+      setEmailListName('');
+      setStatus('Email list saved successfully!');
+    } catch (error) {
+      setStatus('Error: Failed to save email list');
+    }
+  };
+
+  const handleEditEmailList = (list) => {
+    setEditEmailList(list);
+    setEmailListName(list.name);
+    setEmails(list.emails.join('\n'));
+    setActiveTab('compose');
+  };
+
+  const handleSaveEditedEmailList = () => {
+    if (!emailListName || !emails) {
+      setStatus('Error: Enter a list name and emails');
+      return;
+    }
+    try {
+      const emailArray = emails
+        .split('\n')
+        .map((email) => email.trim())
+        .filter((email) => email);
+      const updatedLists = emailLists.map((l) =>
+        l.name === editEmailList.name
+          ? {
+              ...l,
+              name: emailListName,
+              emails: emailArray,
+              count: emailArray.length,
+              updatedAt: new Date().toISOString(),
+            }
+          : l
+      );
+      setEmailLists(updatedLists);
+      localStorage.setItem('emailLists', JSON.stringify(updatedLists));
+      setEditEmailList(null);
+      setEmailListName('');
+      setEmails('');
+      setStatus('Email list updated successfully!');
+    } catch (error) {
+      setStatus('Error: Failed to update email list');
+    }
+  };
+
+  const handleDeleteEmailList = (name) => {
+    if (!confirm(`Are you sure you want to delete the email list "${name}"?`)) return;
+    try {
+      const updatedLists = emailLists.filter((l) => l.name !== name);
+      setEmailLists(updatedLists);
+      localStorage.setItem('emailLists', JSON.stringify(updatedLists));
+      setSelectedList('');
+      setStatus('Email list deleted successfully!');
+    } catch (error) {
+      setStatus('Error: Failed to delete email list');
+    }
+  };
+
+  const handleDuplicateEmailList = (list) => {
+    const newName = `${list.name} (Copy)`;
+    if (emailLists.some((l) => l.name === newName)) {
+      setStatus('Error: Duplicate list name already exists');
+      return;
+    }
+    try {
+      const newList = {
+        ...list,
+        name: newName,
+        createdAt: new Date().toISOString(),
+      };
+      const updatedLists = [...emailLists, newList];
+      setEmailLists(updatedLists);
+      localStorage.setItem('emailLists', JSON.stringify(updatedLists));
+      setStatus('Email list duplicated successfully!');
+    } catch (error) {
+      setStatus('Error: Failed to duplicate email list');
+    }
+  };
+
+  const handleDeleteScheduledEmail = async (id) => {
+    if (!confirm('Are you sure you want to delete this scheduled email?')) return;
+    try {
+      const response = await fetch('/api/schedule-emails', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      if (response.ok) {
+        const updatedScheduled = scheduledEmails.filter((email) => email.id !== id);
+        setScheduledEmails(updatedScheduled);
+        setStatus('Scheduled email deleted successfully!');
+      } else {
+        const result = await response.json();
+        setStatus(`Error: ${result.error || 'Failed to delete scheduled email'}`);
+      }
+    } catch (error) {
+      setStatus('Error: Failed to delete scheduled email');
+    }
+  };
+
+  const handleLoadTemplate = (templateContent) => {
+    setMessage(templateContent);
+    setActiveTab('compose');
+  };
+
+  const handleLoadEmailList = (listName) => {
+    const list = emailLists.find((l) => l.name === listName);
+    if (list) {
+      setEmails(list.emails.join('\n'));
+      setSelectedList(listName);
+      setActiveTab('compose');
+    }
+  };
+
+  const handleAddSingleEmail = () => {
+    if (!singleEmail) return;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(singleEmail)) {
+      setEmailValidation(`Invalid email: ${singleEmail}`);
+      return;
+    }
+    setEmails(emails ? `${emails}\n${singleEmail}` : singleEmail);
+    setSingleEmail('');
+    setEmailValidation('');
+  };
+
+  const handleEmailChange = (value) => {
+    setEmails(value);
+    const validation = validateEmails(value);
+    setEmailValidation(
+      validation.invalidEmails.length > 0
+        ? `Invalid emails: ${validation.invalidEmails.join(', ')}`
+        : ''
+    );
+  };
+
+  const validateEmails = (emailString) => {
+    const emailArray = emailString
+      .split('\n')
+      .map((email) => email.trim())
+      .filter((email) => email);
+    const invalidEmails = emailArray.filter(
+      (email) => !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    );
+    return {
+      valid: invalidEmails.length === 0,
+      invalidEmails,
+      count: emailArray.length,
+    };
+  };
+
+  const handleClearForm = () => {
+    setMessage('');
+    setEmails('');
+    setSubject('');
+    setSingleEmail('');
+    setTemplateName('');
+    setEmailListName('');
+    setSelectedList('');
+    setEditTemplate(null);
+    setEditEmailList(null);
+    setScheduleTime('');
+    setStatus('Form cleared');
+  };
+
+  const handleClearHistory = () => {
+    if (!confirm('Are you sure you want to clear send history?')) return;
+    try {
+      setSendHistory([]);
+      localStorage.setItem('sendHistory', JSON.stringify([]));
+      setStatus('Send history cleared successfully!');
+    } catch (error) {
+      console.error('Error clearing send history:', error);
+      setStatus('Error: Failed to clear send history');
+    }
+  };
+
+  const handleSendEmail = async () => {
+    if (!subject || !message || !emails) {
+      setStatus('Error: Please fill in all fields');
+      return;
+    }
+    const validation = validateEmails(emails);
+    if (!validation.valid) {
+      setStatus(`Error: Invalid emails detected: ${validation.invalidEmails.join(', ')}`);
+      return;
+    }
+    try {
+      const response = await fetch('/api/send-emails', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subject,
+          message,
+          emails: validation.count > 1 ? emails.split('\n').map((e) => e.trim()) : [emails.trim()],
+          scheduleTime: scheduleTime || null,
+        }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        const newHistory = {
+          id: Date.now().toString(),
+          subject,
+          recipients: validation.count,
+          sentAt: new Date().toISOString(),
+        };
+        const updatedHistory = [...sendHistory, newHistory];
+        setSendHistory(updatedHistory);
+        localStorage.setItem('sendHistory', JSON.stringify(updatedHistory));
+        if (scheduleTime) {
+          setScheduledEmails([...scheduledEmails, { ...newHistory, scheduleTime }]);
+          setStatus('Email scheduled successfully!');
+        } else {
+          setStatus('Email sent successfully!');
+        }
+        handleClearForm();
+      } else {
+        setStatus(`Error: ${result.error || 'Failed to send email'}`);
+      }
+    } catch (error) {
+      setStatus('Error: Failed to send email');
+    }
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target.result;
+      const emailArray = text
+        .split('\n')
+        .map((email) => email.trim())
+        .filter((email) => email);
+      setEmails(emailArray.join('\n'));
+      const validation = validateEmails(emailArray.join('\n'));
+      setEmailValidation(
+        validation.invalidEmails.length > 0
+          ? `Invalid emails in file: ${validation.invalidEmails.join(', ')}`
+          : ''
+      );
+    };
+    reader.readAsText(file);
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-950 p-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gray-900/90 backdrop-blur-xl border border-blue-500/30 rounded-3xl p-10 w-full max-w-lg"
+        >
+          <h1 className="text-3xl font-bold text-blue-300 mb-6 text-center">Marketing Access</h1>
+          {status && (
+            <div className="mb-4 p-3 bg-red-500/20 text-red-300 rounded-lg text-sm flex items-center gap-2">
+              <X size={16} />
+              {status}
+            </div>
+          )}
+          <form onSubmit={handlePasswordSubmit}>
+            <div className="relative mb-6">
+              <input
+                type="password"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                className="w-full px-4 py-3 pl-12 bg-gray-900/50 border border-blue-500/30 rounded-lg text-blue-100"
+                placeholder="Enter marketing password"
+              />
+              <Lock className="absolute left-4 top-3.5 text-blue-400/50" size={20} />
+            </div>
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              type="submit"
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg"
+            >
+              Authenticate
+            </motion.button>
+          </form>
+        </motion.div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6">
+      <header className="mb-8 border-b border-blue-500/20">
+        <h1 className="text-3xl font-bold text-blue-300 mb-2">MARKETING DASHBOARD</h1>
+        <div className="flex gap-4 mb-4">
+          {['compose', 'templates', 'emailLists', 'history', 'scheduled'].map((tab) => (
+            <motion.button
+              key={tab}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`px-4 py-2 rounded-lg ${
+                activeTab === tab ? 'bg-blue-500/20 text-blue-300' : 'text-gray-400 hover:text-blue-300'
+              }`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </motion.button>
+          ))}
+        </div>
+        {status && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`mt-4 p-3 rounded-lg text-sm flex items-center gap-2 font-mono ${
+              status.includes('Error') ? 'bg-red-500/20 text-red-300' : 'bg-green-500/20 text-green-300'
+            }`}
+          >
+            {status.includes('Error') ? <X size={16} /> : <Check size={16} />}
+            {status}
+          </motion.div>
+        )}
+      </header>
+
+      {activeTab === 'compose' && (
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-3 bg-gray-800/50 p-6 rounded-xl border border-blue-500/20">
+            <h2 className="text-xl font-bold text-blue-300 mb-4">Compose Email</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-gray-300 mb-1">Subject</label>
+                <input
+                  type="text"
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  className="w-full px-4 py-2 bg-gray-900/50 border border-blue-500/30 rounded-lg text-blue-100"
+                  placeholder="Email subject"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-300 mb-1">Message</label>
+                <textarea
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="w-full px-4 py-2 bg-gray-900/50 border border-blue-500/30 rounded-lg text-blue-100 h-40"
+                  placeholder="Email message"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-300 mb-1">Recipients</label>
+                <textarea
+                  value={emails}
+                  onChange={(e) => handleEmailChange(e.target.value)}
+                  className="w-full px-4 py-2 bg-gray-900/50 border border-blue-500/30 rounded-lg text-blue-100 h-20"
+                  placeholder="Enter emails (one per line)"
+                />
+                {emailValidation && (
+                  <p className="text-red-300 text-sm mt-1">{emailValidation}</p>
+                )}
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <label className="block text-gray-300 mb-1">Add Single Email</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="email"
+                      value={singleEmail}
+                      onChange={(e) => setSingleEmail(e.target.value)}
+                      className="flex-1 px-4 py-2 bg-gray-900/50 border border-blue-500/30 rounded-lg text-blue-100"
+                      placeholder="Add email"
+                    />
+                    <motion.button
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={handleAddSingleEmail}
+                      className="px-4 py-2 bg-blue-500/20 text-blue-300 rounded-lg"
+                    >
+                      Add
+                    </motion.button>
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <label className="block text-gray-300 mb-1">Upload Email List</label>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    accept=".txt,.csv"
+                    className="w-full px-4 py-2 bg-gray-900/50 border border-blue-500/30 rounded-lg text-blue-100"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-gray-300 mb-1">Schedule Email (Optional)</label>
+                <input
+                  type="datetime-local"
+                  value={scheduleTime}
+                  onChange={(e) => setScheduleTime(e.target.value)}
+                  className="w-full px-4 py-2 bg-gray-900/50 border border-blue-500/30 rounded-lg text-blue-100"
+                />
+              </div>
+              <div className="flex gap-4">
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={handleSendEmail}
+                  className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
+                >
+                  {scheduleTime ? 'Schedule Email' : 'Send Email'}
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={handleClearForm}
+                  className="px-4 py-2 bg-gray-700/20 text-gray-300 rounded-lg"
+                >
+                  Clear Form
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={handleSaveTemplate}
+                  className="px-4 py-2 bg-blue-500/20 text-blue-300 rounded-lg"
+                >
+                  {editTemplate ? 'Update Template' : 'Save as Template'}
+                </motion.button>
+              </div>
+            </div>
+          </div>
+          <div className={`lg:col-span-1 bg-gray-800/50 p-4 rounded-xl border border-blue-500/20 ${isSidebarCollapsed ? 'w-16' : 'w-full'}`}>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+              className="mb-4 text-blue-300"
+            >
+              {isSidebarCollapsed ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
+            </motion.button>
+            {!isSidebarCollapsed && (
+              <>
+                <h3 className="text-lg font-bold text-blue-300 mb-4">Templates & Lists</h3>
+                <div className="mb-4">
+                  <label className="block text-gray-300 mb-1">Template Name</label>
+                  <input
+                    type="text"
+                    value={templateName}
+                    onChange={(e) => setTemplateName(e.target.value)}
+                    className="w-full px-4 py-2 bg-gray-900/50 border border-blue-500/30 rounded-lg text-blue-100"
+                    placeholder="Template name"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-300 mb-1">Email List Name</label>
+                  <input
+                    type="text"
+                    value={emailListName}
+                    onChange={(e) => setEmailListName(e.target.value)}
+                    className="w-full px-4 py-2 bg-gray-900/50 border border-blue-500/30 rounded-lg text-blue-100"
+                    placeholder="Email list name"
+                  />
+                  <motion.button
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={editEmailList ? handleSaveEditedEmailList : handleSaveEmailList}
+                    className="mt-2 px-4 py-2 bg-blue-500/20 text-blue-300 rounded-lg w-full"
+                  >
+                    {editEmailList ? 'Update List' : 'Save List'}
+                  </motion.button>
+                </div>
+                <div>
+                  <label className="block text-gray-300 mb-1">Select Email List</label>
+                  <select
+                    value={selectedList}
+                    onChange={(e) => handleLoadEmailList(e.target.value)}
+                    className="w-full px-4 py-2 bg-gray-900/50 border border-blue-500/30 rounded-lg text-blue-100"
+                  >
+                    <option value="">Select a list</option>
+                    {emailLists.map((list) => (
+                      <option key={list.name} value={list.name}>
+                        {list.name} ({list.count} emails)
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'templates' && (
+        <div className="bg-gray-800/50 p-6 rounded-xl border border-blue-500/20">
+          <h2 className="text-xl font-bold text-blue-300 mb-4">Email Templates</h2>
+          {templates.length === 0 ? (
+            <p className="text-gray-400">No templates found</p>
+          ) : (
+            <div className="space-y-4">
+              {templates.map((template) => (
+                <div key={template.name} className="p-4 bg-gray-900/50 rounded-lg border border-blue-500/30">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h3 className="text-blue-300">{template.name}</h3>
+                      <p className="text-gray-400 text-sm">{new Date(template.createdAt).toLocaleString()}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <motion.button
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => handleLoadTemplate(template.content)}
+                        className="px-4 py-2 bg-blue-500/20 text-blue-300 rounded-lg"
+                      >
+                        Load
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => handleEditTemplate(template)}
+                        className="px-4 py-2 bg-blue-500/20 text-blue-300 rounded-lg"
+                      >
+                        Edit
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => handleDuplicateTemplate(template)}
+                        className="px-4 py-2 bg-blue-500/20 text-blue-300 rounded-lg"
+                      >
+                        Duplicate
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => handleDeleteTemplate(template.name)}
+                        className="px-4 py-2 bg-red-500/20 text-red-300 rounded-lg"
+                      >
+                        Delete
+                      </motion.button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'emailLists' && (
+        <div className="bg-gray-800/50 p-6 rounded-xl border border-blue-500/20">
+          <h2 className="text-xl font-bold text-blue-300 mb-4">Email Lists</h2>
+          {emailLists.length === 0 ? (
+            <p className="text-gray-400">No email lists found</p>
+          ) : (
+            <div className="space-y-4">
+              {emailLists.map((list) => (
+                <div key={list.name} className="p-4 bg-gray-900/50 rounded-lg border border-blue-500/30">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h3 className="text-blue-300">{list.name}</h3>
+                      <p className="text-gray-400 text-sm">{list.count} emails</p>
+                      <p className="text-gray-400 text-sm">{new Date(list.createdAt).toLocaleString()}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <motion.button
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => handleLoadEmailList(list.name)}
+                        className="px-4 py-2 bg-blue-500/20 text-blue-300 rounded-lg"
+                      >
+                        Load
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => handleEditEmailList(list)}
+                        className="px-4 py-2 bg-blue-500/20 text-blue-300 rounded-lg"
+                      >
+                        Edit
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => handleDuplicateEmailList(list)}
+                        className="px-4 py-2 bg-blue-500/20 text-blue-300 rounded-lg"
+                      >
+                        Duplicate
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => handleDeleteEmailList(list.name)}
+                        className="px-4 py-2 bg-red-500/20 text-red-300 rounded-lg"
+                      >
+                        Delete
+                      </motion.button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'history' && (
+        <div className="bg-gray-800/50 p-6 rounded-xl border border-blue-500/20">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold text-blue-300">Send History</h2>
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={handleClearHistory}
+              className="px-4 py-2 bg-red-500/20 text-red-300 rounded-lg"
+            >
+              Clear History
+            </motion.button>
+          </div>
+          {sendHistory.length === 0 ? (
+            <p className="text-gray-400">No send history found</p>
+          ) : (
+            <div className="space-y-4">
+              {sendHistory.map((history) => (
+                <div key={history.id} className="p-4 bg-gray-900/50 rounded-lg border border-blue-500/30">
+                  <h3 className="text-blue-300">{history.subject}</h3>
+                  <p className="text-gray-400 text-sm">Sent to {history.recipients} recipients</p>
+                  <p className="text-gray-400 text-sm">{new Date(history.sentAt).toLocaleString()}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'scheduled' && (
+        <div className="bg-gray-800/50 p-6 rounded-xl border border-blue-500/20">
+          <h2 className="text-xl font-bold text-blue-300 mb-4">Scheduled Emails</h2>
+          {scheduledEmails.length === 0 ? (
+            <p className="text-gray-400">No scheduled emails found</p>
+          ) : (
+            <div className="space-y-4">
+              {scheduledEmails.map((email) => (
+                <div key={email.id} className="p-4 bg-gray-900/50 rounded-lg border border-blue-500/30">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h3 className="text-blue-300">{email.subject}</h3>
+                      <p className="text-gray-400 text-sm">Scheduled for {new Date(email.scheduleTime).toLocaleString()}</p>
+                      <p className="text-gray-400 text-sm">To {email.recipients} recipients</p>
+                    </div>
+                    <motion.button
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => handleDeleteScheduledEmail(email.id)}
+                      className="px-4 py-2 bg-red-500/20 text-red-300 rounded-lg"
+                    >
+                      Cancel
+                    </motion.button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
