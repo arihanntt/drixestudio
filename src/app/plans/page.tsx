@@ -78,7 +78,7 @@ const PlanCard = React.memo(({
         <span className="text-2xl font-bold text-violet-400 drop-shadow-lg">
           {currencySymbols[selectedCurrency]}
           {getConvertedPrice(plan.price)}
-          <span className="text-sm text-white/70">/mo</span>
+          <span className="text-sm text-white/70"></span>
         </span>
       </div>
 
@@ -171,7 +171,7 @@ const ComparisonTable = ({
                       <div className="text-violet-400 text-sm sm:text-base">
                         {currencySymbols[selectedCurrency]}
                         {getConvertedPrice(plan.price)}
-                        <span className="text-xs sm:text-sm text-white/70">/mo</span>
+                        <span className="text-xs sm:text-sm text-white/70"></span>
                       </div>
                     </th>
                   ))}
