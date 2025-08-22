@@ -80,8 +80,8 @@ const HeroSection = () => {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="text-sm sm:text-base text-gray-400 max-w-xl mx-auto mb-6 leading-relaxed"
         >
-          Designed by <span className="text-white font-semibold">Drixe</span>, inspired by{" "}
-          <span className="italic font-semibold text-white">Lua</span>. Trusted by gamers, brands & creators worldwide.
+          <span className="text-white font-semibold"></span>{" "}
+          <span className="italic font-semibold text-white"></span>Trusted by gamers, brands & creators worldwide.
         </motion.p>
 
         <motion.div
