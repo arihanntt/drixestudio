@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useMemo, useCallback, useRef, useEffect } from "react";
-import { CheckCircle, X, ChevronDown, ChevronUp, Check, Gem, Crown, Zap, Shield, Mail } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { Check, Gem, Crown, Zap, Shield, Mail, Bitcoin, Sparkles, Star, Sword, Target, Trophy, Skull } from "lucide-react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import Modal from "@/components/Modal";
 
 interface Plan {
@@ -15,65 +15,70 @@ interface Plan {
   popular?: boolean;
   bestValue?: boolean;
   custom?: boolean;
+  gradient: string;
+  glow: string;
+  icon: React.ReactNode;
+  particleColor: string;
 }
 
 const plans: Plan[] = [
   {
-    name: "Starter Pack",
+    name: "STARTER PACK",
     price: 9.99,
     gems: 20,
     bonus: 0,
-    summary: "Perfect for beginners looking to get started in Death Ball",
-    details: [
-      "20 Million Death Ball Gems",
-      "Instant Delivery",
-      "$0.50 per million",
-      "Secure Payment",
-    ]
+    summary: "Begin your Death Ball journey with essential power",
+    details: ["20 Million Death Ball Gems", "Instant Delivery", "Starter Bonus", "Secure Encrypted Payment"],
+    gradient: "from-blue-600 to-cyan-500",
+    glow: "rgba(59, 130, 246, 0.3)",
+    icon: <Sparkles className="w-6 h-6" />,
+    particleColor: "rgb(59, 130, 246)"
   },
   {
-    name: "Warrior Bundle",
+    name: "WARRIOR BUNDLE",
     price: 45,
     gems: 100,
     bonus: 0,
-    summary: "Great value for regular players wanting more power",
+    summary: "Dominate the arena with superior firepower",
     popular: true,
-    details: [
-      "100 Million Death Ball Gems",
-      "Instant Delivery",
-      "Secure Payment",
-      "$0.45 per million"
-    ]
+    details: ["100 Million Death Ball Gems", "Priority Delivery", "Warrior Exclusive Badge", "Advanced Support"],
+    gradient: "from-purple-600 to-pink-500",
+    glow: "rgba(168, 85, 247, 0.4)",
+    icon: <Sword className="w-6 h-6" />,
+    particleColor: "rgb(168, 85, 247)"
   },
   {
-    name: "Champion Pack",
+    name: "CHAMPION PACK",
     price: 120,
     gems: 300,
     bonus: 0,
-    summary: "Ultimate package for serious Death Ball competitors",
+    summary: "Unleash ultimate power and reign supreme",
     bestValue: true,
-    details: [
-      "300 Million Death Ball Gems",
-      "Instant Delivery",
-      "VIP Priority Support",
-      "Secure Payment",
-    ]
+    details: ["300 Million Death Ball Gems", "Instant VIP Access", "Champion Title", "24/7 Priority Support"],
+    gradient: "from-amber-600 to-orange-500",
+    glow: "rgba(245, 158, 11, 0.4)",
+    icon: <Crown className="w-6 h-6" />,
+    particleColor: "rgb(245, 158, 11)"
   },
   {
-    name: "Custom Pack",
+    name: "LEGENDARY PACK",
     price: 0,
     gems: 0,
     bonus: 0,
-    summary: "Contact us for custom gem packages",
+    summary: "Forge your own destiny with custom power",
     custom: true,
     details: [
-      "Custom gem amounts available",
-      "Best value for bulk orders",
-      "Instant Delivery",
+      "Custom Gem Amounts",
+      "Dedicated Account Manager",
+      "Instant Bulk Delivery",
       "VIP Priority Support",
-      "24/7 Customer Support",
-      "Flexible pricing options"
-    ]
+      "Exclusive Legendary Status",
+      "Flexible Payment Options"
+    ],
+    gradient: "from-emerald-600 to-teal-500",
+    glow: "rgba(16, 185, 129, 0.3)",
+    icon: <Trophy className="w-6 h-6" />,
+    particleColor: "rgb(16, 185, 129)"
   }
 ];
 
@@ -81,238 +86,441 @@ const currencyRates: { [key: string]: number } = {
   USD: 1,
   EUR: 0.92,
   GBP: 0.79,
-  AUD: 1.52,
-  CAD: 1.35,
-  JPY: 148.50,
-  INR: 83.20,
+  INR: 83.20
 };
 
 const currencySymbols: { [key: string]: string } = {
   USD: "$",
   EUR: "€",
   GBP: "£",
-  AUD: "A$",
-  CAD: "C$",
-  JPY: "¥",
-  INR: "₹",
+  INR: "₹"
 };
 
-const PlanCard = React.memo(({ 
-  plan, 
-  selectedCurrency, 
-  openModal
-}: { 
-  plan: Plan; 
-  selectedCurrency: string; 
-  openModal: (plan: Plan) => void;
-}) => {
+// Particle System Component
+const ParticleField = ({ color, count = 50 }: { color: string; count?: number }) => {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {[...Array(count)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full"
+          style={{ backgroundColor: color }}
+          animate={{
+            y: [0, -100, 0],
+            x: [0, Math.sin(i) * 50, 0],
+            scale: [0, 1, 0],
+            opacity: [0, 0.6, 0],
+          }}
+          transition={{
+            duration: 3 + Math.random() * 2,
+            repeat: Infinity,
+            delay: Math.random() * 5,
+          }}
+          style={{
+            width: `${2 + Math.random() * 4}px`,
+            height: `${2 + Math.random() * 4}px`,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+// Animated Gem Component
+const AnimatedGem = ({ className = "" }: { className?: string }) => {
+  return (
+    <motion.div
+      className={`relative ${className}`}
+      animate={{
+        rotateY: [0, 360],
+        scale: [1, 1.1, 1],
+      }}
+      transition={{
+        duration: 4,
+        repeat: Infinity,
+        ease: "linear"
+      }}
+    >
+      <Gem className="w-full h-full text-amber-400 drop-shadow-2xl" />
+      <motion.div
+        className="absolute inset-0 bg-amber-400 blur-xl opacity-30"
+        animate={{ opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      />
+    </motion.div>
+  );
+};
+
+const PlanCard = ({ plan, selectedCurrency, openModal, index }: { plan: Plan; selectedCurrency: string; openModal: (plan: Plan) => void; index: number }) => {
   const getConvertedPrice = (price: number) => {
     const rate = currencyRates[selectedCurrency] || 1;
     return (price * rate).toFixed(2);
   };
 
-  const handleCustomContact = () => {
-    window.open('mailto:support@deathball.com?subject=Custom Gem Package Request', '_blank');
-  };
+  const cardRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ["start end", "end start"]
+  });
 
-  if (plan.custom) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="relative border-2 bg-gradient-to-b from-[#0a0a0f] to-[#1a1a2e] p-6 sm:p-8 rounded-2xl shadow-2xl backdrop-blur-md overflow-hidden border-cyan-500 ring-4 ring-cyan-500/20 shadow-cyan-500/20"
-        whileHover={{
-          boxShadow: "0 0 30px 8px rgba(6, 182, 212, 0.3)",
-          transform: "translateY(-8px)",
-        }}
-      >
-        {/* Badge */}
-        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-          <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
-            <Zap className="w-4 h-4" />
-            CUSTOM PACK
-          </div>
-        </div>
-
-        <div className="text-center mb-6">
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent drop-shadow-md mb-2">
-            {plan.name}
-          </h3>
-          
-          {/* Custom Gem Icon */}
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Gem className="w-8 h-8 text-cyan-400" />
-            <span className="text-2xl font-bold text-white">Custom</span>
-          </div>
-
-          {/* Contact Price */}
-          <div className="mb-4">
-            <span className="text-2xl font-bold text-white drop-shadow-lg">
-              Contact Us
-            </span>
-            <div className="text-amber-400 text-sm mt-1">
-              Best prices for bulk orders!
-            </div>
-          </div>
-        </div>
-
-        <p className="text-white/70 italic mb-6 text-sm sm:text-base leading-snug bg-gradient-to-r from-cyan-500/10 to-blue-500/10 p-4 rounded-lg border border-white/5">
-          {plan.summary}
-        </p>
-
-        <ul className="space-y-3 text-sm sm:text-base text-white/90 mb-8">
-          {plan.details.map((item: string, idx: number) => (
-            <motion.li
-              key={idx}
-              initial={{ x: -20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: idx * 0.05, duration: 0.3 }}
-              className="flex items-center gap-3"
-            >
-              <div className="w-5 h-5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center shrink-0">
-                <Check className="w-3 h-3 text-white" />
-              </div>
-              <span className="flex-1">{item}</span>
-            </motion.li>
-          ))}
-        </ul>
-
-        <motion.button
-  className="w-full py-4 rounded-xl font-bold text-white transition-all duration-300 shadow-lg relative overflow-hidden group bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700"
-  whileHover={{ scale: 1.03 }}
-  whileTap={{ scale: 0.98 }}
-  onClick={() => openModal(plan)}  // <--- FIXED HERE
->
-  <span className="relative z-10 flex items-center justify-center gap-2">
-    <Mail className="w-4 h-4" />
-    CONTACT FOR CUSTOM PACK
-  </span>
-  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-</motion.button>
-
-      </motion.div>
-    );
-  }
+  const rotateX = useTransform(scrollYProgress, [0, 1], [15, -15]);
+  const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className={`relative border-2 bg-gradient-to-b from-[#0a0a0f] to-[#1a1a2e] p-6 sm:p-8 rounded-2xl shadow-2xl backdrop-blur-md overflow-hidden ${
-        plan.popular 
-          ? "border-purple-500 ring-4 ring-purple-500/20 shadow-purple-500/20" 
-          : plan.bestValue
-          ? "border-amber-500 ring-4 ring-amber-500/20 shadow-amber-500/20"
-          : "border-gray-700/50"
-      }`}
-      whileHover={{
-        boxShadow: plan.popular 
-          ? "0 0 30px 8px rgba(147, 51, 234, 0.3)" 
-          : plan.bestValue
-          ? "0 0 30px 8px rgba(245, 158, 11, 0.3)"
-          : "0 0 20px 5px rgba(99, 102, 241, 0.2)",
-        transform: "translateY(-8px)",
-      }}
+      ref={cardRef}
+      style={{ rotateX, y }}
+      initial={{ opacity: 0, y: 100, rotateY: 45 }}
+      animate={{ opacity: 1, y: 0, rotateY: 0 }}
+      transition={{ duration: 0.8, delay: index * 0.15, type: "spring", stiffness: 50 }}
+      whileHover={{ y: -20, scale: 1.02, transition: { duration: 0.3 } }}
+      className={`relative backdrop-blur-2xl bg-gradient-to-br ${plan.gradient}/20 border-2 ${plan.gradient}/40 p-8 rounded-3xl shadow-2xl hover:shadow-[0_0_80px_var(--glow)] transition-all duration-500 flex flex-col h-full group perspective-1000`}
+      style={{ '--glow': plan.glow } as React.CSSProperties}
     >
-      {/* Badges */}
-      {plan.popular && (
-        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
-          <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
-            <Crown className="w-4 h-4" />
-            MOST POPULAR
-          </div>
-        </div>
-      )}
-
-      {plan.bestValue && (
-        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
-          <div className="bg-gradient-to-r from-amber-600 to-orange-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
-            <Gem className="w-4 h-4" />
-            BEST VALUE
-          </div>
-        </div>
-      )}
-
-      <div className="text-center mb-6 pt-2">
-        <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent drop-shadow-md mb-2">
-          {plan.name}
-        </h3>
-        
-        {/* Gem Count */}
-        <div className="flex items-center justify-center gap-2 mb-4">
-          <Gem className="w-6 h-6 text-purple-400" />
-          <span className="text-3xl font-bold text-white">
-            {plan.gems} Million
-            {plan.bonus > 0 && (
-              <span className="text-amber-400 text-lg ml-1">
-                +{plan.bonus}M
-              </span>
-            )}
-          </span>
-        </div>
-
-        {/* Price */}
-        <div className="mb-4">
-          <span className="text-2xl font-bold text-white drop-shadow-lg">
-            {currencySymbols[selectedCurrency]}
-            {getConvertedPrice(plan.price)}
-          </span>
-          <div className="text-white/60 text-sm mt-1">
-            {currencySymbols[selectedCurrency]}
-            {(plan.price / plan.gems).toFixed(2)} per million
-          </div>
-        </div>
+      {/* Animated Border */}
+      <div className={`absolute inset-0 rounded-3xl bg-gradient-to-r ${plan.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10`}>
+        <div className="absolute inset-[2px] rounded-3xl bg-slate-900" />
       </div>
 
-      <p className="text-white/70 italic mb-6 text-sm sm:text-base leading-snug bg-gradient-to-r from-purple-500/10 to-blue-500/10 p-4 rounded-lg border border-white/5">
-        {plan.summary}
-      </p>
+      {/* Particle Field */}
+      <ParticleField color={plan.particleColor} count={8} />
 
-      <ul className="space-y-3 text-sm sm:text-base text-white/90 mb-8">
-        {plan.details.map((item: string, idx: number) => (
+      {/* Hover Glow */}
+      <div className={`absolute inset-0 bg-gradient-to-br ${plan.gradient} opacity-0 group-hover:opacity-10 rounded-3xl transition-opacity duration-500 blur-xl`} />
+
+      {/* Badges */}
+      {plan.popular && (
+        <motion.div
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ delay: index * 0.15 + 0.4, type: "spring", stiffness: 200 }}
+          className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-30"
+        >
+          <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-full text-sm font-black shadow-2xl flex items-center gap-3 border-2 border-white/30 backdrop-blur-xl">
+            <Crown className="w-5 h-5" />
+            <span className="bg-gradient-to-r from-white to-amber-200 bg-clip-text text-transparent tracking-wider">
+              MOST POPULAR
+            </span>
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="w-2 h-2 bg-yellow-400 rounded-full"
+            />
+          </div>
+        </motion.div>
+      )}
+      {plan.bestValue && (
+        <motion.div
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ delay: index * 0.15 + 0.4, type: "spring", stiffness: 200 }}
+          className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-30"
+        >
+          <div className="bg-gradient-to-r from-amber-600 to-orange-600 text-white px-8 py-3 rounded-full text-sm font-black shadow-2xl flex items-center gap-3 border-2 border-white/30 backdrop-blur-xl">
+            <Gem className="w-5 h-5" />
+            <span className="bg-gradient-to-r from-white to-yellow-200 bg-clip-text text-transparent tracking-wider">
+              BEST VALUE
+            </span>
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="w-2 h-2 bg-green-400 rounded-full"
+            />
+          </div>
+        </motion.div>
+      )}
+      {plan.custom && (
+        <motion.div
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ delay: index * 0.15 + 0.4, type: "spring", stiffness: 200 }}
+          className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-30"
+        >
+          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-8 py-3 rounded-full text-sm font-black shadow-2xl flex items-center gap-3 border-2 border-white/30 backdrop-blur-xl">
+            <Trophy className="w-5 h-5" />
+            <span className="bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent tracking-wider">
+              LEGENDARY
+            </span>
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="w-2 h-2 bg-cyan-400 rounded-full"
+            />
+          </div>
+        </motion.div>
+      )}
+
+      {/* Plan Header */}
+      <div className="text-center mb-8 pt-6 relative z-20">
+        {/* Icon with Glow */}
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: index * 0.15 + 0.2, type: "spring" }}
+          className="flex justify-center mb-6"
+        >
+          <div className={`p-4 rounded-3xl bg-gradient-to-r ${plan.gradient} shadow-2xl relative`}>
+            {plan.icon}
+            <div className={`absolute inset-0 bg-gradient-to-r ${plan.gradient} rounded-3xl blur-lg opacity-50`} />
+          </div>
+        </motion.div>
+
+        <motion.h3
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.15 + 0.3 }}
+          className="text-2xl font-black text-white mb-4 tracking-wider"
+        >
+          {plan.name}
+        </motion.h3>
+
+        {!plan.custom ? (
+          <>
+            {/* Gem Count with Animation */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.15 + 0.4 }}
+              className="flex items-center justify-center gap-4 mb-6"
+            >
+              <AnimatedGem className="w-10 h-10" />
+              <span className="text-5xl font-black bg-gradient-to-r from-white to-white/90 bg-clip-text text-transparent tracking-tight">
+                {plan.gems}M
+              </span>
+            </motion.div>
+
+            {/* Price */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: index * 0.15 + 0.5 }}
+              className="mb-6"
+            >
+              <span className="text-4xl font-black text-white">
+                {currencySymbols[selectedCurrency]}
+                {getConvertedPrice(plan.price)}
+              </span>
+              <div className="text-white/70 text-lg mt-3 font-semibold tracking-wide">
+                {currencySymbols[selectedCurrency]}{(plan.price / plan.gems).toFixed(2)} per million
+              </div>
+            </motion.div>
+          </>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: index * 0.15 + 0.4 }}
+            className="mb-6"
+          >
+            <span className="text-4xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              CUSTOM POWER
+            </span>
+            <div className="text-amber-300 text-lg mt-3 font-semibold tracking-wide drop-shadow-lg">
+              Ultimate deals for champions
+            </div>
+          </motion.div>
+        )}
+      </div>
+
+      {/* Summary */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: index * 0.15 + 0.6 }}
+        className="text-white/80 text-center mb-8 text-lg leading-relaxed font-medium tracking-wide relative z-20"
+      >
+        {plan.summary}
+      </motion.p>
+
+      {/* Details */}
+      <ul className="space-y-4 text-lg text-white/90 mb-10 relative z-20 flex-1">
+        {plan.details.map((item, idx) => (
           <motion.li
             key={idx}
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: idx * 0.05, duration: 0.3 }}
-            className="flex items-center gap-3"
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.15 + 0.7 + idx * 0.1 }}
+            className="flex items-center gap-4 group/item"
           >
-            <div className="w-5 h-5 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center shrink-0">
-              <Check className="w-3 h-3 text-white" />
-            </div>
-            <span className="flex-1">{item}</span>
+            <motion.div
+              className={`w-7 h-7 bg-gradient-to-r ${plan.gradient} rounded-full flex items-center justify-center shadow-2xl flex-shrink-0 group-hover/item:scale-110 transition-transform duration-300`}
+              whileHover={{ rotate: 360 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Check className="w-4 h-4 text-white" />
+            </motion.div>
+            <span className="font-semibold tracking-wide">{item}</span>
           </motion.li>
         ))}
       </ul>
 
+      {/* Button */}
       <motion.button
-        className={`w-full py-4 rounded-xl font-bold text-white transition-all duration-300 shadow-lg relative overflow-hidden group ${
-          plan.popular
-            ? "bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-            : plan.bestValue
-            ? "bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700"
-            : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
-        }`}
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.98 }}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.15 + 1 }}
+        className={`mt-auto w-full py-5 rounded-2xl font-black text-white transition-all duration-500 shadow-2xl relative overflow-hidden group/btn bg-gradient-to-r ${plan.gradient} hover:shadow-[0_0_50px_var(--glow)] border-2 border-white/20`}
+        whileHover={{ scale: 1.05, y: -2 }}
+        whileTap={{ scale: 0.95 }}
         onClick={() => openModal(plan)}
       >
-        <span className="relative z-10 flex items-center justify-center gap-2">
-          <Gem className="w-4 h-4" />
-          BUY NOW
+        {/* Button Shine Effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 transform translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000" />
+        
+        {/* Button Particles */}
+        <div className="absolute inset-0 overflow-hidden rounded-2xl">
+          {[...Array(3)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-white rounded-full"
+              animate={{
+                y: [0, -20, 0],
+                opacity: [0, 1, 0],
+              }}
+              transition={{
+                duration: 1.5,
+                delay: i * 0.5,
+                repeat: Infinity,
+              }}
+              style={{
+                left: `${20 + i * 30}%`,
+                bottom: "0%",
+              }}
+            />
+          ))}
+        </div>
+
+        <span className="relative z-10 flex items-center justify-center gap-4 text-xl tracking-wider">
+          {plan.custom ? (
+            <>
+              <Mail className="w-6 h-6" /> 
+              <span className="bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">
+                BECOME LEGEND
+              </span>
+            </>
+          ) : (
+            <>
+              <Gem className="w-6 h-6" />
+              <span className="bg-gradient-to-r from-white to-amber-200 bg-clip-text text-transparent">
+                ACQUIRE POWER
+              </span>
+            </>
+          )}
         </span>
-        <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       </motion.button>
     </motion.div>
   );
-});
+};
+
+// Enhanced Floating Elements
+const CinematicBackground = () => {
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      {/* Animated Grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,black,transparent)]" />
+      
+      {/* Large Floating Orbs */}
+      {[...Array(8)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full bg-gradient-to-r from-purple-500/10 to-pink-500/10"
+          animate={{
+            y: [0, -100, 0],
+            x: [0, Math.sin(i) * 100, 0],
+            scale: [1, 1.5, 1],
+            opacity: [0.1, 0.3, 0.1],
+          }}
+          transition={{
+            duration: 8 + Math.random() * 4,
+            repeat: Infinity,
+            delay: Math.random() * 5,
+          }}
+          style={{
+            width: `${100 + Math.random() * 200}px`,
+            height: `${100 + Math.random() * 200}px`,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            filter: 'blur(40px)',
+          }}
+        />
+      ))}
+
+      {/* Small Particles */}
+      {[...Array(50)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full bg-white/5"
+          animate={{
+            y: [0, -50, 0],
+            x: [0, Math.cos(i) * 30, 0],
+            opacity: [0, 0.8, 0],
+          }}
+          transition={{
+            duration: 3 + Math.random() * 2,
+            repeat: Infinity,
+            delay: Math.random() * 3,
+          }}
+          style={{
+            width: `${1 + Math.random() * 3}px`,
+            height: `${1 + Math.random() * 3}px`,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+// Animated Title Component
+const AnimatedTitle = () => {
+  const letters = "DEATH BALL GEMS".split("");
+  
+  return (
+    <motion.h1
+      initial={{ opacity: 0, y: 100 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1, ease: "easeOut" }}
+      className="text-5xl sm:text-7xl lg:text-8xl font-black text-center mb-8 tracking-tighter"
+    >
+      {letters.map((letter, index) => (
+        <motion.span
+          key={index}
+          initial={{ opacity: 0, y: 100, rotateX: 90 }}
+          animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          transition={{
+            duration: 0.8,
+            delay: index * 0.05,
+            ease: "easeOut"
+          }}
+          className="inline-block"
+        >
+          {letter === ' ' ? '\u00A0' : (
+            <span className="bg-gradient-to-r from-white via-purple-200 to-amber-200 bg-clip-text text-transparent">
+              {letter}
+            </span>
+          )}
+        </motion.span>
+      ))}
+    </motion.h1>
+  );
+};
 
 export default function DeathBallGemsPage() {
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 100);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const openModal = useCallback((plan: Plan) => {
     setSelectedPlan(plan);
@@ -326,216 +534,175 @@ export default function DeathBallGemsPage() {
 
   const plansGrid = useMemo(() => {
     return plans.map((plan: Plan, index: number) => (
-      <div key={index} className="h-full">
-        <PlanCard 
-          plan={plan} 
-          selectedCurrency={selectedCurrency} 
-          openModal={openModal}
-        />
-      </div>
+      <PlanCard 
+        key={index} 
+        plan={plan} 
+        selectedCurrency={selectedCurrency} 
+        openModal={openModal} 
+        index={index}
+      />
     ));
   }, [plans, selectedCurrency, openModal]);
 
   return (
-    <section className="relative z-10 py-12 sm:py-24 px-4 sm:px-6 bg-gradient-to-br from-[#0a0a0f] via-[#1a1a2e] to-[#15152b] text-white border-t border-purple-500/20 overflow-hidden min-h-screen">
-      {/* Enhanced Background Elements */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        {/* Main gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0f] via-[#1a1a2e] to-[#15152b]"></div>
-        
-        {/* Animated grid */}
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
-        
-        {/* Glowing orbs */}
-        <div className="absolute -top-40 -left-40 w-80 h-80 bg-purple-600/20 blur-[100px] rounded-full animate-pulse"></div>
-        <div className="absolute top-1/3 -right-40 w-96 h-96 bg-blue-600/15 blur-[120px] rounded-full"></div>
-        <div className="absolute -bottom-40 left-1/4 w-72 h-72 bg-cyan-600/10 blur-[80px] rounded-full"></div>
-        
-        {/* Floating particles */}
-        {[...Array(12)].map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ 
-              opacity: 0, 
-              y: Math.random() * 100,
-              x: Math.random() * 100 
-            }}
-            animate={{
-              opacity: [0, 0.8, 0],
-              y: [0, -Math.random() * 200],
-              x: [0, Math.random() * 100 - 50]
-            }}
-            transition={{
-              duration: 15 + Math.random() * 20,
-              repeat: Infinity,
-              ease: "linear",
-              delay: Math.random() * 5
-            }}
-            className="absolute w-1 h-1 bg-purple-400 rounded-full"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
-
-        {/* Large floating gems */}
-        {[...Array(2)].map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, rotate: 0 }}
-            animate={{ 
-              opacity: [0.3, 0.6, 0.3],
-              rotate: 360,
-              y: [0, -20, 0]
-            }}
-            transition={{
-              duration: 20 + i * 5,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-            className="absolute text-purple-400/20"
-            style={{
-              top: `${20 + i * 30}%`,
-              left: `${10 + i * 40}%`,
-              fontSize: `${30 + i * 15}px`
-            }}
-          >
-            <Gem />
-          </motion.div>
-        ))}
-      </div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-center mb-12 sm:mb-20 max-w-4xl mx-auto px-2"
-      >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2 }}
-          className="inline-flex items-center gap-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 px-4 sm:px-6 py-2 sm:py-3 rounded-full mb-4 sm:mb-6"
-        >
-          <Gem className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
-          <span className="text-xs sm:text-sm font-semibold text-purple-300 uppercase tracking-wider">
-            Premium Death Ball Currency
-          </span>
-        </motion.div>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="text-4xl sm:text-6xl lg:text-7xl font-black bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-2xl mb-4 sm:mb-6 leading-tight"
-        >
-          DEATH BALL
-          <span className="block bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            GEMS
-          </span>
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed px-2"
-        >
-          Sharp swords, sharper victories. Buy them with gems..
-        </motion.p>
-
-        {/* Features Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12 max-w-2xl mx-auto"
-        >
-          {[
-            { icon: Zap, text: "Instant Delivery" },
-            { icon: Shield, text: "100% Safe" },
-            { icon: Crown, text: "Premium Quality" }
-          ].map((item, index) => (
-            <div key={index} className="flex items-center gap-3 justify-center p-3 sm:p-4 bg-white/5 rounded-xl border border-white/10">
-              <item.icon className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
-              <span className="text-white/80 font-medium text-sm sm:text-base">{item.text}</span>
-            </div>
-          ))}
-        </motion.div>
-
+    <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900/50 to-slate-900">
+      {/* Cinematic Background */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/30 via-slate-900 to-slate-900" />
+      <CinematicBackground />
+      
+      {/* Main Content */}
+      <div className="relative z-10 py-8 px-4 sm:px-6 lg:px-8 min-h-screen">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          className="flex flex-col sm:flex-row justify-center items-center gap-4"
+          transition={{ duration: 1 }}
+          className={`text-center mb-16 lg:mb-24 pt-16 lg:pt-24 transition-all duration-700 ${
+            isScrolled ? 'lg:pt-8 scale-90' : 'lg:pt-24 scale-100'
+          }`}
         >
-          <div className="flex items-center gap-4 bg-black/30 border border-purple-500/30 rounded-xl px-4 sm:px-6 py-3">
-            <span className="text-white/70 font-medium text-sm sm:text-base">Currency:</span>
-            <select
-              value={selectedCurrency}
-              onChange={(e) => setSelectedCurrency(e.target.value)}
-              className="bg-transparent text-white border-none focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-lg text-sm sm:text-base"
+          {/* Main Title */}
+          <div className="relative">
+            <AnimatedTitle />
+            
+            {/* Subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1 }}
+              className="text-2xl sm:text-3xl lg:text-4xl text-white/80 max-w-4xl mx-auto font-light tracking-wider mb-12"
             >
-              {Object.keys(currencyRates).map((currency) => (
-                <option key={currency} value={currency} className="bg-[#1a1a2e] text-white">
-                  {currencySymbols[currency]} {currency}
-                </option>
-              ))}
-            </select>
+              <span className="bg-gradient-to-r from-amber-400 to-yellow-400 bg-clip-text text-transparent font-bold">
+                FORGE YOUR LEGACY
+              </span>
+              <br />
+              <span className="text-xl sm:text-2xl text-white/60">
+                Acquire power, dominate the arena, become immortal
+              </span>
+            </motion.p>
+
+            {/* Animated Gem Decoration */}
+            <motion.div
+              initial={{ scale: 0, rotate: 180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ duration: 1, delay: 1.5, type: "spring" }}
+              className="absolute -top-4 -right-4 lg:-right-12"
+            >
+              <AnimatedGem className="w-16 h-16 lg:w-24 lg:h-24" />
+            </motion.div>
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ duration: 1, delay: 1.7, type: "spring" }}
+              className="absolute -bottom-4 -left-4 lg:-left-12"
+            >
+              <AnimatedGem className="w-12 h-12 lg:w-20 lg:h-20" />
+            </motion.div>
+          </div>
+
+          {/* Currency Selector */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 1.8 }}
+            className="flex justify-center mb-16 lg:mb-20"
+          >
+            <div className="relative">
+              <motion.select
+                value={selectedCurrency}
+                onChange={(e) => setSelectedCurrency(e.target.value)}
+                className="appearance-none bg-black/60 backdrop-blur-2xl border-2 border-purple-500/60 px-8 py-4 rounded-2xl text-white font-black text-lg shadow-2xl focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-300 tracking-wide"
+                whileHover={{ scale: 1.05 }}
+                whileFocus={{ scale: 1.05 }}
+              >
+                {Object.keys(currencyRates).map((currency) => (
+                  <option key={currency} value={currency} className="bg-slate-900 text-white py-2">
+                    {currencySymbols[currency]} {currency}
+                  </option>
+                ))}
+              </motion.select>
+              <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                <motion.div
+                  animate={{ y: [0, 2, 0] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="w-3 h-3 border-r-2 border-b-2 border-amber-400 rotate-45"
+                />
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Plans Grid */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          viewport={{ once: true }}
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 lg:gap-10 max-w-7xl mx-auto mb-20"
+        >
+          {plansGrid}
+        </motion.div>
+
+        {/* Payment Methods */}
+        <motion.div
+          initial={{ opacity: 0, y: 100 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="mt-32 lg:mt-40 text-center"
+        >
+          <motion.h3 
+            className="text-3xl lg:text-5xl font-black mb-16 bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent tracking-wider"
+            whileInView={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
+            ACCEPTED PAYMENTS
+          </motion.h3>
+          <div className="flex justify-center gap-8 lg:gap-16 text-white/80 flex-wrap">
+            {[
+              { name: "PayPal", icon: "/images/paypal.png", color: "from-blue-500 to-cyan-500" },
+              { name: "UPI", icon: "/images/upi.png", color: "from-green-500 to-emerald-500" },
+              { name: "Crypto", icon: <Bitcoin className="w-12 h-12" />, color: "from-yellow-500 to-amber-500" },
+              { name: "Credit Card", icon: "💳", color: "from-purple-500 to-pink-500" }
+            ].map((method, index) => (
+              <motion.div
+                key={method.name}
+                initial={{ opacity: 0, y: 50, scale: 0.8 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: index * 0.1 + 0.5, type: "spring" }}
+                whileHover={{ scale: 1.15, y: -10 }}
+                className="flex flex-col items-center group cursor-pointer"
+              >
+                <motion.div
+                  className={`p-6 rounded-3xl bg-gradient-to-r ${method.color}/20 border-2 ${method.color}/30 backdrop-blur-2xl transition-all duration-500 group-hover:shadow-2xl relative overflow-hidden`}
+                  whileHover={{ rotateY: 180 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  {typeof method.icon === 'string' && method.icon.length > 2 ? (
+                    <img src={method.icon} alt={method.name} className="h-12 lg:h-16" />
+                  ) : (
+                    <div className="text-3xl lg:text-4xl">
+                      {method.icon}
+                    </div>
+                  )}
+                  <div className={`absolute inset-0 bg-gradient-to-r ${method.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
+                </motion.div>
+                <span className="text-lg lg:text-xl mt-4 font-bold group-hover:text-white transition-colors duration-300 tracking-wide">
+                  {method.name}
+                </span>
+              </motion.div>
+            ))}
           </div>
         </motion.div>
-      </motion.div>
 
-      {/* Plans Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6 sm:gap-8 max-w-7xl mx-auto px-2 sm:px-4">
-        <AnimatePresence>
-          {plansGrid}
-        </AnimatePresence>
+        {/* Footer Space */}
+        <div className="h-32 lg:h-48" />
       </div>
 
-      {/* Trust Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.5 }}
-        className="mt-16 sm:mt-20 text-center max-w-4xl mx-auto px-2"
-      >
-        <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-2xl p-6 sm:p-8">
-          <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">Why Choose Us?</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 text-white/70">
-            <div className="text-center">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-              </div>
-              <h4 className="font-semibold text-white mb-2 text-sm sm:text-base">Instant Delivery</h4>
-              <p className="text-xs sm:text-sm">Receive your gems within seconds of payment</p>
-            </div>
-            <div className="text-center">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-              </div>
-              <h4 className="font-semibold text-white mb-2 text-sm sm:text-base">100% Safe</h4>
-              <p className="text-xs sm:text-sm">Compliant with Roblox Terms of Service</p>
-            </div>
-            <div className="text-center">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-              </div>
-              <h4 className="font-semibold text-white mb-2 text-sm sm:text-base">Premium Support</h4>
-              <p className="text-xs sm:text-sm">24/7 customer support for all your needs</p>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
+      {/* Modal */}
       <AnimatePresence>
         {isModalOpen && (
-          <Modal
-            isOpen={isModalOpen}
-            onClose={closeModal}
-            plan={selectedPlan?.name || "Unknown Plan"}
-          />
+          <Modal isOpen={isModalOpen} onClose={closeModal} plan={selectedPlan?.name || "Unknown Plan"} />
         )}
       </AnimatePresence>
     </section>
