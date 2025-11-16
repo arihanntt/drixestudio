@@ -1,26 +1,44 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Users, HeartHandshake, Search, Calendar, Sparkles, 
-  MessageCircle, Home, User, Users2, QrCode, 
-  ArrowRight, Star, Shield, Zap, Globe,
-  ChevronLeft, ChevronRight, Send,
-  Instagram, Twitter, Facebook, Linkedin
+import { motion, AnimatePresence, PanInfo } from "framer-motion";
+import {
+  Users,
+  HeartHandshake,
+  Search,
+  Calendar,
+  Sparkles,
+  MessageCircle,
+  Home,
+  User,
+  Users2,
+  QrCode,
+  ArrowRight,
+  Star,
+  Shield,
+  Zap,
+  Globe,
+  ChevronLeft,
+  ChevronRight,
+  Send,
+  Instagram,
+  Twitter,
+  Facebook,
+  Linkedin,
 } from "lucide-react";
 
 export default function CampusConnectPrototype() {
   const [currentPage, setCurrentPage] = useState("home");
   const [isLoading, setIsLoading] = useState(true);
-  const [swipeDirection, setSwipeDirection] = useState(0);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 1500);
     return () => clearTimeout(timer);
   }, []);
 
-  // Loading Screen
+  /* --------------------------------------------------------------
+     Loading Screen
+  -------------------------------------------------------------- */
   if (isLoading) {
     return (
       <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
@@ -30,26 +48,26 @@ export default function CampusConnectPrototype() {
           className="text-center"
         >
           <motion.div
-            animate={{ 
+            animate={{
               rotate: 360,
-              scale: [1, 1.2, 1]
+              scale: [1, 1.2, 1],
             }}
-            transition={{ 
+            transition={{
               rotate: { duration: 2, repeat: Infinity, ease: "linear" },
-              scale: { duration: 1, repeat: Infinity }
+              scale: { duration: 1, repeat: Infinity },
             }}
             className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6"
           >
             <Users className="text-white" size={32} />
           </motion.div>
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent"
           >
             Campus Connect
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
@@ -62,36 +80,46 @@ export default function CampusConnectPrototype() {
     );
   }
 
-  // Enhanced Navigation Component
-  const Navbar = () => (
-    <motion.nav 
+  /* --------------------------------------------------------------
+     Shared Reusable UI Pieces
+  -------------------------------------------------------------- */
+  const Logo = () => (
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      className="flex items-center space-x-3 cursor-pointer"
+      onClick={() => setCurrentPage("home")}
+    >
+      <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+        <Users className="text-white" size={24} />
+      </div>
+      <span className="text-2xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+        Campus Connect
+      </span>
+    </motion.div>
+  );
+
+  const navItems = [
+    { id: "home", label: "Home", icon: <Home size={18} /> },
+    { id: "profiles", label: "Profiles", icon: <User size={18} /> },
+    { id: "groups", label: "Groups", icon: <Users2 size={18} /> },
+    { id: "connect", label: "Connect", icon: <HeartHandshake size={18} /> },
+    { id: "chat", label: "Chat", icon: <MessageCircle size={18} /> },
+    { id: "qr", label: "Get App", icon: <QrCode size={18} /> },
+  ];
+
+  /* --------------------------------------------------------------
+     Desktop Navbar
+  -------------------------------------------------------------- */
+  const DesktopNavbar = () => (
+    <motion.nav
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="w-full max-w-7xl bg-white/5 backdrop-blur-xl rounded-3xl p-4 mb-8 border border-white/10 shadow-2xl"
+      className="hidden md:flex w-full max-w-7xl bg-white/5 backdrop-blur-xl rounded-3xl p-4 mb-8 border border-white/10 shadow-2xl"
     >
-      <div className="flex justify-between items-center">
-        <motion.div 
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center space-x-3 cursor-pointer"
-          onClick={() => setCurrentPage("home")}
-        >
-          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
-            <Users className="text-white" size={24} />
-          </div>
-          <span className="text-2xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
-            Campus Connect
-          </span>
-        </motion.div>
-
+      <div className="flex justify-between items-center w-full">
+        <Logo />
         <div className="flex space-x-2">
-          {[
-            { id: "home", label: "Home", icon: <Home size={18} /> },
-            { id: "profiles", label: "Profiles", icon: <User size={18} /> },
-            { id: "groups", label: "Groups", icon: <Users2 size={18} /> },
-            { id: "connect", label: "Connect", icon: <HeartHandshake size={18} /> },
-            { id: "chat", label: "Chat", icon: <MessageCircle size={18} /> },
-            { id: "qr", label: "Get App", icon: <QrCode size={18} /> }
-          ].map((item, index) => (
+          {navItems.map((item, index) => (
             <motion.button
               key={item.id}
               initial={{ opacity: 0, y: -20 }}
@@ -101,8 +129,8 @@ export default function CampusConnectPrototype() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className={`flex items-center space-x-2 px-4 py-3 rounded-2xl transition-all duration-300 ${
-                currentPage === item.id 
-                  ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg" 
+                currentPage === item.id
+                  ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
                   : "text-gray-300 hover:bg-white/10 hover:text-white"
               }`}
             >
@@ -115,9 +143,45 @@ export default function CampusConnectPrototype() {
     </motion.nav>
   );
 
-  // Enhanced Footer Component
+  /* --------------------------------------------------------------
+     Mobile Navbar (bottom fixed, icons only)
+  -------------------------------------------------------------- */
+  const MobileNavbar = () => (
+    <motion.nav
+      initial={{ y: 100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      className="md:hidden fixed bottom-0 left-0 right-0 bg-white/5 backdrop-blur-xl border-t border-white/10 p-4 z-50"
+    >
+      <div className="flex justify-around items-center">
+        {[
+          { id: "home", icon: <Home size={24} /> },
+          { id: "profiles", icon: <User size={24} /> },
+          { id: "connect", icon: <HeartHandshake size={24} /> },
+          { id: "chat", icon: <MessageCircle size={24} /> },
+          { id: "qr", icon: <QrCode size={24} /> },
+        ].map((item) => (
+          <motion.button
+            key={item.id}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setCurrentPage(item.id)}
+            className={`p-3 rounded-2xl transition-all ${
+              currentPage === item.id
+                ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+                : "text-gray-400"
+            }`}
+          >
+            {item.icon}
+          </motion.button>
+        ))}
+      </div>
+    </motion.nav>
+  );
+
+  /* --------------------------------------------------------------
+     Footer
+  -------------------------------------------------------------- */
   const Footer = () => (
-    <motion.footer 
+    <motion.footer
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       className="w-full max-w-7xl mt-20 py-12 border-t border-white/10 text-center"
@@ -160,7 +224,9 @@ export default function CampusConnectPrototype() {
     </motion.footer>
   );
 
-  // Enhanced Home Page
+  /* --------------------------------------------------------------
+     Pages
+  -------------------------------------------------------------- */
   const HomePage = () => (
     <div className="w-full max-w-7xl">
       {/* HERO SECTION */}
@@ -172,21 +238,21 @@ export default function CampusConnectPrototype() {
           className="relative"
         >
           <motion.div
-            animate={{ 
+            animate={{
               rotate: 360,
-              scale: [1, 1.1, 1]
+              scale: [1, 1.1, 1],
             }}
-            transition={{ 
+            transition={{
               rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-              scale: { duration: 4, repeat: Infinity }
+              scale: { duration: 4, repeat: Infinity },
             }}
             className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-600/20 blur-3xl rounded-full mx-auto w-96 h-96 -z-10"
           />
-          
+
           <h1 className="text-7xl font-bold mb-6 bg-gradient-to-r from-white via-blue-200 to-purple-300 bg-clip-text text-transparent">
             Campus Connect
           </h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
@@ -195,13 +261,13 @@ export default function CampusConnectPrototype() {
             Where campus lives connect. Meet, collaborate, and grow together in your college ecosystem.
           </motion.p>
 
-          <motion.div 
+          <motion.div
             className="flex justify-center space-x-6"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
           >
-            <motion.button 
+            <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-12 py-4 rounded-2xl text-lg font-semibold shadow-2xl flex items-center space-x-3 transition-all duration-300"
@@ -209,7 +275,7 @@ export default function CampusConnectPrototype() {
               <span>Create Profile</span>
               <ArrowRight size={20} />
             </motion.button>
-            <motion.button 
+            <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-white/20 text-white px-12 py-4 rounded-2xl text-lg font-semibold transition-all duration-300"
@@ -221,7 +287,7 @@ export default function CampusConnectPrototype() {
       </div>
 
       {/* FEATURES GRID */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20"
@@ -232,22 +298,22 @@ export default function CampusConnectPrototype() {
             title: "Verified Network",
             desc: "Exclusive to verified college students with official email IDs",
             gradient: "from-blue-500/20 to-blue-600/20",
-            color: "text-blue-400"
+            color: "text-blue-400",
           },
           {
             icon: <Calendar className="text-purple-400" size={32} />,
             title: "Campus Events",
             desc: "Discover and create events, fests, and activities",
             gradient: "from-purple-500/20 to-purple-600/20",
-            color: "text-purple-400"
+            color: "text-purple-400",
           },
           {
             icon: <Shield className="text-green-400" size={32} />,
             title: "Safe Space",
             desc: "Secure environment moderated by campus authorities",
             gradient: "from-green-500/20 to-green-600/20",
-            color: "text-green-400"
-          }
+            color: "text-green-400",
+          },
         ].map((feature, index) => (
           <motion.div
             key={index}
@@ -257,7 +323,7 @@ export default function CampusConnectPrototype() {
             whileHover={{ scale: 1.05, y: -10 }}
             className={`bg-gradient-to-br ${feature.gradient} backdrop-blur-sm border border-white/10 rounded-3xl p-8 text-center shadow-2xl cursor-pointer transition-all duration-500`}
           >
-            <motion.div 
+            <motion.div
               className={`w-16 h-16 bg-black/30 rounded-2xl flex items-center justify-center mx-auto mb-6 ${feature.color}`}
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.5 }}
@@ -277,21 +343,18 @@ export default function CampusConnectPrototype() {
         className="relative bg-gradient-to-r from-purple-900/50 to-blue-900/50 backdrop-blur-sm border border-purple-500/30 rounded-3xl p-12 mb-20 text-center shadow-2xl overflow-hidden"
       >
         <motion.div
-          animate={{ 
+          animate={{
             x: [0, 100, 0],
-            opacity: [0.5, 1, 0.5]
+            opacity: [0.5, 1, 0.5],
           }}
-          transition={{ 
+          transition={{
             duration: 4,
-            repeat: Infinity 
+            repeat: Infinity,
           }}
           className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 -z-10"
         />
-        
-        <motion.div
-          whileHover={{ scale: 1.1, rotate: 360 }}
-          className="flex justify-center mb-8"
-        >
+
+        <motion.div whileHover={{ scale: 1.1, rotate: 360 }} className="flex justify-center mb-8">
           <div className="w-20 h-20 bg-gradient-to-r from-pink-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-2xl">
             <HeartHandshake size={36} className="text-white" />
           </div>
@@ -301,11 +364,11 @@ export default function CampusConnectPrototype() {
           Campus Connect Premium
         </h2>
         <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-          Unlock intelligent matching algorithms that connect you with like-minded peers. 
-          Find study partners, project collaborators, and build meaningful campus relationships.
+          Unlock intelligent matching algorithms that connect you with like-minded peers. Find study
+          partners, project collaborators, and build meaningful campus relationships.
         </p>
 
-        <motion.button 
+        <motion.button
           whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(192, 132, 252, 0.3)" }}
           whileTap={{ scale: 0.95 }}
           className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-12 py-4 rounded-2xl text-lg font-semibold shadow-2xl transition-all duration-300"
@@ -319,35 +382,34 @@ export default function CampusConnectPrototype() {
     </div>
   );
 
-  // Enhanced Profiles Page
   const ProfilesPage = () => {
     const [selectedProfile, setSelectedProfile] = useState(0);
 
     const students = [
-      { 
-        name: "Aditi Sharma", 
-        branch: "Computer Science, 2nd Year", 
-        interests: ["AI/ML Research", "Classical Music", "Startup Culture"], 
-        image: "👩‍💻",
+      {
+        name: "Aditi Sharma",
+        branch: "Computer Science, 2nd Year",
+        interests: ["AI/ML Research", "Classical Music", "Startup Culture"],
+        image: "female programmer",
         bio: "Passionate about building AI solutions. Looking for coding partners and startup enthusiasts.",
-        skills: ["Python", "React", "Machine Learning"]
+        skills: ["Python", "React", "Machine Learning"],
       },
-      { 
-        name: "Rahul Verma", 
-        branch: "Mechanical Engineering, 3rd Year", 
-        interests: ["Robotics", "Football", "Photography"], 
-        image: "👨‍🔧",
+      {
+        name: "Rahul Verma",
+        branch: "Mechanical Engineering, 3rd Year",
+        interests: ["Robotics", "Football", "Photography"],
+        image: "male engineer",
         bio: "Robotics club lead. Love capturing campus life through my lens.",
-        skills: ["CAD", "Python", "Photography"]
+        skills: ["CAD", "Python", "Photography"],
       },
-      { 
-        name: "Priya Patel", 
-        branch: "Design, 1st Year", 
-        interests: ["UI/UX Design", "Contemporary Dance", "Art"], 
-        image: "👩‍🎨",
+      {
+        name: "Priya Patel",
+        branch: "Design, 1st Year",
+        interests: ["UI/UX Design", "Contemporary Dance", "Art"],
+        image: "female artist",
         bio: "Creating beautiful digital experiences. Dance keeps me creative!",
-        skills: ["Figma", "Illustration", "Animation"]
-      }
+        skills: ["Figma", "Illustration", "Animation"],
+      },
     ];
 
     return (
@@ -367,7 +429,9 @@ export default function CampusConnectPrototype() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => setSelectedProfile((prev) => (prev - 1 + students.length) % students.length)}
+            onClick={() =>
+              setSelectedProfile((prev) => (prev - 1 + students.length) % students.length)
+            }
             className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center hover:bg-white/20 transition-all"
           >
             <ChevronLeft size={24} />
@@ -389,7 +453,7 @@ export default function CampusConnectPrototype() {
                   >
                     {students[selectedProfile].image}
                   </motion.div>
-                  
+
                   <div className="flex-1 text-left">
                     <h3 className="text-3xl font-bold text-white mb-2">
                       {students[selectedProfile].name}
@@ -400,7 +464,7 @@ export default function CampusConnectPrototype() {
                     <p className="text-gray-300 mb-6 leading-relaxed">
                       {students[selectedProfile].bio}
                     </p>
-                    
+
                     <div className="mb-6">
                       <h4 className="text-white font-semibold mb-3">Skills & Interests</h4>
                       <div className="flex flex-wrap gap-2">
@@ -418,12 +482,12 @@ export default function CampusConnectPrototype() {
                       </div>
                     </div>
 
-                    <motion.button 
+                    <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-4 rounded-2xl font-semibold shadow-2xl transition-all duration-300"
                     >
-                      Connect with {students[selectedProfile].name.split(' ')[0]}
+                      Connect with {students[selectedProfile].name.split(" ")[0]}
                     </motion.button>
                   </div>
                 </div>
@@ -444,7 +508,6 @@ export default function CampusConnectPrototype() {
     );
   };
 
-  // Enhanced Connect Page (Tinder-style)
   const ConnectPage = () => {
     const [currentCard, setCurrentCard] = useState(0);
     const [exitX, setExitX] = useState(0);
@@ -455,25 +518,26 @@ export default function CampusConnectPrototype() {
         branch: "Psychology, 2nd Year",
         interests: "Mental Health Advocacy, Poetry, Dance",
         lookingFor: "Study Partners, Dance Crew Members",
-        image: "👩‍🎓"
+        image: "female student",
       },
       {
         name: "Karan Mehta",
         branch: "Business, 3rd Year",
         interests: "Entrepreneurship, Stock Markets, Debate",
         lookingFor: "Startup Co-founders, Case Study Partners",
-        image: "👨‍💼"
+        image: "male businessman",
       },
       {
         name: "Sneha Kapoor",
         branch: "Biotech, 1st Year",
         interests: "Research, Painting, Badminton",
         lookingFor: "Lab Partners, Art Club Members",
-        image: "👩‍🔬"
-      }
+        image: "female scientist",
+      },
     ];
 
-    const handleSwipe = (direction) => {
+    type SwipeDirection = 1 | -1;
+    const handleSwipe = (direction: SwipeDirection) => {
       setExitX(direction * 300);
       setTimeout(() => {
         setCurrentCard((prev) => (prev + 1) % profiles.length);
@@ -504,35 +568,33 @@ export default function CampusConnectPrototype() {
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
-              onDragEnd={(e, { offset, velocity }) => {
-                if (offset.x > 100) handleSwipe(1);
-                if (offset.x < -100) handleSwipe(-1);
+              onDragEnd={(_e, info: PanInfo) => {
+                const offset = info.offset.x;
+                if (offset > 100) handleSwipe(1);
+                if (offset < -100) handleSwipe(-1);
               }}
               className="absolute inset-0 bg-gradient-to-br from-purple-900 to-blue-900 rounded-3xl p-8 border-2 border-purple-500/30 shadow-2xl cursor-grab active:cursor-grabbing"
             >
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                className="text-8xl text-center mb-6"
-              >
+              <motion.div whileHover={{ scale: 1.1 }} className="text-8xl text-center mb-6">
                 {profiles[currentCard].image}
               </motion.div>
-              
+
               <h3 className="text-3xl font-bold text-center mb-2 text-white">
                 {profiles[currentCard].name}
               </h3>
               <p className="text-blue-300 text-center mb-6 text-lg">
                 {profiles[currentCard].branch}
               </p>
-              
+
               <div className="space-y-4">
-                <motion.div 
+                <motion.div
                   whileHover={{ scale: 1.02 }}
                   className="bg-black/30 rounded-2xl p-4 backdrop-blur-sm"
                 >
                   <span className="font-semibold text-pink-400">Interests:</span>
                   <p className="text-gray-200 mt-1">{profiles[currentCard].interests}</p>
                 </motion.div>
-                <motion.div 
+                <motion.div
                   whileHover={{ scale: 1.02 }}
                   className="bg-black/30 rounded-2xl p-4 backdrop-blur-sm"
                 >
@@ -551,7 +613,7 @@ export default function CampusConnectPrototype() {
             onClick={() => handleSwipe(-1)}
             className="w-20 h-20 bg-red-500 hover:bg-red-600 rounded-3xl flex items-center justify-center shadow-2xl transition-all"
           >
-            <span className="text-white font-bold text-2xl">✕</span>
+            <span className="text-white font-bold text-2xl">cross</span>
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.1 }}
@@ -559,11 +621,11 @@ export default function CampusConnectPrototype() {
             onClick={() => handleSwipe(1)}
             className="w-20 h-20 bg-green-500 hover:bg-green-600 rounded-3xl flex items-center justify-center shadow-2xl transition-all"
           >
-            <span className="text-white font-bold text-2xl">✓</span>
+            <span className="text-white font-bold text-2xl">check</span>
           </motion.button>
         </div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
@@ -582,7 +644,6 @@ export default function CampusConnectPrototype() {
     );
   };
 
-  // Enhanced Groups Page
   const GroupsPage = () => (
     <div className="w-full max-w-7xl">
       <motion.div
@@ -598,53 +659,53 @@ export default function CampusConnectPrototype() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[
-          { 
-            icon: "📚", 
-            title: "Study Groups", 
-            desc: "Collaborate and ace your exams together with dedicated study sessions", 
+          {
+            icon: "book",
+            title: "Study Groups",
+            desc: "Collaborate and ace your exams together with dedicated study sessions",
             members: "240+ members",
             gradient: "from-blue-500/20 to-blue-600/20",
-            activity: "Highly Active"
+            activity: "Highly Active",
           },
-          { 
-            icon: "🛠", 
-            title: "Project Teams", 
-            desc: "Build amazing projects and participate in hackathons with talented peers", 
+          {
+            icon: "tools",
+            title: "Project Teams",
+            desc: "Build amazing projects and participate in hackathons with talented peers",
             members: "156+ members",
             gradient: "from-purple-500/20 to-purple-600/20",
-            activity: "Very Active"
+            activity: "Very Active",
           },
-          { 
-            icon: "🏏", 
-            title: "Sports Clubs", 
-            desc: "Stay active, make friends, and represent your college in tournaments", 
+          {
+            icon: "cricket",
+            title: "Sports Clubs",
+            desc: "Stay active, make friends, and represent your college in tournaments",
             members: "420+ members",
             gradient: "from-green-500/20 to-green-600/20",
-            activity: "Active"
+            activity: "Active",
           },
-          { 
-            icon: "🎨", 
-            title: "Creative Arts", 
-            desc: "Express your creativity with fellow artists and designers", 
+          {
+            icon: "paintbrush",
+            title: "Creative Arts",
+            desc: "Express your creativity with fellow artists and designers",
             members: "98+ members",
             gradient: "from-pink-500/20 to-pink-600/20",
-            activity: "Growing"
+            activity: "Growing",
           },
-          { 
-            icon: "💻", 
-            title: "Tech Community", 
-            desc: "Hackathons, workshops, and coding challenges for tech enthusiasts", 
+          {
+            icon: "laptop",
+            title: "Tech Community",
+            desc: "Hackathons, workshops, and coding challenges for tech enthusiasts",
             members: "312+ members",
             gradient: "from-orange-500/20 to-orange-600/20",
-            activity: "Very Active"
+            activity: "Very Active",
           },
-          { 
-            icon: "🎵", 
-            title: "Music & Dance", 
-            desc: "Jam sessions, performances, and cultural events", 
+          {
+            icon: "music",
+            title: "Music & Dance",
+            desc: "Jam sessions, performances, and cultural events",
             members: "187+ members",
             gradient: "from-red-500/20 to-red-600/20",
-            activity: "Active"
+            activity: "Active",
           },
         ].map((group, index) => (
           <motion.div
@@ -656,7 +717,7 @@ export default function CampusConnectPrototype() {
             className={`bg-gradient-to-br ${group.gradient} backdrop-blur-sm border border-white/10 rounded-3xl p-6 hover:shadow-2xl transition-all duration-500 cursor-pointer`}
           >
             <div className="flex items-start space-x-4">
-              <motion.div 
+              <motion.div
                 whileHover={{ scale: 1.2, rotate: 360 }}
                 className="text-4xl bg-black/30 rounded-2xl p-3"
               >
@@ -671,7 +732,7 @@ export default function CampusConnectPrototype() {
                 </div>
                 <p className="text-gray-300 text-sm mb-3 leading-relaxed">{group.desc}</p>
                 <p className="text-blue-400 text-sm mb-4">{group.members}</p>
-                <motion.button 
+                <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-2xl font-semibold transition-all duration-300"
@@ -686,7 +747,6 @@ export default function CampusConnectPrototype() {
     </div>
   );
 
-  // Enhanced Chat Page
   const ChatPage = () => (
     <div className="w-full max-w-4xl">
       <motion.div
@@ -701,11 +761,11 @@ export default function CampusConnectPrototype() {
       </motion.div>
 
       <div className="bg-gradient-to-br from-slate-900/50 to-purple-900/50 backdrop-blur-sm border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
-        {/* Chat Header */}
+        {/* Header */}
         <div className="bg-white/5 border-b border-white/10 p-6">
           <div className="flex items-center space-x-4">
             <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-2xl flex items-center justify-center text-2xl">
-              👩‍💻
+              female programmer
             </div>
             <div>
               <h3 className="text-white font-semibold">Aditi Sharma</h3>
@@ -714,15 +774,13 @@ export default function CampusConnectPrototype() {
           </div>
         </div>
 
-        {/* Chat Messages */}
+        {/* Messages */}
         <div className="h-96 p-6 space-y-4 overflow-y-auto">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex justify-start"
-          >
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex justify-start">
             <div className="bg-blue-500/20 backdrop-blur-sm rounded-3xl rounded-bl-none p-4 max-w-md">
-              <p className="text-white">Hey! Are you joining the study group tomorrow? We're working on the AI project.</p>
+              <p className="text-white">
+                Hey! Are you joining the study group tomorrow? We're working on the AI project.
+              </p>
               <span className="text-blue-300 text-xs mt-2 block">2:30 PM</span>
             </div>
           </motion.div>
@@ -734,7 +792,9 @@ export default function CampusConnectPrototype() {
             className="flex justify-end"
           >
             <div className="bg-purple-500/20 backdrop-blur-sm rounded-3xl rounded-br-none p-4 max-w-md">
-              <p className="text-white">Yes! I've completed the data preprocessing part. What time are we meeting?</p>
+              <p className="text-white">
+                Yes! I've completed the data preprocessing part. What time are we meeting?
+              </p>
               <span className="text-purple-300 text-xs mt-2 block">2:31 PM</span>
             </div>
           </motion.div>
@@ -746,7 +806,9 @@ export default function CampusConnectPrototype() {
             className="flex justify-start"
           >
             <div className="bg-blue-500/20 backdrop-blur-sm rounded-3xl rounded-bl-none p-4 max-w-md">
-              <p className="text-white">Let's meet at 3 PM in the central library. I'll bring the research papers! 📚</p>
+              <p className="text-white">
+                Let's meet at 3 PM in the central library. I'll bring the research papers! book
+              </p>
               <span className="text-blue-300 text-xs mt-2 block">2:32 PM</span>
             </div>
           </motion.div>
@@ -757,13 +819,11 @@ export default function CampusConnectPrototype() {
             transition={{ delay: 0.6 }}
             className="text-center"
           >
-            <span className="bg-white/10 text-gray-400 text-sm px-4 py-2 rounded-full">
-              Today
-            </span>
+            <span className="bg-white/10 text-gray-400 text-sm px-4 py-2 rounded-full">Today</span>
           </motion.div>
         </div>
 
-        {/* Message Input */}
+        {/* Input */}
         <div className="border-t border-white/10 p-6">
           <div className="flex space-x-4">
             <motion.input
@@ -785,14 +845,9 @@ export default function CampusConnectPrototype() {
     </div>
   );
 
-  // Enhanced QR Code Page
   const QRPage = () => (
     <div className="w-full max-w-4xl text-center">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="mb-12"
-      >
+      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="mb-12">
         <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-white to-green-200 bg-clip-text text-transparent">
           Get Campus Connect
         </h1>
@@ -800,28 +855,24 @@ export default function CampusConnectPrototype() {
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        {/* QR Code Section */}
+        {/* QR */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
           className="space-y-8"
         >
-          {/* Animated QR Code */}
           <motion.div
             whileHover={{ scale: 1.05, rotate: [0, -5, 5, 0] }}
             className="bg-white p-8 rounded-3xl inline-block shadow-2xl"
           >
             <div className="w-64 h-64 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-600 rounded-2xl flex items-center justify-center relative overflow-hidden">
               <motion.div
-                animate={{ 
+                animate={{
                   opacity: [0.3, 0.7, 0.3],
-                  scale: [1, 1.1, 1]
+                  scale: [1, 1.1, 1],
                 }}
-                transition={{ 
-                  duration: 3,
-                  repeat: Infinity 
-                }}
+                transition={{ duration: 3, repeat: Infinity }}
                 className="absolute inset-0 bg-gradient-to-br from-transparent via-white/20 to-transparent"
               />
               <div className="text-center text-white relative z-10">
@@ -842,7 +893,7 @@ export default function CampusConnectPrototype() {
           </motion.p>
         </motion.div>
 
-        {/* App Features */}
+        {/* Features */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -850,7 +901,7 @@ export default function CampusConnectPrototype() {
           className="text-left space-y-6"
         >
           <h3 className="text-2xl font-bold text-white mb-6">Why Download Campus Connect?</h3>
-          
+
           {[
             { icon: <Zap className="text-yellow-400" size={24} />, text: "Instant campus notifications" },
             { icon: <Users className="text-blue-400" size={24} />, text: "Connect with peers instantly" },
@@ -871,7 +922,7 @@ export default function CampusConnectPrototype() {
             </motion.div>
           ))}
 
-          <motion.button 
+          <motion.button
             whileHover={{ scale: 1.02, boxShadow: "0 20px 40px rgba(34, 197, 94, 0.3)" }}
             whileTap={{ scale: 0.98 }}
             className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-5 rounded-2xl text-xl font-bold shadow-2xl transition-all duration-300 mt-6"
@@ -881,7 +932,7 @@ export default function CampusConnectPrototype() {
         </motion.div>
       </div>
 
-      {/* App Store Badges */}
+      {/* Store badges */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -901,22 +952,34 @@ export default function CampusConnectPrototype() {
     </div>
   );
 
-  // Render current page
   const renderCurrentPage = () => {
     switch (currentPage) {
-      case "home": return <HomePage />;
-      case "profiles": return <ProfilesPage />;
-      case "groups": return <GroupsPage />;
-      case "connect": return <ConnectPage />;
-      case "chat": return <ChatPage />;
-      case "qr": return <QRPage />;
-      default: return <HomePage />;
+      case "home":
+        return <HomePage />;
+      case "profiles":
+        return <ProfilesPage />;
+      case "groups":
+        return <GroupsPage />;
+      case "connect":
+        return <ConnectPage />;
+      case "chat":
+
+        return <ChatPage />;
+      case "qr":
+        return <QRPage />;
+      default:
+        return <HomePage />;
     }
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white flex flex-col items-center px-6 py-8 overflow-x-hidden">
-      <Navbar />
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white flex flex-col items-center px-6 py-8 pb-24 md:pb-8 overflow-x-hidden">
+      {/* Desktop Navbar */}
+      <div className="w-full flex justify-center mb-8">
+        <DesktopNavbar />
+      </div>
+
+      {/* Page Content */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentPage}
@@ -929,6 +992,11 @@ export default function CampusConnectPrototype() {
           {renderCurrentPage()}
         </motion.div>
       </AnimatePresence>
+
+      {/* Mobile Navbar (fixed) */}
+      <MobileNavbar />
+
+      {/* Footer */}
       <Footer />
     </div>
   );
