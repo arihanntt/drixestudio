@@ -1,4 +1,3 @@
-// components/LayoutWrapper.jsx
 'use client';
 
 import { usePathname } from 'next/navigation';
@@ -8,14 +7,18 @@ import SmoothScrollWrapper from './SmoothScrollWrapper';
 
 export default function LayoutWrapper({ children }) {
   const pathname = usePathname();
+
   const isHomePage = pathname === '/';
-  const isAdminPage = pathname === '/admin'; // Adjust if admin route is different
+  const isAdminPage = pathname === '/admin';
+  const isCampusPage = pathname.startsWith('/campus'); // 🔥 add this
+
+  const hideLayout = isHomePage || isAdminPage || isCampusPage;
 
   return (
     <>
-      {!isHomePage && !isAdminPage && <Navbar />}
+      {!hideLayout && <Navbar />}
       <main>{children}</main>
-      {!isHomePage && !isAdminPage && <Footer />}
+      {!hideLayout && <Footer />}
     </>
   );
 }
