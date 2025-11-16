@@ -25,6 +25,8 @@ import {
   Twitter,
   Facebook,
   Linkedin,
+  X,
+  Check,
 } from "lucide-react";
 
 export default function CampusConnectPrototype() {
@@ -156,6 +158,7 @@ export default function CampusConnectPrototype() {
         {[
           { id: "home", icon: <Home size={24} /> },
           { id: "profiles", icon: <User size={24} /> },
+          { id: "groups", icon: <Users2 size={24} /> },
           { id: "connect", icon: <HeartHandshake size={24} /> },
           { id: "chat", icon: <MessageCircle size={24} /> },
           { id: "qr", icon: <QrCode size={24} /> },
@@ -184,7 +187,7 @@ export default function CampusConnectPrototype() {
     <motion.footer
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
-      className="w-full max-w-7xl mt-20 py-12 border-t border-white/10 text-center"
+      className="w-full max-w-7xl mt-20 py-12 border-t border-white/10 text-center px-4"
     >
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
         {["Product", "Company", "Resources", "Legal"].map((section, index) => (
@@ -228,7 +231,7 @@ export default function CampusConnectPrototype() {
      Pages
   -------------------------------------------------------------- */
   const HomePage = () => (
-    <div className="w-full max-w-7xl">
+    <div className="w-full max-w-7xl px-4">
       {/* HERO SECTION */}
       <div className="text-center mb-20">
         <motion.div
@@ -249,20 +252,20 @@ export default function CampusConnectPrototype() {
             className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-600/20 blur-3xl rounded-full mx-auto w-96 h-96 -z-10"
           />
 
-          <h1 className="text-7xl font-bold mb-6 bg-gradient-to-r from-white via-blue-200 to-purple-300 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-blue-200 to-purple-300 bg-clip-text text-transparent">
             Campus Connect
           </h1>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed"
+            className="text-lg md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed px-4"
           >
             Where campus lives connect. Meet, collaborate, and grow together in your college ecosystem.
           </motion.p>
 
           <motion.div
-            className="flex justify-center space-x-6"
+            className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
@@ -270,7 +273,7 @@ export default function CampusConnectPrototype() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-12 py-4 rounded-2xl text-lg font-semibold shadow-2xl flex items-center space-x-3 transition-all duration-300"
+              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-4 rounded-2xl text-lg font-semibold shadow-2xl flex items-center justify-center space-x-3 transition-all duration-300 w-full sm:w-auto"
             >
               <span>Create Profile</span>
               <ArrowRight size={20} />
@@ -278,7 +281,7 @@ export default function CampusConnectPrototype() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-white/20 text-white px-12 py-4 rounded-2xl text-lg font-semibold transition-all duration-300"
+              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-white/20 text-white px-8 py-4 rounded-2xl text-lg font-semibold transition-all duration-300 w-full sm:w-auto"
             >
               Find Students
             </motion.button>
@@ -290,7 +293,7 @@ export default function CampusConnectPrototype() {
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20"
+        className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20"
       >
         {[
           {
@@ -321,7 +324,7 @@ export default function CampusConnectPrototype() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.2 }}
             whileHover={{ scale: 1.05, y: -10 }}
-            className={`bg-gradient-to-br ${feature.gradient} backdrop-blur-sm border border-white/10 rounded-3xl p-8 text-center shadow-2xl cursor-pointer transition-all duration-500`}
+            className={`bg-gradient-to-br ${feature.gradient} backdrop-blur-sm border border-white/10 rounded-3xl p-6 text-center shadow-2xl cursor-pointer transition-all duration-500`}
           >
             <motion.div
               className={`w-16 h-16 bg-black/30 rounded-2xl flex items-center justify-center mx-auto mb-6 ${feature.color}`}
@@ -330,8 +333,8 @@ export default function CampusConnectPrototype() {
             >
               {feature.icon}
             </motion.div>
-            <h3 className="text-2xl font-bold text-white mb-4">{feature.title}</h3>
-            <p className="text-gray-300 leading-relaxed">{feature.desc}</p>
+            <h3 className="text-xl font-bold text-white mb-4">{feature.title}</h3>
+            <p className="text-gray-300 leading-relaxed text-sm">{feature.desc}</p>
           </motion.div>
         ))}
       </motion.div>
@@ -340,7 +343,7 @@ export default function CampusConnectPrototype() {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         whileInView={{ opacity: 1, scale: 1 }}
-        className="relative bg-gradient-to-r from-purple-900/50 to-blue-900/50 backdrop-blur-sm border border-purple-500/30 rounded-3xl p-12 mb-20 text-center shadow-2xl overflow-hidden"
+        className="relative bg-gradient-to-r from-purple-900/50 to-blue-900/50 backdrop-blur-sm border border-purple-500/30 rounded-3xl p-6 md:p-12 mb-20 text-center shadow-2xl overflow-hidden"
       >
         <motion.div
           animate={{
@@ -354,16 +357,16 @@ export default function CampusConnectPrototype() {
           className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 -z-10"
         />
 
-        <motion.div whileHover={{ scale: 1.1, rotate: 360 }} className="flex justify-center mb-8">
-          <div className="w-20 h-20 bg-gradient-to-r from-pink-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-2xl">
-            <HeartHandshake size={36} className="text-white" />
+        <motion.div whileHover={{ scale: 1.1, rotate: 360 }} className="flex justify-center mb-6 md:mb-8">
+          <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r from-pink-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-2xl">
+            <HeartHandshake size={28} className="text-white" />
           </div>
         </motion.div>
 
-        <h2 className="text-4xl font-bold mb-6 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+        <h2 className="text-2xl md:text-4xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
           Campus Connect Premium
         </h2>
-        <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-base md:text-xl text-gray-300 mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed">
           Unlock intelligent matching algorithms that connect you with like-minded peers. Find study
           partners, project collaborators, and build meaningful campus relationships.
         </p>
@@ -371,9 +374,9 @@ export default function CampusConnectPrototype() {
         <motion.button
           whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(192, 132, 252, 0.3)" }}
           whileTap={{ scale: 0.95 }}
-          className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-12 py-4 rounded-2xl text-lg font-semibold shadow-2xl transition-all duration-300"
+          className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-8 py-4 rounded-2xl text-lg font-semibold shadow-2xl transition-all duration-300 w-full sm:w-auto"
         >
-          <span className="flex items-center space-x-3">
+          <span className="flex items-center justify-center space-x-3">
             <Star size={20} />
             <span>Unlock Premium Features</span>
           </span>
@@ -390,7 +393,7 @@ export default function CampusConnectPrototype() {
         name: "Aditi Sharma",
         branch: "Computer Science, 2nd Year",
         interests: ["AI/ML Research", "Classical Music", "Startup Culture"],
-        image: "female programmer",
+        image: "👩‍💻",
         bio: "Passionate about building AI solutions. Looking for coding partners and startup enthusiasts.",
         skills: ["Python", "React", "Machine Learning"],
       },
@@ -398,7 +401,7 @@ export default function CampusConnectPrototype() {
         name: "Rahul Verma",
         branch: "Mechanical Engineering, 3rd Year",
         interests: ["Robotics", "Football", "Photography"],
-        image: "male engineer",
+        image: "👨‍🔧",
         bio: "Robotics club lead. Love capturing campus life through my lens.",
         skills: ["CAD", "Python", "Photography"],
       },
@@ -406,26 +409,26 @@ export default function CampusConnectPrototype() {
         name: "Priya Patel",
         branch: "Design, 1st Year",
         interests: ["UI/UX Design", "Contemporary Dance", "Art"],
-        image: "female artist",
+        image: "👩‍🎨",
         bio: "Creating beautiful digital experiences. Dance keeps me creative!",
         skills: ["Figma", "Illustration", "Animation"],
       },
     ];
 
     return (
-      <div className="w-full max-w-6xl">
+      <div className="w-full max-w-6xl px-4">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8"
         >
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
             Meet Campus Stars
           </h1>
-          <p className="text-xl text-gray-300">Connect with talented students across your college</p>
+          <p className="text-lg md:text-xl text-gray-300">Connect with talented students across your college</p>
         </motion.div>
 
-        <div className="flex space-x-6 mb-8">
+        <div className="flex items-center space-x-4 mb-8">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -437,37 +440,37 @@ export default function CampusConnectPrototype() {
             <ChevronLeft size={24} />
           </motion.button>
 
-          <div className="flex-1">
+          <div className="flex-1 min-h-[400px]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={selectedProfile}
                 initial={{ opacity: 0, x: 100 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -100 }}
-                className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 backdrop-blur-sm border border-white/10 rounded-3xl p-8 shadow-2xl"
+                className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 backdrop-blur-sm border border-white/10 rounded-3xl p-6 shadow-2xl h-full"
               >
-                <div className="flex items-start space-x-8">
+                <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
                   <motion.div
                     whileHover={{ scale: 1.1 }}
-                    className="text-8xl bg-black/30 rounded-3xl p-8"
+                    className="text-6xl bg-black/30 rounded-3xl p-6 w-32 h-32 flex items-center justify-center"
                   >
                     {students[selectedProfile].image}
                   </motion.div>
 
-                  <div className="flex-1 text-left">
-                    <h3 className="text-3xl font-bold text-white mb-2">
+                  <div className="flex-1 text-center md:text-left">
+                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
                       {students[selectedProfile].name}
                     </h3>
-                    <p className="text-blue-400 text-lg mb-4">
+                    <p className="text-blue-400 text-base md:text-lg mb-4">
                       {students[selectedProfile].branch}
                     </p>
-                    <p className="text-gray-300 mb-6 leading-relaxed">
+                    <p className="text-gray-300 mb-6 leading-relaxed text-sm md:text-base">
                       {students[selectedProfile].bio}
                     </p>
 
                     <div className="mb-6">
                       <h4 className="text-white font-semibold mb-3">Skills & Interests</h4>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2 justify-center md:justify-start">
                         {students[selectedProfile].skills.map((skill, index) => (
                           <motion.span
                             key={skill}
@@ -485,7 +488,7 @@ export default function CampusConnectPrototype() {
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-4 rounded-2xl font-semibold shadow-2xl transition-all duration-300"
+                      className="w-full md:w-auto bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-3 px-6 rounded-2xl font-semibold shadow-2xl transition-all duration-300"
                     >
                       Connect with {students[selectedProfile].name.split(" ")[0]}
                     </motion.button>
@@ -518,21 +521,21 @@ export default function CampusConnectPrototype() {
         branch: "Psychology, 2nd Year",
         interests: "Mental Health Advocacy, Poetry, Dance",
         lookingFor: "Study Partners, Dance Crew Members",
-        image: "female student",
+        image: "👩‍🎓",
       },
       {
         name: "Karan Mehta",
         branch: "Business, 3rd Year",
         interests: "Entrepreneurship, Stock Markets, Debate",
         lookingFor: "Startup Co-founders, Case Study Partners",
-        image: "male businessman",
+        image: "👨‍💼",
       },
       {
         name: "Sneha Kapoor",
         branch: "Biotech, 1st Year",
         interests: "Research, Painting, Badminton",
         lookingFor: "Lab Partners, Art Club Members",
-        image: "female scientist",
+        image: "👩‍🔬",
       },
     ];
 
@@ -546,13 +549,13 @@ export default function CampusConnectPrototype() {
     };
 
     return (
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md px-4">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
             Find Your Match
           </h1>
           <p className="text-gray-300">Swipe right to connect, left to skip</p>
@@ -573,16 +576,16 @@ export default function CampusConnectPrototype() {
                 if (offset > 100) handleSwipe(1);
                 if (offset < -100) handleSwipe(-1);
               }}
-              className="absolute inset-0 bg-gradient-to-br from-purple-900 to-blue-900 rounded-3xl p-8 border-2 border-purple-500/30 shadow-2xl cursor-grab active:cursor-grabbing"
+              className="absolute inset-0 bg-gradient-to-br from-purple-900 to-blue-900 rounded-3xl p-6 border-2 border-purple-500/30 shadow-2xl cursor-grab active:cursor-grabbing"
             >
-              <motion.div whileHover={{ scale: 1.1 }} className="text-8xl text-center mb-6">
+              <motion.div whileHover={{ scale: 1.1 }} className="text-6xl text-center mb-6">
                 {profiles[currentCard].image}
               </motion.div>
 
-              <h3 className="text-3xl font-bold text-center mb-2 text-white">
+              <h3 className="text-2xl md:text-3xl font-bold text-center mb-2 text-white">
                 {profiles[currentCard].name}
               </h3>
-              <p className="text-blue-300 text-center mb-6 text-lg">
+              <p className="text-blue-300 text-center mb-6 text-base md:text-lg">
                 {profiles[currentCard].branch}
               </p>
 
@@ -592,14 +595,14 @@ export default function CampusConnectPrototype() {
                   className="bg-black/30 rounded-2xl p-4 backdrop-blur-sm"
                 >
                   <span className="font-semibold text-pink-400">Interests:</span>
-                  <p className="text-gray-200 mt-1">{profiles[currentCard].interests}</p>
+                  <p className="text-gray-200 mt-1 text-sm">{profiles[currentCard].interests}</p>
                 </motion.div>
                 <motion.div
                   whileHover={{ scale: 1.02 }}
                   className="bg-black/30 rounded-2xl p-4 backdrop-blur-sm"
                 >
                   <span className="font-semibold text-green-400">Looking for:</span>
-                  <p className="text-gray-200 mt-1">{profiles[currentCard].lookingFor}</p>
+                  <p className="text-gray-200 mt-1 text-sm">{profiles[currentCard].lookingFor}</p>
                 </motion.div>
               </div>
             </motion.div>
@@ -611,17 +614,17 @@ export default function CampusConnectPrototype() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => handleSwipe(-1)}
-            className="w-20 h-20 bg-red-500 hover:bg-red-600 rounded-3xl flex items-center justify-center shadow-2xl transition-all"
+            className="w-16 h-16 md:w-20 md:h-20 bg-red-500 hover:bg-red-600 rounded-3xl flex items-center justify-center shadow-2xl transition-all"
           >
-            <span className="text-white font-bold text-2xl">cross</span>
+            <X size={32} className="text-white" />
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => handleSwipe(1)}
-            className="w-20 h-20 bg-green-500 hover:bg-green-600 rounded-3xl flex items-center justify-center shadow-2xl transition-all"
+            className="w-16 h-16 md:w-20 md:h-20 bg-green-500 hover:bg-green-600 rounded-3xl flex items-center justify-center shadow-2xl transition-all"
           >
-            <span className="text-white font-bold text-2xl">check</span>
+            <Check size={32} className="text-white" />
           </motion.button>
         </div>
 
@@ -629,7 +632,7 @@ export default function CampusConnectPrototype() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="text-center mt-8 text-gray-400 space-y-2"
+          className="text-center mt-8 text-gray-400 space-y-2 text-sm"
         >
           <p className="flex items-center justify-center space-x-2">
             <span>Swipe Right to Connect</span>
@@ -645,22 +648,22 @@ export default function CampusConnectPrototype() {
   };
 
   const GroupsPage = () => (
-    <div className="w-full max-w-7xl">
+    <div className="w-full max-w-7xl px-4">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-12"
+        className="text-center mb-8"
       >
-        <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-green-200 bg-clip-text text-transparent">
+        <h1 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-green-200 bg-clip-text text-transparent">
           Join Campus Communities
         </h1>
-        <p className="text-xl text-gray-300">Find your tribe and collaborate on amazing projects</p>
+        <p className="text-lg md:text-xl text-gray-300">Find your tribe and collaborate on amazing projects</p>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {[
           {
-            icon: "book",
+            icon: "📚",
             title: "Study Groups",
             desc: "Collaborate and ace your exams together with dedicated study sessions",
             members: "240+ members",
@@ -668,7 +671,7 @@ export default function CampusConnectPrototype() {
             activity: "Highly Active",
           },
           {
-            icon: "tools",
+            icon: "🛠️",
             title: "Project Teams",
             desc: "Build amazing projects and participate in hackathons with talented peers",
             members: "156+ members",
@@ -676,7 +679,7 @@ export default function CampusConnectPrototype() {
             activity: "Very Active",
           },
           {
-            icon: "cricket",
+            icon: "⚽",
             title: "Sports Clubs",
             desc: "Stay active, make friends, and represent your college in tournaments",
             members: "420+ members",
@@ -684,7 +687,7 @@ export default function CampusConnectPrototype() {
             activity: "Active",
           },
           {
-            icon: "paintbrush",
+            icon: "🎨",
             title: "Creative Arts",
             desc: "Express your creativity with fellow artists and designers",
             members: "98+ members",
@@ -692,7 +695,7 @@ export default function CampusConnectPrototype() {
             activity: "Growing",
           },
           {
-            icon: "laptop",
+            icon: "💻",
             title: "Tech Community",
             desc: "Hackathons, workshops, and coding challenges for tech enthusiasts",
             members: "312+ members",
@@ -700,7 +703,7 @@ export default function CampusConnectPrototype() {
             activity: "Very Active",
           },
           {
-            icon: "music",
+            icon: "🎵",
             title: "Music & Dance",
             desc: "Jam sessions, performances, and cultural events",
             members: "187+ members",
@@ -714,28 +717,28 @@ export default function CampusConnectPrototype() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
             whileHover={{ scale: 1.05, y: -5 }}
-            className={`bg-gradient-to-br ${group.gradient} backdrop-blur-sm border border-white/10 rounded-3xl p-6 hover:shadow-2xl transition-all duration-500 cursor-pointer`}
+            className={`bg-gradient-to-br ${group.gradient} backdrop-blur-sm border border-white/10 rounded-3xl p-4 md:p-6 hover:shadow-2xl transition-all duration-500 cursor-pointer`}
           >
-            <div className="flex items-start space-x-4">
+            <div className="flex items-start space-x-3 md:space-x-4">
               <motion.div
                 whileHover={{ scale: 1.2, rotate: 360 }}
-                className="text-4xl bg-black/30 rounded-2xl p-3"
+                className="text-2xl md:text-4xl bg-black/30 rounded-2xl p-2 md:p-3"
               >
                 {group.icon}
               </motion.div>
               <div className="flex-1">
                 <div className="flex items-start justify-between mb-2">
-                  <h3 className="text-xl font-semibold text-white">{group.title}</h3>
+                  <h3 className="text-lg md:text-xl font-semibold text-white">{group.title}</h3>
                   <span className="bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full">
                     {group.activity}
                   </span>
                 </div>
-                <p className="text-gray-300 text-sm mb-3 leading-relaxed">{group.desc}</p>
-                <p className="text-blue-400 text-sm mb-4">{group.members}</p>
+                <p className="text-gray-300 text-xs md:text-sm mb-3 leading-relaxed">{group.desc}</p>
+                <p className="text-blue-400 text-xs md:text-sm mb-4">{group.members}</p>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-2xl font-semibold transition-all duration-300"
+                  className="w-full bg-white/10 hover:bg-white/20 text-white py-2 md:py-3 rounded-2xl font-semibold transition-all duration-300 text-sm"
                 >
                   Join Community
                 </motion.button>
@@ -748,37 +751,37 @@ export default function CampusConnectPrototype() {
   );
 
   const ChatPage = () => (
-    <div className="w-full max-w-4xl">
+    <div className="w-full max-w-4xl px-4">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-8"
       >
-        <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+        <h1 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
           Campus Connect Chat
         </h1>
-        <p className="text-xl text-gray-300">Real-time messaging - Connect faster than ever!</p>
+        <p className="text-lg md:text-xl text-gray-300">Real-time messaging - Connect faster than ever!</p>
       </motion.div>
 
       <div className="bg-gradient-to-br from-slate-900/50 to-purple-900/50 backdrop-blur-sm border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
         {/* Header */}
-        <div className="bg-white/5 border-b border-white/10 p-6">
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-2xl flex items-center justify-center text-2xl">
-              female programmer
+        <div className="bg-white/5 border-b border-white/10 p-4 md:p-6">
+          <div className="flex items-center space-x-3 md:space-x-4">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-2xl flex items-center justify-center text-xl md:text-2xl">
+              👩‍💻
             </div>
             <div>
-              <h3 className="text-white font-semibold">Aditi Sharma</h3>
-              <p className="text-green-400 text-sm">Online - Typing...</p>
+              <h3 className="text-white font-semibold text-sm md:text-base">Aditi Sharma</h3>
+              <p className="text-green-400 text-xs md:text-sm">Online - Typing...</p>
             </div>
           </div>
         </div>
 
         {/* Messages */}
-        <div className="h-96 p-6 space-y-4 overflow-y-auto">
+        <div className="h-80 md:h-96 p-4 md:p-6 space-y-4 overflow-y-auto">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex justify-start">
-            <div className="bg-blue-500/20 backdrop-blur-sm rounded-3xl rounded-bl-none p-4 max-w-md">
-              <p className="text-white">
+            <div className="bg-blue-500/20 backdrop-blur-sm rounded-3xl rounded-bl-none p-3 md:p-4 max-w-xs md:max-w-md">
+              <p className="text-white text-sm md:text-base">
                 Hey! Are you joining the study group tomorrow? We're working on the AI project.
               </p>
               <span className="text-blue-300 text-xs mt-2 block">2:30 PM</span>
@@ -791,8 +794,8 @@ export default function CampusConnectPrototype() {
             transition={{ delay: 0.2 }}
             className="flex justify-end"
           >
-            <div className="bg-purple-500/20 backdrop-blur-sm rounded-3xl rounded-br-none p-4 max-w-md">
-              <p className="text-white">
+            <div className="bg-purple-500/20 backdrop-blur-sm rounded-3xl rounded-br-none p-3 md:p-4 max-w-xs md:max-w-md">
+              <p className="text-white text-sm md:text-base">
                 Yes! I've completed the data preprocessing part. What time are we meeting?
               </p>
               <span className="text-purple-300 text-xs mt-2 block">2:31 PM</span>
@@ -805,9 +808,9 @@ export default function CampusConnectPrototype() {
             transition={{ delay: 0.4 }}
             className="flex justify-start"
           >
-            <div className="bg-blue-500/20 backdrop-blur-sm rounded-3xl rounded-bl-none p-4 max-w-md">
-              <p className="text-white">
-                Let's meet at 3 PM in the central library. I'll bring the research papers! book
+            <div className="bg-blue-500/20 backdrop-blur-sm rounded-3xl rounded-bl-none p-3 md:p-4 max-w-xs md:max-w-md">
+              <p className="text-white text-sm md:text-base">
+                Let's meet at 3 PM in the central library. I'll bring the research papers!
               </p>
               <span className="text-blue-300 text-xs mt-2 block">2:32 PM</span>
             </div>
@@ -819,25 +822,25 @@ export default function CampusConnectPrototype() {
             transition={{ delay: 0.6 }}
             className="text-center"
           >
-            <span className="bg-white/10 text-gray-400 text-sm px-4 py-2 rounded-full">Today</span>
+            <span className="bg-white/10 text-gray-400 text-xs px-3 py-1 rounded-full">Today</span>
           </motion.div>
         </div>
 
         {/* Input */}
-        <div className="border-t border-white/10 p-6">
-          <div className="flex space-x-4">
+        <div className="border-t border-white/10 p-4 md:p-6">
+          <div className="flex space-x-3 md:space-x-4">
             <motion.input
               whileFocus={{ scale: 1.02 }}
               type="text"
               placeholder="Type your message..."
-              className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-all"
+              className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-4 md:px-6 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-all text-sm md:text-base"
             />
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white w-14 h-14 rounded-2xl flex items-center justify-center shadow-2xl transition-all"
+              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shadow-2xl transition-all"
             >
-              <Send size={20} />
+              <Send size={18} />
             </motion.button>
           </div>
         </div>
@@ -846,27 +849,27 @@ export default function CampusConnectPrototype() {
   );
 
   const QRPage = () => (
-    <div className="w-full max-w-4xl text-center">
-      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="mb-12">
-        <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-white to-green-200 bg-clip-text text-transparent">
+    <div className="w-full max-w-4xl px-4 text-center">
+      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="mb-8 md:mb-12">
+        <h1 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-white to-green-200 bg-clip-text text-transparent">
           Get Campus Connect
         </h1>
-        <p className="text-2xl text-gray-300 mb-8">Start Your Campus Journey Today!</p>
+        <p className="text-lg md:text-2xl text-gray-300 mb-6 md:mb-8">Start Your Campus Journey Today!</p>
       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
         {/* QR */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
-          className="space-y-8"
+          className="space-y-6 md:space-y-8"
         >
           <motion.div
             whileHover={{ scale: 1.05, rotate: [0, -5, 5, 0] }}
-            className="bg-white p-8 rounded-3xl inline-block shadow-2xl"
+            className="bg-white p-6 md:p-8 rounded-3xl inline-block shadow-2xl"
           >
-            <div className="w-64 h-64 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-600 rounded-2xl flex items-center justify-center relative overflow-hidden">
+            <div className="w-48 h-48 md:w-64 md:h-64 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-600 rounded-2xl flex items-center justify-center relative overflow-hidden">
               <motion.div
                 animate={{
                   opacity: [0.3, 0.7, 0.3],
@@ -876,9 +879,9 @@ export default function CampusConnectPrototype() {
                 className="absolute inset-0 bg-gradient-to-br from-transparent via-white/20 to-transparent"
               />
               <div className="text-center text-white relative z-10">
-                <QrCode size={48} className="mx-auto mb-3" />
-                <p className="font-bold text-lg">CAMPUS CONNECT</p>
-                <p className="text-sm opacity-90">Scan to Download</p>
+                <QrCode size={36} className="mx-auto mb-2 md:mb-3" />
+                <p className="font-bold text-base md:text-lg">CAMPUS CONNECT</p>
+                <p className="text-xs md:text-sm opacity-90">Scan to Download</p>
               </div>
             </div>
           </motion.div>
@@ -887,7 +890,7 @@ export default function CampusConnectPrototype() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="text-3xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent"
+            className="text-xl md:text-3xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent"
           >
             SCAN TO START CONNECTING
           </motion.p>
@@ -898,34 +901,34 @@ export default function CampusConnectPrototype() {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
-          className="text-left space-y-6"
+          className="text-left space-y-4 md:space-y-6"
         >
-          <h3 className="text-2xl font-bold text-white mb-6">Why Download Campus Connect?</h3>
+          <h3 className="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6">Why Download Campus Connect?</h3>
 
           {[
-            { icon: <Zap className="text-yellow-400" size={24} />, text: "Instant campus notifications" },
-            { icon: <Users className="text-blue-400" size={24} />, text: "Connect with peers instantly" },
-            { icon: <Calendar className="text-green-400" size={24} />, text: "Never miss campus events" },
-            { icon: <Shield className="text-purple-400" size={24} />, text: "Secure verified network" },
+            { icon: <Zap className="text-yellow-400" size={20} />, text: "Instant campus notifications" },
+            { icon: <Users className="text-blue-400" size={20} />, text: "Connect with peers instantly" },
+            { icon: <Calendar className="text-green-400" size={20} />, text: "Never miss campus events" },
+            { icon: <Shield className="text-purple-400" size={20} />, text: "Secure verified network" },
           ].map((feature, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 + index * 0.1 }}
-              className="flex items-center space-x-4 p-4 bg-white/5 rounded-2xl hover:bg-white/10 transition-all cursor-pointer"
+              className="flex items-center space-x-3 p-3 md:p-4 bg-white/5 rounded-2xl hover:bg-white/10 transition-all cursor-pointer"
             >
-              <div className="w-12 h-12 bg-black/30 rounded-2xl flex items-center justify-center">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-black/30 rounded-2xl flex items-center justify-center">
                 {feature.icon}
               </div>
-              <span className="text-gray-300 text-lg">{feature.text}</span>
+              <span className="text-gray-300 text-sm md:text-lg">{feature.text}</span>
             </motion.div>
           ))}
 
           <motion.button
             whileHover={{ scale: 1.02, boxShadow: "0 20px 40px rgba(34, 197, 94, 0.3)" }}
             whileTap={{ scale: 0.98 }}
-            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-5 rounded-2xl text-xl font-bold shadow-2xl transition-all duration-300 mt-6"
+            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-4 md:py-5 rounded-2xl text-lg md:text-xl font-bold shadow-2xl transition-all duration-300 mt-4 md:mt-6"
           >
             Download Now - It's Free!
           </motion.button>
@@ -937,15 +940,15 @@ export default function CampusConnectPrototype() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
-        className="flex justify-center space-x-6 mt-12"
+        className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6 mt-8 md:mt-12"
       >
         {["Play Store", "App Store", "Web App"].map((store, index) => (
           <motion.div
             key={store}
             whileHover={{ scale: 1.1, y: -5 }}
-            className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 px-8 py-4 rounded-2xl cursor-pointer transition-all duration-300"
+            className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 px-6 py-3 rounded-2xl cursor-pointer transition-all duration-300 text-center"
           >
-            <span className="text-white font-semibold">Download on {store}</span>
+            <span className="text-white font-semibold text-sm md:text-base">Download on {store}</span>
           </motion.div>
         ))}
       </motion.div>
@@ -963,7 +966,6 @@ export default function CampusConnectPrototype() {
       case "connect":
         return <ConnectPage />;
       case "chat":
-
         return <ChatPage />;
       case "qr":
         return <QRPage />;
@@ -973,9 +975,9 @@ export default function CampusConnectPrototype() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white flex flex-col items-center px-6 py-8 pb-24 md:pb-8 overflow-x-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white flex flex-col items-center px-4 py-6 pb-24 md:pb-8 overflow-x-hidden">
       {/* Desktop Navbar */}
-      <div className="w-full flex justify-center mb-8">
+      <div className="w-full flex justify-center mb-6 md:mb-8">
         <DesktopNavbar />
       </div>
 
