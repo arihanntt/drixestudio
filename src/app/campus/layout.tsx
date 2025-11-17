@@ -8,7 +8,14 @@ import Footer from "./components/Footer";
 import MobileNavbar from "./components/MobileNavbar";
 import { usePathname } from "next/navigation";
 
-type Page = "home" | "profiles" | "groups" | "connect" | "chat" | "get-app";
+type Page =
+  | "home"
+  | "profiles"
+  | "groups"
+  | "connect"
+  | "chat"
+  | "bus-tracker"
+  | "login";
 
 export default function CampusLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -26,7 +33,8 @@ export default function CampusLayout({ children }: { children: React.ReactNode }
       case "/campus/groups": return "groups";
       case "/campus/connect": return "connect";
       case "/campus/chat": return "chat";
-      case "/campus/get-app": return "get-app";
+      case "/campus/bus-tracker": return "bus-tracker";
+      case "/campus/login": return "login";
       default: return "home";
     }
   };
@@ -37,7 +45,10 @@ export default function CampusLayout({ children }: { children: React.ReactNode }
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center">
           <motion.div
             animate={{ rotate: 360, scale: [1, 1.2, 1] }}
-            transition={{ rotate: { duration: 2, repeat: Infinity, ease: "linear" }, scale: { duration: 1, repeat: Infinity } }}
+            transition={{
+              rotate: { duration: 2, repeat: Infinity, ease: "linear" },
+              scale: { duration: 1, repeat: Infinity },
+            }}
             className="w-20 h-20 bg-gradient-to-r from-pink-400 to-sky-400 rounded-2xl flex items-center justify-center mx-auto mb-6"
           >
             <Users className="text-white" size={32} />
@@ -71,7 +82,7 @@ export default function CampusLayout({ children }: { children: React.ReactNode }
       </AnimatePresence>
 
       <MobileNavbar currentPage={getCurrentPage()} />
-      <Footer /> {/* ← Only here! */}
+      <Footer />
     </div>
   );
 }

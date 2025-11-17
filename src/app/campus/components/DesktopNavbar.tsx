@@ -1,7 +1,16 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { Home, User, Users2, HeartHandshake, MessageCircle, QrCode } from "lucide-react";
+import { 
+  Home, 
+  User, 
+  Users2, 
+  HeartHandshake, 
+  MessageCircle, 
+  QrCode,
+  Bus,
+  LockIcon
+} from "lucide-react";   // ✅ Added Bus icon
 import { Logo } from "./Header";
 import Link from "next/link";
 
@@ -15,8 +24,10 @@ const navItems = [
   { id: "groups", label: "Groups", icon: <Users2 size={18} />, path: "/campus/groups" },
   { id: "connect", label: "Connect", icon: <HeartHandshake size={18} />, path: "/campus/connect" },
   { id: "chat", label: "Chat", icon: <MessageCircle size={18} />, path: "/campus/chat" },
-  { id: "get-app", label: "Get App", icon: <QrCode size={18} />, path: "/campus/get-app" },
+  { id: "bus-tracker", label: "Bus Tracker", icon: <Bus size={18} />, path: "/campus/bus-tracker" }, // ✅ Added here
+  { id: "login", label: "Login/Sign up", icon: <LockIcon size={18} />, path: "/campus/login" },
 ];
+
 
 export default function DesktopNavbar({ currentPage }: DesktopNavbarProps) {
   return (

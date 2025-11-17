@@ -1,7 +1,8 @@
 "use client";
+
 import React from "react";
 import { motion } from "framer-motion";
-import { Home, User, Users2, HeartHandshake, MessageCircle, QrCode } from "lucide-react";
+import { Home, User, Users2, HeartHandshake, MessageCircle, QrCode, Bus, LockIcon } from "lucide-react";
 import Link from "next/link";
 
 interface MobileNavbarProps {
@@ -14,7 +15,8 @@ const mobileNavItems = [
   { id: "groups", icon: <Users2 size={24} />, path: "/campus/groups" },
   { id: "connect", icon: <HeartHandshake size={24} />, path: "/campus/connect" },
   { id: "chat", icon: <MessageCircle size={24} />, path: "/campus/chat" },
-  { id: "get-app", icon: <QrCode size={24} />, path: "/campus/get-app" },
+  { id: "bus-tracker", icon: <Bus size={24} />, path: "/campus/bus-tracker" },
+  { id: "login", icon: <LockIcon size={24} />, path: "/campus/login" },
 ];
 
 export default function MobileNavbar({ currentPage }: MobileNavbarProps) {
@@ -29,7 +31,7 @@ export default function MobileNavbar({ currentPage }: MobileNavbarProps) {
           <Link key={item.id} href={item.path}>
             <motion.div
               whileTap={{ scale: 0.9 }}
-              className={`p-3 rounded-2xl transition-all cursor-pointer ${
+              className={`p-2 rounded-2xl transition-all cursor-pointer ${
                 currentPage === item.id
                   ? "bg-gradient-to-r from-pink-400 to-sky-400 text-white"
                   : "text-slate-600"
