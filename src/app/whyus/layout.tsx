@@ -6,28 +6,42 @@ export async function generateMetadata(): Promise<Metadata> {
   const imageUrl = `${baseUrl}/assets/whyus.png`;
 
   return {
-    title: {
-      default: "Why Us | Drixe Studio",
-      template: "%s | Drixe Studio"
-    },
+    title: "Why Drixe Studio | Our Approach & Philosophy",
     description:
-      "Learn why Drixe Studio is the top choice for professional Discord server design and automation. We deliver unique setups tailored to every community.",
+      "Learn how Drixe Studio approaches websites, Discord communities, and digital systems with clarity, structure, and long-term thinking.",
+
     keywords: [
-      "Why choose Drixe Studio",
-      "Discord server design",
-      "Professional Discord setups",
-      "Discord automation services",
-      "Custom Discord servers",
-      "Discord server branding",
-      "Best Discord setup agency",
-      "Premium Discord customization",
-      "Discord community engagement",
-      "Tailored Discord solutions"
+      // Brand
+      "Drixe Studio",
+      "digital studio",
+
+      // Systems positioning
+      "digital systems design",
+      "community systems",
+      "automation workflows",
+      "scalable digital solutions",
+
+      // Website services
+      "website design studio",
+      "frontend development",
+      "static website development",
+
+      // Discord (retain authority)
+      "Discord server setup",
+      "Discord community systems",
+      "Discord automation",
+      "Discord moderation services",
+
+      // Creator & business
+      "creator tools",
+      "community building",
+      "online communities",
     ],
+
     openGraph: {
-      title: "Why Drixe Studio is Your Best Discord Setup Partner",
+      title: "Why Drixe Studio | Systems, Not Just Setups",
       description:
-        "Discover what makes Drixe Studio the leader in custom Discord servers — premium design, automation, moderation systems and more.",
+        "We design websites, Discord communities, and workflows with structure, clarity, and long-term usability in mind.",
       url: pageUrl,
       siteName: "Drixe Studio",
       images: [
@@ -35,27 +49,25 @@ export async function generateMetadata(): Promise<Metadata> {
           url: imageUrl,
           width: 1200,
           height: 630,
-          alt: "Why Choose Drixe Studio - Discord Server Benefits",
-          type: "image/png",
-        }
+          alt: "Drixe Studio – our approach to building digital systems",
+        },
       ],
       locale: "en_US",
-      type: "website"
+      type: "website",
     },
+
     twitter: {
       card: "summary_large_image",
-      title: "Why Choose Drixe Studio",
+      title: "Why Drixe Studio",
       description:
-        "We build stunning, automated Discord servers tailored for your community, brand, or business.",
-      creator: "@DrixeStudio",
-      images: [imageUrl]
+        "Our philosophy on building websites, communities, and digital systems that last.",
+      images: [imageUrl],
     },
+
     alternates: {
       canonical: pageUrl,
-      languages: {
-        "en-US": pageUrl
-      }
     },
+
     robots: {
       index: true,
       follow: true,
@@ -64,24 +76,27 @@ export async function generateMetadata(): Promise<Metadata> {
         follow: true,
         "max-image-preview": "large",
         "max-snippet": -1,
-        "max-video-preview": -1
-      }
+        "max-video-preview": -1,
+      },
     },
-    verification: {
-      google: "your-google-verification-code" // Replace with your real one if needed
-    },
+
     category: "technology",
-    metadataBase: new URL(baseUrl),
     applicationName: "Drixe Studio",
     authors: [{ name: "Drixe Studio", url: baseUrl }],
     creator: "Drixe Studio",
     publisher: "Drixe Studio",
-    other: {
-      "discord:invite": "https://discord.gg/E22K7T4p"
-    }
+    metadataBase: new URL(baseUrl),
   };
 }
 
-export default function WhyUsLayout({ children }: { children: React.ReactNode }) {
-  return <main className="min-h-screen bg-white text-black">{children}</main>;
+export default function WhyUsLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <main className="min-h-screen bg-black text-white">
+      {children}
+    </main>
+  );
 }

@@ -1,83 +1,84 @@
-// 📦 Plan Data
+// 📦 Discord Plan Data (Revamped & Repositioned)
+
 export const plans = [
   {
     name: "Basic",
-    price: 3000,
+    price: 4500, // ↑ from 3000
     summary:
-      "Starter Discord server setup with essential bots, custom roles, and auto systems — great for beginners.",
+      "Essential Discord server setup with automation, roles, and core engagement systems — ideal for new communities.",
     details: [
       "Custom channels (Text & Voice)",
-      "Invite Tracking System",
+      "Invite tracking system",
       "Automated welcome & role system",
-      "Essential bots (Moderation, Music, & Auto-messages)",
+      "Essential bots (Moderation, Music, Auto-messages)",
       "Boosting & announcement system",
-      "Giveaway & Polling System",
-      "Basic security setup",
+      "Giveaway & polling system",
+      "Basic security configuration",
       "Delivery: 1 day",
     ],
   },
   {
     name: "Standard",
-    price: 6000,
+    price: 8000, // ↑ from 6000
     summary:
-      "Designed for growing Discord communities — custom server layout, verification, emojis, and user engagement tools.",
+      "Structured Discord server designed for growing communities with verification, branding, and engagement tools.",
     details: [
       "Everything in Basic plan",
-      "Epic Server Design",
-      "Verification System",
+      "Professional server layout & design",
+      "Verification system",
       "Basic logging system",
-      "Moderate security",
-      "3-5 bots (Moderation, Games, Reaction Roles, Auto-moderation)",
-      "Static & Animated Emojis",
-      "Level System",
+      "Moderate security configuration",
+      "3–5 bots (Moderation, Games, Reaction Roles, Auto-moderation)",
+      "Static & animated emojis",
+      "Level system",
       "Delivery: 1–2 days",
     ],
   },
   {
     name: "Pro",
-    price: 9000,
+    price: 11500, // ↑ from 9000
     summary:
-      "Advanced Discord server setup with branding, AI features, and monetization tools for creators and teams.",
+      "Advanced Discord system with branding, AI features, support tools, and strong security — built for creators and teams.",
     details: [
       "Everything in Standard plan",
-      "Support System i.e. Ticket",
-      "Full branding package (icons, banners)",
-      "Anti-Raid & Spam protection",
-      "Advanced security system",
+      "Support system (Ticket setup)",
+      "Complete branding package (icons, banners)",
+      "Anti-raid & spam protection",
+      "Advanced security configuration",
       "Advanced logging system",
       "AI-powered chat engagement system",
-      "After Delivery Technical Support",
+      "Post-delivery technical support",
       "Delivery: 2–3 days",
     ],
   },
   {
     name: "Ultimate",
-    price: 9700,
+    price: 13500, // ↑ from 9700
     popular: true,
     summary:
-      "Fully automated Discord server setup with advanced AI, temporary channels, and unlimited customization.",
+      "Highly automated Discord server with advanced AI, dynamic channels, and deep customization.",
     details: [
-      "Everything in Pro Plan",
+      "Everything in Pro plan",
       "Unlimited channels & full automation",
-      "Advanced AI (Auto-response)",
-      "Temporary voice and Text Channel's",
+      "Advanced AI (auto-responses & engagement)",
+      "Temporary voice & text channels",
       "Delivery: 2–3 days",
     ],
   },
   {
     name: "Empire",
-    price: 10000,
+    price: 15000, // HARD CAP (≤ 15k)
     summary:
-      "Enterprise-level Discord setup with onboarding flow, advanced ranks, DM automation, and pro-level moderation.",
+      "Enterprise-grade Discord ecosystem with onboarding flows, rank systems, automation, and extended support.",
     details: [
-      "Everything in Ultimate Plan",
-      "Server backup without Bots and messages",
-      "Onboarding Flow Design (Intro channel, start-here)",
-      "Auto-DM with server guide",
-      "Rank-naming theme (e.g. “Novice” → “OG” → “Legend”)",
-      "Auto-perks for high-level users (access to secret VC, etc.)",
-      "Dedicated 20-day support",
-      "Delivery: 3-4 days",
+      "Everything in Ultimate plan",
+      "Server backup (excluding bots & messages)",
+      "Custom onboarding flow (intro & start-here channels)",
+      "Automated DMs with server guide",
+      "Rank-naming theme (e.g. Novice → OG → Legend)",
+      "Auto-perks for high-level members",
+      "Dedicated 20-day priority support",
+      "Delivery: 3–4 days",
     ],
   },
 ];

@@ -1,115 +1,135 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const PlansSection = () => {
   const router = useRouter();
 
   return (
-    <section 
+    <section
       id="plans"
-      className="relative z-10 py-24 sm:py-32 px-4 sm:px-6 overflow-hidden border-t border-neutral-800"
+      className="border-t border-white/10 bg-black px-6 py-24 sm:py-32"
+      aria-labelledby="pricing-heading"
     >
-      {/* Static background (no animations) */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a12] via-[#0f0c24] to-[#0a0618]" />
-        <div className="absolute -left-[200px] -top-[200px] w-[600px] h-[600px] rounded-full bg-violet-600/10" />
-        <div className="absolute -right-[200px] -bottom-[200px] w-[600px] h-[600px] rounded-full bg-indigo-600/10" />
-      </div>
-
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="inline-block"
+        <div className="mb-16 text-center">
+          <h2
+            id="pricing-heading"
+            className="text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl"
           >
-            <span className="text-xs sm:text-sm font-mono text-violet-400 mb-2 block">
-              SIMPLE PRICING
-            </span>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-violet-300">
-                Flexible
-              </span>{' '}
-              <span className="relative inline-block">
-                <span className="relative z-10">Transparent</span>
-                <span className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-violet-400 to-indigo-400 rounded-full" />
-              </span>{' '}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-indigo-400">
-                Fair
-              </span>
-            </h2>
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.1, duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-gray-400 text-base sm:text-lg mt-6 max-w-3xl mx-auto"
-          >
-            Custom solutions for communities of all sizes, with <span className="text-violet-300">no hidden fees</span>.
-          </motion.p>
+            Simple, transparent pricing
+          </h2>
+          <p className="mx-auto mt-6 max-w-3xl text-base text-white/60 sm:text-lg">
+            Clear engagement tiers for websites, Discord communities, and digital
+            systems — built with focus and intent.
+          </p>
         </div>
 
-        {/* Value Propositions */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
-        >
-          {[
-            {
-              title: "Pay As You Grow",
-              description: "Scale your plan as your community expands",
-              icon: "📈"
-            },
-            {
-              title: "No Lock-in",
-              description: "Cancel or change plans anytime",
-              icon: "🔓"
-            },
-            {
-              title: "All Features Included",
-              description: "No artificial limitations",
-              icon: "✨"
-            }
-          ].map((item, index) => (
-            <div 
-              key={index}
-              className="p-6 rounded-xl bg-gradient-to-br from-black/40 to-gray-900/30 border border-gray-700/50"
-            >
-              <div className="text-3xl mb-4">{item.icon}</div>
-              <h3 className="text-xl font-bold mb-2 text-white">{item.title}</h3>
-              <p className="text-gray-400">{item.description}</p>
-            </div>
-          ))}
-        </motion.div>
-
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center"
-        >
-          <button
-            onClick={() => router.push("/plans")}
-            className="px-8 py-4 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold hover:from-violet-700 hover:to-indigo-700 transition-colors"
+        {/* Pricing Cards */}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          {/* Starter */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            viewport={{ once: true }}
+            className="rounded-2xl border border-white/10 bg-white/5 p-8"
           >
-            Explore Pricing Options
-          </button>
-          <p className="text-sm text-gray-500 mt-4">
-            Need help deciding? <span className="text-violet-300 cursor-pointer hover:underline">Chat with us</span>
+            <h3 className="text-lg font-medium text-white">Starter</h3>
+            <p className="mt-2 text-sm text-white/60">
+              A solid foundation for individuals and early-stage teams.
+            </p>
+
+            <ul className="mt-6 space-y-3 text-sm text-white/70">
+              <li>• Marketing or portfolio website</li>
+              <li>• Basic Discord server structure</li>
+              <li>• Roles, permissions & clean layout</li>
+              <li>• Launch-ready delivery</li>
+            </ul>
+
+            <button
+              onClick={() => router.push("/contact")}
+              className="mt-8 w-full rounded-full border border-white/20 px-6 py-3 text-sm font-medium text-white transition hover:border-white/40"
+            >
+              Get started
+            </button>
+          </motion.div>
+
+          {/* Core */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.05 }}
+            viewport={{ once: true }}
+            className="relative rounded-2xl border border-white/20 bg-white/10 p-8"
+          >
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-violet-500 px-4 py-1 text-xs font-medium text-white">
+              Most chosen
+            </span>
+
+            <h3 className="text-lg font-medium text-white">Core</h3>
+            <p className="mt-2 text-sm text-white/60">
+              Built for growing creators and brands.
+            </p>
+
+            <ul className="mt-6 space-y-3 text-sm text-white/70">
+              <li>• Custom website or landing system</li>
+              <li>• Advanced Discord architecture</li>
+              <li>• Automation & moderation setup</li>
+              <li>• UX, performance & clarity focus</li>
+            </ul>
+
+            <button
+              onClick={() => router.push("/contact")}
+              className="mt-8 w-full rounded-full bg-violet-500 px-6 py-3 text-sm font-medium text-white transition hover:opacity-90"
+            >
+              Start a project
+            </button>
+          </motion.div>
+
+          {/* Advanced */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            viewport={{ once: true }}
+            className="rounded-2xl border border-white/10 bg-white/5 p-8"
+          >
+            <h3 className="text-lg font-medium text-white">Advanced</h3>
+            <p className="mt-2 text-sm text-white/60">
+              For serious products and large communities.
+            </p>
+
+            <ul className="mt-6 space-y-3 text-sm text-white/70">
+              <li>• Scalable website architecture</li>
+              <li>• Full Discord ecosystem</li>
+              <li>• Custom workflows & integrations</li>
+              <li>• Ongoing iteration & support</li>
+            </ul>
+
+            <button
+              onClick={() => router.push("/contact")}
+              className="mt-8 w-full rounded-full border border-white/20 px-6 py-3 text-sm font-medium text-white transition hover:border-white/40"
+            >
+              Talk to us
+            </button>
+          </motion.div>
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="mt-16 text-center">
+          <p className="text-sm text-white/50">
+            Not sure which tier fits your needs?
           </p>
-        </motion.div>
+          <button
+            onClick={() => router.push("/contact")}
+            className="mt-4 inline-flex items-center rounded-full border border-white/20 px-8 py-3 text-sm font-medium text-white transition hover:border-white/40"
+          >
+            Get a recommendation
+          </button>
+        </div>
       </div>
     </section>
   );

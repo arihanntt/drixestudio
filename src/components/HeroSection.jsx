@@ -1,142 +1,107 @@
-"use client"; // Required for useState & interactivity in Next.js App Router
+"use client";
 
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 const HeroSection = () => {
-  const heroRef = useRef(null);
+  const heroRef = useRef<HTMLElement | null>(null);
+
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
 
-  // Lightweight parallax with capped range
-  const yText = useTransform(scrollYProgress, [0, 0.5], ["0%", "10%"]);
+  const y = useTransform(scrollYProgress, [0, 0.6], ["0%", "5%"]);
 
   return (
-    <section
-      ref={heroRef}
-      className="relative overflow-hidden flex flex-col justify-center items-center text-center min-h-screen px-4 py-16 sm:py-24 bg-[#0f0f1c] will-change-transform"
-      style={{ touchAction: "manipulation" }}
-    >
-      {/* Background Images with Overlay */}
-      <div className="absolute inset-0 -z-10 pointer-events-none">
-        {/* Desktop Image (hidden on mobile) */}
-        <img
-          src="/background-hero-desktop.jpg" // Replace with your desktop image path
-          alt="Hero Background Desktop"
-          className="w-full h-full object-cover opacity-80 hidden md:block"
-          loading="lazy"
-        />
-        {/* Mobile Image (hidden on desktop) */}
-        <img
-          src="/background-hero-mobile.jpg" // Replace with your mobile image path
-          alt="Hero Background Mobile"
-          className="w-full h-full object-cover opacity-80 md:hidden"
-          loading="lazy"
-        />
-        {/* Overlay for contrast */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f1c]/95 via-[#0f0f1c]/70 to-transparent" />
+    <motion.section
+  ref={heroRef}
+  aria-labelledby="hero-heading"
+  className="
+    relative flex min-h-screen items-center justify-center overflow-hidden bg-black
+    px-6 text-center
+    pt-32 pb-32
+    sm:pt-36 sm:pb-36
+    md:pt-0 md:pb-0
+  "
+>
+
+      {/* Advanced background system */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-[radial-gradient(60%_40%_at_50%_0%,rgba(168,85,247,0.18),transparent_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(40%_30%_at_80%_20%,rgba(99,102,241,0.15),transparent_70%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:100%_48px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black" />
       </div>
 
-      {/* Content with enhanced styling */}
+      {/* Content */}
       <motion.div
-        className="relative z-10 max-w-3xl mx-auto text-center"
-        style={{ y: yText }}
-        whileInView={{ opacity: 1 }}
-        initial={{ opacity: 0 }}
-        transition={{ duration: 0.6 }}
+        style={{ y }}
+        className="relative z-10 mx-auto max-w-5xl"
       >
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-4"
-        >
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-indigo-400 drop-shadow-lg">
-            Drixe Studio
-          </h2>
-        </motion.div>
+        {/* Eyebrow */}
+        <p className="mb-5 text-xs uppercase tracking-[0.3em] text-white/50">
+          Web & Community Systems Studio
+        </p>
 
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-          className="h-[2px] bg-gradient-to-r from-transparent via-indigo-500 to-transparent mx-auto mb-6 w-1/2 sm:w-3/4"
-        />
-
-        <motion.p
-          initial={{ y: 10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="text-lg sm:text-xl text-white/90 font-medium mb-4"
+        {/* H1 */}
+        <h1
+          id="hero-heading"
+          className="mb-6 text-4xl font-medium leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
         >
-          Professional Discord Server Setup & Customization
-        </motion.p>
+          Websites and communities
+          <span className="block bg-gradient-to-r from-violet-400 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
+            engineered to scale.
+          </span>
+        </h1>
 
-        <motion.p
-          initial={{ y: 10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="text-sm sm:text-base text-gray-400 max-w-xl mx-auto mb-6 leading-relaxed"
-        >
-          <span className="text-white font-semibold"></span>{" "}
-          <span className="italic font-semibold text-white"></span>Trusted by gamers, brands & creators worldwide.
-        </motion.p>
+        {/* Supporting copy */}
+        <p className="mx-auto mb-10 max-w-2xl text-base leading-relaxed text-white/70 sm:text-lg">
+          Drixe Studio designs high-performance websites and structured Discord
+          community systems for creators, brands, and online businesses. We
+          focus on speed, clarity, user flow, and long-term scalability.
+        </p>
 
-        <motion.div
-          initial={{ y: 10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-        >
+        {/* CTAs */}
+        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
           <button
-            onClick={() => {
-              const el = document.getElementById("plans");
-              el?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-medium text-white bg-white/5 border border-white/20 hover:border-white/40 transition-all duration-300 relative overflow-hidden group focus:outline-none touch-manipulation"
+            onClick={() =>
+              document
+                .getElementById("plans")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="rounded-full bg-white px-8 py-3 text-sm font-medium text-black transition hover:bg-white/90"
           >
-            <span className="relative z-10 flex items-center justify-center gap-2">
-              <span className="group-hover:-translate-y-1 transition-transform duration-300">↓</span>
-              Explore Plans
-            </span>
-            <span className="absolute inset-0 rounded-full overflow-hidden">
-              <span className="absolute inset-0 bg-gradient-to-r from-violet-600/0 via-violet-600/20 to-indigo-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
-            </span>
+            View Services
           </button>
-        </motion.div>
+
+          <a
+            href="/contact"
+            className="rounded-full border border-white/20 px-8 py-3 text-sm font-medium text-white transition hover:border-white/40"
+          >
+            Start a Project
+          </a>
+        </div>
       </motion.div>
 
-      {/* Scroll indicator with CSS animation */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce sm:bottom-8">
-        <div className="w-3 h-6 rounded-full border-2 border-white/30 flex justify-center p-0.5 sm:w-3.5 sm:h-7">
-          <div className="w-1 h-2 rounded-full bg-white/80 animate-scrollIndicator sm:w-1.5 sm:h-3" />
+      {/* Scroll indicator (hidden on very small screens) */}
+      <div className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 opacity-60 sm:block">
+        <div className="flex h-8 w-4 items-start justify-center rounded-full border border-white/30 p-1">
+          <div className="h-2 w-1 animate-scroll rounded-full bg-white" />
         </div>
       </div>
 
       <style jsx global>{`
-        @keyframes bounce {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-8px); }
-        }
-        @keyframes scrollIndicator {
+        @keyframes scroll {
           0% { transform: translateY(0); opacity: 1; }
-          50% { transform: translateY(3px); opacity: 0.5; }
+          50% { transform: translateY(6px); opacity: 0.4; }
           100% { transform: translateY(0); opacity: 1; }
         }
-        .animate-bounce { animation: bounce 1.8s infinite ease-in-out; }
-        .animate-scrollIndicator { animation: scrollIndicator 1.2s infinite ease-in-out; }
-        @media (max-width: 640px) {
-          .min-h-screen { min-height: 100vh; }
-          .px-4 { padding-left: 0.75rem; padding-right: 0.75rem; }
-          .text-4xl { font-size: 2rem; }
-          .text-5xl { font-size: 2.5rem; }
-          .text-6xl { font-size: 2.75rem; }
-          .max-w-3xl { max-width: 100%; }
-          .mb-6 { margin-bottom: 1rem; }
+        .animate-scroll {
+          animation: scroll 1.6s infinite ease-in-out;
         }
       `}</style>
-    </section>
+    </motion.section>
   );
 };
 

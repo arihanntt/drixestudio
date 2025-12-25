@@ -175,6 +175,44 @@ const markdownComponents: Components = {
     return <p className="my-6 text-white/80 leading-relaxed animate-fade-in">{children}</p>;
   },
 };
+function ArticleSchema({ post }: { post: any }) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.description,
+    image: post.thumbnail
+      ? [`https://www.drixestudio.services${post.thumbnail}`]
+      : [],
+    author: {
+      "@type": "Organization",
+      name: "Drixe Studio",
+      url: "https://www.drixestudio.services",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Drixe Studio",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.drixestudio.services/logo.png",
+      },
+    },
+    datePublished: post.date,
+    dateModified: post.date,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://www.drixestudio.services/blog/${post.id}`,
+    },
+    keywords: post.keywords?.join(", "),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
 
 export default async function SingleBlogPage({ params }: PageParams) {
   const { id } = await params;
@@ -200,6 +238,10 @@ export default async function SingleBlogPage({ params }: PageParams) {
   ];
 
   return (
+
+    <>
+    {/* ✅ SEO JSON-LD GOES HERE */}
+    <ArticleSchema post={post} />
     <div className="min-h-screen bg-gray-950 text-white">
       {/* Global CSS Animations */}
       <style>{`
@@ -394,5 +436,6 @@ export default async function SingleBlogPage({ params }: PageParams) {
         </div>
       </section>
     </div>
+    </>
   );
 }

@@ -113,7 +113,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               url: 'https://drixestudio.services',
               image: 'https://drixestudio.services/drixe-preview.png',
               description:
-                'Premium Discord server design and setup services — roles, bots, UI, moderation, branding.',
+'Premium Discord server design, website development, and social media content systems for creators, brands, and communities.',
               areaServed: 'Worldwide',
               availableLanguage: 'English',
               serviceType: 'Discord server setup and design',

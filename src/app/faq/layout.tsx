@@ -1,84 +1,90 @@
-// app/faq/layout.tsx
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
 
 const baseUrl = "https://www.drixestudio.services";
-const pageUrl = `${baseUrl}/faq`;
-const imageUrl = `${baseUrl}/assets/faq.png`;
 
 export const metadata: Metadata = {
-  title: {
-    default: "FAQ | Drixe Studio",
-    template: "%s | Drixe Studio",
-  },
+  title: "FAQ – Websites, Discord & Social Media | Drixe Studio",
   description:
-    "Get answers to all your questions about Discord server setup, customization, and management from Drixe Studio experts.",
+    "Find clear answers about Drixe Studio services including website development, Discord server setup, automation, security, pricing, and social media content.",
+
   keywords: [
-    "Discord FAQ",
-    "Server setup questions",
-    "Discord bot configuration",
-    "Discord help center",
-    "Server management help",
-    "Discord customization",
-    "Discord pricing",
-    "Server security FAQ",
-    "Discord support Drixe",
-    "Drixe Studio FAQs"
+    // Brand
+    "Drixe Studio FAQ",
+    "Drixe Studio help",
+
+    // Discord
+    "Discord server setup FAQ",
+    "Discord automation questions",
+    "Discord moderation help",
+    "Discord pricing questions",
+
+    // Websites
+    "website development FAQ",
+    "static website agency",
+    "landing page development questions",
+
+    // Social
+    "social media services FAQ",
+    "content creation questions",
+
+    // Intent
+    "digital studio support",
+    "agency frequently asked questions"
   ],
-  metadataBase: new URL(baseUrl),
+
+  alternates: {
+    canonical: `${baseUrl}/faq`,
+  },
+
   openGraph: {
     title: "FAQ | Drixe Studio",
     description:
-      "Expert answers to common questions about professional Discord server setup and management.",
-    url: pageUrl,
+      "Answers to common questions about our websites, Discord systems, automation, pricing, and social media services.",
+    url: `${baseUrl}/faq`,
     siteName: "Drixe Studio",
     type: "website",
     images: [
       {
-        url: imageUrl,
+        url: `${baseUrl}/assets/faq.png`,
         width: 1200,
         height: 630,
-        alt: "Drixe Studio FAQ - Discord Server Setup Questions",
-        type: "image/png",
+        alt: "Drixe Studio FAQ – Websites, Discord & Social Media",
       },
     ],
   },
+
   twitter: {
     card: "summary_large_image",
     title: "FAQ | Drixe Studio",
     description:
-      "Everything you need to know about professional Discord server setups and Drixe Studio services.",
-    images: [imageUrl],
-    creator: "@DrixeStudio",
+      "Learn everything about Drixe Studio services — websites, Discord systems, pricing, and content.",
+    images: [`${baseUrl}/assets/faq.png`],
   },
-  alternates: {
-    canonical: pageUrl,
-    languages: {
-      "en-US": pageUrl,
-    },
-  },
+
   robots: {
     index: true,
     follow: true,
     googleBot: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
+      "max-video-preview": -1,
     },
   },
-  applicationName: "Drixe Studio",
+
   category: "technology",
+  applicationName: "Drixe Studio",
   authors: [{ name: "Drixe Studio", url: baseUrl }],
+  creator: "Drixe Studio",
+  publisher: "Drixe Studio",
+  metadataBase: new URL(baseUrl),
 };
 
-export default function FaqLayout({ children }: { children: ReactNode }) {
-  return (
-    <html lang="en">
-      <body className="bg-[#0f0f0f] text-white">
-        {children}
-      </body>
-    </html>
-  );
+export default function FaqLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <main className="bg-black text-white">{children}</main>;
 }

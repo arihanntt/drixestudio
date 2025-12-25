@@ -1,69 +1,40 @@
-// src/app/blog/layout.tsx
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
 
-const BLOG_THUMBNAIL = "/assets/blogs.png";
-const SITE_URL = "https://www.drixestudio.services";
-const BLOG_URL = `${SITE_URL}/blog`;
-const TITLE = "Blogs | Drixe Studio";
-const DESCRIPTION =
-  "Explore our latest design and development insights, tips, tutorials, and updates.";
-
-const KEYWORDS = [
-  "Drixe Studio",
-  "design blog",
-  "development blog",
-  "UI UX insights",
-  "web development tips",
-  "frontend trends",
-  "branding strategies",
-  "Next.js blog",
-  "React tutorials",
-  "creative tech studio"
-];
+const baseUrl = "https://drixestudio.services";
 
 export const metadata: Metadata = {
-  title: TITLE,
-  description: DESCRIPTION,
-  keywords: KEYWORDS,
-  metadataBase: new URL(SITE_URL),
-  openGraph: {
-    title: TITLE,
-    description: DESCRIPTION,
-    url: BLOG_URL,
-    type: "website",
-    siteName: "Drixe Studio",
-    images: [
-      {
-        url: BLOG_THUMBNAIL,
-        width: 1200,
-        height: 630,
-        alt: "Drixe Studio Blog Thumbnail",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: TITLE,
-    description: DESCRIPTION,
-    images: [BLOG_THUMBNAIL],
-  },
+  title: "Blog | Discord, Websites & Growth Insights – Drixe Studio",
+  description:
+    "Actionable insights on Discord server building, website design, automation, SEO, and creator growth by Drixe Studio.",
   alternates: {
-    canonical: BLOG_URL,
+    canonical: `${baseUrl}/blog`,
+  },
+  keywords: [
+    "discord server tips",
+    "discord automation",
+    "website design blog",
+    "seo for creators",
+    "community building",
+    "drixe studio blog",
+  ],
+  openGraph: {
+    title: "Drixe Studio Blog",
+    description:
+      "Guides, tutorials, and insights on Discord servers, websites, automation, and digital growth.",
+    url: `${baseUrl}/blog`,
+    siteName: "Drixe Studio",
+    type: "website",
   },
   robots: {
     index: true,
     follow: true,
-    nocache: false,
-    googleBot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-    },
   },
-  category: "Technology",
 };
 
-export default function BlogLayout({ children }: { children: ReactNode }) {
-  return <main className="min-h-screen bg-white text-black">{children}</main>;
+export default function BlogLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <main>{children}</main>;
 }
