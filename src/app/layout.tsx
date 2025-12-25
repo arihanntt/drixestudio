@@ -8,8 +8,8 @@ import type { Metadata } from 'next';
 import SmoothScrollWrapper from "@/components/SmoothScrollWrapper"; 
 
 export const metadata: Metadata = {
-  title: 'Drixe Studio | Premium Discord Server Setups',
-  description: 'Drixe Studio builds custom Discord servers with bots, moderation, automation & style.',
+  title: 'Drixe Studio | Discord Server Setup, Website Design & Social Media Services',
+  description: 'Drixe Studio designs custom Discord servers, high-performance websites, and social media content for creators and brands. Fast, scalable, and professional.',
   keywords: [
     'Drixe Studio',
     'Discord server setup',

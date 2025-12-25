@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Website: https://www.drixestudio.services
+Description: Professional Discord server setup, website design, and social media services.
+Contact: https://www.drixestudio.services/contact
