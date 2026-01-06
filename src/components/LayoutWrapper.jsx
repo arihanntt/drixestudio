@@ -13,8 +13,9 @@ export default function LayoutWrapper({ children }) {
   const isCampusPage = pathname.startsWith('/campus'); // 🔥 add this
   const isClanzoPage = pathname.startsWith('/clanzo'); // 🔥 add this
     const isdaztaoPage = pathname.startsWith('/daztao'); // 🔥 add this
+    const isdrixePage = pathname.startsWith('/drixe'); // 🔥 add this
 
-  const hideLayout = isHomePage || isAdminPage || isCampusPage || isClanzoPage || isdaztaoPage ;
+  const hideLayout = isHomePage || isAdminPage || isCampusPage || isClanzoPage || isdaztaoPage || isdrixePage ;
 
   return (
     <>
