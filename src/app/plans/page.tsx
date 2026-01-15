@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, X } from "lucide-react";
+import { Check } from "lucide-react";
 import Modal from "@/components/Modal";
 
 /* ---------------- TYPES ---------------- */
@@ -20,7 +20,6 @@ interface Plan {
 
 const plans: Plan[] = [
   /* ---------------- WEBSITE PLANS ---------------- */
-
   {
     name: "Website Starter",
     price: 9000,
@@ -49,8 +48,7 @@ const plans: Plan[] = [
     ]
   },
 
-  /* ---------------- DISCORD PLANS (REVISED, ≤15K) ---------------- */
-
+  /* ---------------- DISCORD PLANS ---------------- */
   {
     name: "Discord Basic",
     price: 4500,
@@ -111,8 +109,7 @@ const plans: Plan[] = [
     ]
   },
 
-  /* ---------------- SOCIAL MEDIA CONTENT PLANS ---------------- */
-
+  /* ---------------- SOCIAL PLANS ---------------- */
   {
     name: "Social Starter",
     price: 6000,
@@ -155,7 +152,6 @@ const plans: Plan[] = [
   }
 ];
 
-
 /* ---------------- CURRENCY ---------------- */
 
 const currencyRates: Record<string, number> = {
@@ -189,135 +185,158 @@ export default function PlansPage() {
 
   return (
     <section
-      className="relative min-h-screen bg-black px-6 py-24 border-t border-white/10"
+      className="relative min-h-screen bg-black px-6 py-24 font-mono text-zinc-300 border-t border-white/20 sm:py-32"
       aria-labelledby="pricing-heading"
     >
-      {/* BACKGROUND */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(50%_40%_at_50%_0%,rgba(139,92,246,0.15),transparent_70%)]" />
-      </div>
+      {/* --- RETRO BACKGROUND GRID --- */}
+      <div 
+        className="pointer-events-none absolute inset-0 z-0 opacity-20"
+        style={{
+             backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), 
+             linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)`,
+             backgroundSize: '40px 40px'
+        }}
+      />
 
-      {/* HEADER */}
-      <div className="mx-auto max-w-4xl text-center mb-16">
-        <h1
-          id="pricing-heading"
-          className="text-4xl sm:text-5xl font-semibold tracking-tight text-white"
-        >
-          Pricing & Engagements
-        </h1>
-        <p className="mt-6 text-white/60 text-base sm:text-lg">
-          Transparent pricing for websites, Discord community systems,
-          and full digital ecosystems.
-        </p>
-      </div>
-
-      {/* CATEGORY SWITCH */}
-      <div className="flex justify-center gap-2 mb-12 flex-wrap">
-        {[
-          { key: "website", label: "Websites" },
-          { key: "discord", label: "Discord Systems" },
-          { key: "hybrid", label: "Social Media" }
-
-        ].map(item => (
-          <button
-            key={item.key}
-            onClick={() => setCategory(item.key as PlanCategory)}
-            className={`px-5 py-2 rounded-full text-sm font-medium transition ${
-              category === item.key
-                ? "bg-white text-black"
-                : "border border-white/20 text-white/70 hover:border-white/40"
-            }`}
+      <div className="relative z-10 mx-auto max-w-7xl">
+        
+        {/* HEADER */}
+        <div className="mb-16 text-center">
+          <h1
+            id="pricing-heading"
+            className="text-4xl font-bold uppercase tracking-tighter text-white sm:text-5xl"
           >
-            {item.label}
-          </button>
-        ))}
-      </div>
+            Pricing & Engagements
+          </h1>
+          <p className="mx-auto mt-6 max-w-2xl text-base text-zinc-400">
+            Transparent pricing for websites, Discord community systems,
+            and full digital ecosystems.
+          </p>
+        </div>
 
-      {/* CURRENCY */}
-      <div className="flex justify-center mb-12">
-        <select
-          value={currency}
-          onChange={e => setCurrency(e.target.value)}
-          className="bg-black border border-white/20 rounded-full px-5 py-2 text-sm text-white focus:outline-none"
-        >
-          {Object.keys(currencyRates).map(c => (
-            <option key={c} value={c}>
-              {currencySymbols[c]} {c}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* PLANS GRID */}
-      <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <AnimatePresence>
-          {filteredPlans.map(plan => (
-            <motion.div
-              key={plan.name}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
-              className={`relative rounded-2xl border p-8 ${
-                plan.popular
-                  ? "border-violet-500 bg-white/10"
-                  : "border-white/10 bg-white/5"
-              }`}
-            >
-              {plan.popular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-violet-500 px-4 py-1 text-xs font-medium text-white">
-                  Most chosen
-                </span>
-              )}
-
-              <h3 className="text-lg font-medium text-white">
-                {plan.name}
-              </h3>
-
-              <p className="mt-2 text-sm text-white/60">
-                {plan.summary}
-              </p>
-
-              <div className="mt-6 text-3xl font-semibold text-white">
-                {currencySymbols[currency]}
-                {price(plan.price)}
-              </div>
-
-              <ul className="mt-6 space-y-3 text-sm text-white/70">
-                {plan.details.map((d, i) => (
-                  <li key={i} className="flex gap-3">
-                    <Check className="w-4 h-4 text-violet-400 mt-0.5" />
-                    <span>{d}</span>
-                  </li>
-                ))}
-              </ul>
-
+        {/* CONTROLS (TABS + CURRENCY) */}
+        <div className="mb-12 flex flex-col items-center justify-between gap-6 border-b border-white/20 pb-8 sm:flex-row">
+          
+          {/* CATEGORY TABS (SQUARED OFF) */}
+          <div className="flex flex-wrap justify-center gap-0 border border-white/20">
+            {[
+              { key: "website", label: "Websites" },
+              { key: "discord", label: "Discord Systems" },
+              { key: "hybrid", label: "Social Media" }
+            ].map((item) => (
               <button
-                onClick={() => setActivePlan(plan)}
-                className={`mt-8 w-full rounded-full px-6 py-3 text-sm font-medium transition ${
-                  plan.popular
-                    ? "bg-violet-500 text-white hover:opacity-90"
-                    : "border border-white/20 text-white hover:border-white/40"
+                key={item.key}
+                onClick={() => setCategory(item.key as PlanCategory)}
+                className={`border-r border-white/20 px-6 py-3 text-xs font-bold uppercase tracking-widest transition-all last:border-r-0 hover:bg-white/10 ${
+                  category === item.key
+                    ? "bg-white text-black hover:bg-white"
+                    : "bg-black text-zinc-400"
                 }`}
               >
-                Start project
+                {item.label}
               </button>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
+            ))}
+          </div>
 
-      {/* BOTTOM CTA */}
-      <div className="mt-20 text-center">
-        <p className="text-white/50 mb-4">
-          Need something custom or not sure where to start?
-        </p>
-        <a
-          href="/contact"
-          className="inline-flex rounded-full border border-white/20 px-8 py-3 text-sm font-medium text-white hover:border-white/40 transition"
-        >
-          Get a recommendation
-        </a>
+          {/* CURRENCY SELECTOR (RETRO INPUT) */}
+          <div className="flex items-center gap-3">
+             <span className="text-xs font-bold uppercase text-zinc-500">Currency:</span>
+             <div className="relative">
+                <select
+                    value={currency}
+                    onChange={e => setCurrency(e.target.value)}
+                    className="appearance-none border border-white/20 bg-black py-2 pl-4 pr-10 text-xs font-bold uppercase text-white hover:border-white focus:outline-none"
+                >
+                    {Object.keys(currencyRates).map(c => (
+                    <option key={c} value={c}>
+                        {currencySymbols[c]} {c}
+                    </option>
+                    ))}
+                </select>
+                <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-white">▼</div>
+             </div>
+          </div>
+        </div>
+
+        {/* PLANS GRID */}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence mode="wait">
+            {filteredPlans.map((plan, i) => (
+              <motion.div
+                key={plan.name}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className={`group relative flex flex-col border p-8 transition-colors duration-300 ${
+                  plan.popular
+                    ? "border-white bg-white/5"
+                    : "border-white/20 bg-black hover:border-white/40"
+                }`}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-3 right-0 bg-black px-2">
+                     <span className="border border-white bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-black">
+                        Most chosen
+                     </span>
+                  </div>
+                )}
+
+                <h3 className="text-xl font-bold uppercase tracking-wide text-white">
+                  {plan.name}
+                </h3>
+
+                <p className="mt-4 min-h-[40px] text-sm text-zinc-400">
+                  {plan.summary}
+                </p>
+
+                <div className="mt-6 text-3xl font-bold text-white">
+                  <span className="text-xl text-zinc-500 mr-1">{currencySymbols[currency]}</span>
+                  {price(plan.price).toLocaleString()}
+                </div>
+
+                <div className="my-8 h-px w-full bg-white/10" />
+
+                <ul className="mb-8 flex-1 space-y-4 text-sm text-zinc-300">
+                  {plan.details.map((d, i) => (
+                    <li key={i} className="flex gap-3">
+                      {/* Custom Retro Checkbox */}
+                      <div className="flex h-5 w-5 shrink-0 items-center justify-center border border-zinc-600 bg-black text-white">
+                        <Check size={12} strokeWidth={4} />
+                      </div>
+                      <span className="leading-snug">{d}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  onClick={() => setActivePlan(plan)}
+                  className={`w-full border py-4 text-xs font-bold uppercase tracking-widest transition-all hover:-translate-y-1 ${
+                    plan.popular
+                      ? "border-white bg-white text-black hover:bg-transparent hover:text-white"
+                      : "border-white/40 bg-transparent text-white hover:border-white hover:bg-white hover:text-black"
+                  }`}
+                >
+                  Start project
+                </button>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        {/* BOTTOM CTA */}
+        <div className="mt-20 text-center">
+          <p className="mb-4 text-sm text-zinc-500">
+            Need something custom or not sure where to start?
+          </p>
+          <a
+            href="/contact"
+            className="group inline-flex items-center gap-2 border-b border-white pb-0.5 text-sm font-bold uppercase tracking-widest text-white hover:border-zinc-500 hover:text-zinc-500 transition-colors"
+          >
+            Get a recommendation
+            <span className="transition-transform group-hover:translate-x-1">→</span>
+          </a>
+        </div>
       </div>
 
       {/* MODAL */}

@@ -2,132 +2,156 @@
 
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const PlansSection = () => {
   const router = useRouter();
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const plans = [
+    {
+      name: "Starter",
+      description: "A solid foundation for individuals and early-stage teams.",
+      features: [
+        "Marketing or portfolio website",
+        "Basic Discord server structure",
+        "Roles, permissions & clean layout",
+        "Launch-ready delivery",
+      ],
+      buttonText: "Get started",
+      isPopular: false,
+    },
+    {
+      name: "Core",
+      description: "Built for growing creators and brands.",
+      features: [
+        "Custom website or landing system",
+        "Advanced Discord architecture",
+        "Automation & moderation setup",
+        "UX, performance & clarity focus",
+      ],
+      buttonText: "Start a project",
+      isPopular: true,
+    },
+    {
+      name: "Advanced",
+      description: "For serious products and large communities.",
+      features: [
+        "Scalable website architecture",
+        "Full Discord ecosystem",
+        "Custom workflows & integrations",
+        "Ongoing iteration & support",
+      ],
+      buttonText: "Talk to us",
+      isPopular: false,
+    },
+  ];
 
   return (
     <section
       id="plans"
-      className="border-t border-white/10 bg-black px-6 py-24 sm:py-32"
-      aria-labelledby="pricing-heading"
+      className="relative min-h-screen border-t border-white/20 bg-black py-24 font-mono text-zinc-200 sm:py-32"
     >
-      <div className="mx-auto max-w-7xl">
+      {/* --- RETRO BACKGROUND GRID --- */}
+      <div 
+        className="pointer-events-none absolute inset-0 z-0 opacity-20"
+        style={{
+             backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), 
+             linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)`,
+             backgroundSize: '40px 40px'
+        }}
+      />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-6">
         {/* Header */}
-        <div className="mb-16 text-center">
-          <h2
-            id="pricing-heading"
-            className="text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl"
-          >
+        <div className="mb-20 text-center">
+          <h2 className="text-3xl font-bold uppercase tracking-tighter text-white sm:text-4xl md:text-5xl">
             Simple, transparent pricing
           </h2>
-          <p className="mx-auto mt-6 max-w-3xl text-base text-white/60 sm:text-lg">
+          <p className="mx-auto mt-6 max-w-2xl text-base text-zinc-400">
             Clear engagement tiers for websites, Discord communities, and digital
             systems — built with focus and intent.
           </p>
         </div>
 
-        {/* Pricing Cards */}
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          {/* Starter */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            viewport={{ once: true }}
-            className="rounded-2xl border border-white/10 bg-white/5 p-8"
-          >
-            <h3 className="text-lg font-medium text-white">Starter</h3>
-            <p className="mt-2 text-sm text-white/60">
-              A solid foundation for individuals and early-stage teams.
-            </p>
-
-            <ul className="mt-6 space-y-3 text-sm text-white/70">
-              <li>• Marketing or portfolio website</li>
-              <li>• Basic Discord server structure</li>
-              <li>• Roles, permissions & clean layout</li>
-              <li>• Launch-ready delivery</li>
-            </ul>
-
-            <button
-              onClick={() => router.push("/contact")}
-              className="mt-8 w-full rounded-full border border-white/20 px-6 py-3 text-sm font-medium text-white transition hover:border-white/40"
+        {/* Cards Grid */}
+        <div className="grid grid-cols-1 gap-0 border-l border-t border-white/20 md:grid-cols-3">
+          {plans.map((plan, index) => (
+            <motion.div
+              key={plan.name}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              className={`group relative flex flex-col border-b border-r border-white/20 bg-black p-8 transition-colors duration-300 ${
+                plan.isPopular ? "bg-white/5" : ""
+              } hover:bg-zinc-900`}
             >
-              Get started
-            </button>
-          </motion.div>
+              
+              {/* "Most Chosen" Badge - Styled Retro */}
+              {plan.isPopular && (
+                <div className="absolute top-0 right-0 border-b border-l border-white/20 bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black">
+                  Most Chosen
+                </div>
+              )}
 
-          {/* Core */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.05 }}
-            viewport={{ once: true }}
-            className="relative rounded-2xl border border-white/20 bg-white/10 p-8"
-          >
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-violet-500 px-4 py-1 text-xs font-medium text-white">
-              Most chosen
-            </span>
+              {/* Plan Title */}
+              <h3 className="mb-2 text-xl font-bold uppercase tracking-wide text-white">
+                {plan.name}
+              </h3>
+              
+              {/* Description */}
+              <p className="mb-8 min-h-[40px] text-sm text-zinc-500">
+                {plan.description}
+              </p>
 
-            <h3 className="text-lg font-medium text-white">Core</h3>
-            <p className="mt-2 text-sm text-white/60">
-              Built for growing creators and brands.
-            </p>
+              {/* Divider */}
+              <div className="mb-8 h-px w-full bg-white/20" />
 
-            <ul className="mt-6 space-y-3 text-sm text-white/70">
-              <li>• Custom website or landing system</li>
-              <li>• Advanced Discord architecture</li>
-              <li>• Automation & moderation setup</li>
-              <li>• UX, performance & clarity focus</li>
-            </ul>
+              {/* Features List */}
+              <ul className="mb-10 flex-1 space-y-4">
+                {plan.features.map((feature, i) => (
+                  <li key={i} className="flex items-start gap-3 text-sm text-zinc-300">
+                    {/* Retro Bullet Point */}
+                    <span className="mt-1 h-1.5 w-1.5 shrink-0 bg-white" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
 
-            <button
-              onClick={() => router.push("/contact")}
-              className="mt-8 w-full rounded-full bg-violet-500 px-6 py-3 text-sm font-medium text-white transition hover:opacity-90"
-            >
-              Start a project
-            </button>
-          </motion.div>
+              {/* Button */}
+              <button
+                onClick={() => router.push("/contact")}
+                className={`relative w-full border border-white px-6 py-4 text-xs font-bold uppercase tracking-widest transition-all duration-200 
+                ${
+                  plan.isPopular 
+                    ? "bg-white text-black hover:bg-black hover:text-white" 
+                    : "bg-transparent text-white hover:bg-white hover:text-black"
+                }`}
+              >
+                {plan.buttonText}
+              </button>
 
-          {/* Advanced */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="rounded-2xl border border-white/10 bg-white/5 p-8"
-          >
-            <h3 className="text-lg font-medium text-white">Advanced</h3>
-            <p className="mt-2 text-sm text-white/60">
-              For serious products and large communities.
-            </p>
+              {/* Hover Decorative Corner */}
+              <div className={`absolute bottom-2 right-2 h-2 w-2 border-b border-r border-white opacity-0 transition-opacity duration-300 ${hoveredIndex === index ? 'opacity-100' : ''}`} />
 
-            <ul className="mt-6 space-y-3 text-sm text-white/70">
-              <li>• Scalable website architecture</li>
-              <li>• Full Discord ecosystem</li>
-              <li>• Custom workflows & integrations</li>
-              <li>• Ongoing iteration & support</li>
-            </ul>
-
-            <button
-              onClick={() => router.push("/contact")}
-              className="mt-8 w-full rounded-full border border-white/20 px-6 py-3 text-sm font-medium text-white transition hover:border-white/40"
-            >
-              Talk to us
-            </button>
-          </motion.div>
+            </motion.div>
+          ))}
         </div>
 
         {/* Bottom CTA */}
         <div className="mt-16 text-center">
-          <p className="text-sm text-white/50">
+          <p className="text-sm text-zinc-500">
             Not sure which tier fits your needs?
           </p>
           <button
             onClick={() => router.push("/contact")}
-            className="mt-4 inline-flex items-center rounded-full border border-white/20 px-8 py-3 text-sm font-medium text-white transition hover:border-white/40"
+            className="group mt-4 inline-flex items-center gap-2 border-b border-white pb-0.5 text-sm font-bold uppercase tracking-wider text-white hover:text-zinc-300 hover:border-zinc-300"
           >
             Get a recommendation
+            <span className="transition-transform group-hover:translate-x-1">→</span>
           </button>
         </div>
       </div>
