@@ -6,17 +6,18 @@ import LayoutWrapper from '../components/LayoutWrapper';
 import SmoothScrollWrapper from "@/components/SmoothScrollWrapper"; 
 import type { Metadata, Viewport } from 'next';
 
-// 1. Optimized Font Loading (Editorial Serif + Clean Sans)
 const playfair = Playfair_Display({
   subsets: ['latin'],
   style: ['italic', 'normal'],
   weight: ['400', '700'],
   variable: '--font-serif',
+  display: 'swap', // ✅ Adds performance by swapping font faster
 });
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
+  display: 'swap',
 });
 
 export const viewport: Viewport = {
@@ -26,15 +27,15 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: 'Drixe Studio | Digital Systems & Web Architecture',
-  description: 'Premium Discord server design, high-performance websites, and content infrastructure for creators and brands. Engineered for speed and clarity.',
-  keywords: ['Drixe Studio', 'Discord server setup', 'Web Architecture', 'Next.js developer', 'Discord automation'],
+  description: 'Premium Discord server design, high-performance websites, and content infrastructure for creators and brands.',
+  keywords: ['Drixe Studio', 'Discord server setup', 'Web Architecture', 'Next.js developer'],
   metadataBase: new URL('https://drixestudio.services'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: 'Drixe Studio | Digital Architecture',
-    description: 'Custom Discord ecosystems and high-performance websites for modern brands.',
+    description: 'Custom Discord ecosystems and high-performance websites.',
     url: 'https://drixestudio.services',
     siteName: 'Drixe Studio',
     images: [{ url: '/drixe-preview.png', width: 1200, height: 630 }],
@@ -48,9 +49,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${inter.variable} scroll-smooth`}>
+    // ❌ REMOVED: "scroll-smooth" class (It causes conflict with Lenis)
+    <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
       <head>
-        {/* GA4 using Next.js Script component for performance */}
+        {/* GA4 Script */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-PB0HBP3GY2"
           strategy="afterInteractive"
@@ -64,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}
         </Script>
 
-        {/* Structured Data: ProfessionalService */}
+        {/* Structured Data */}
         <Script id="structured-data" type="application/ld+json" strategy="beforeInteractive">
           {JSON.stringify({
             '@context': 'https://schema.org',
@@ -72,7 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             name: 'Drixe Studio',
             url: 'https://drixestudio.services',
             image: 'https://drixestudio.services/drixe-preview.png',
-            description: 'Premium Discord server design, website development, and content systems for creators and brands.',
+            description: 'Premium Discord server design and web architecture.',
             address: {
               '@type': 'PostalAddress',
               'addressCountry': 'IN'
@@ -82,7 +84,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           })}
         </Script>
       </head>
-      <body className="bg-[#0a0a0a] text-white antialiased">
+      
+      {/* ✅ Added transform-gpu to force hardware acceleration on the body */}
+      <body className="bg-[#0a0a0a] text-white antialiased transform-gpu">
         <SmoothScrollWrapper>
           <LayoutWrapper>
             {children}

@@ -1,53 +1,39 @@
 @import "tailwindcss";
 
-/* 1. FONT VARIABLE INTEGRATION */
-:root {
-  /* These connect to the variables defined in your layout.tsx */
-  --font-serif: var(--font-serif);
-  --font-sans: var(--font-sans);
-  
-  --background: #0a0a0a;
-  --foreground: #ededed;
-}
-
-/* 2. TAILWIND THEME CONFIG (V4 Style) */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: #0a0a0a;
+  --color-foreground: #ededed;
   
-  /* Link Tailwind classes to our Next.js fonts */
+  /* Link Tailwind classes to Next.js variables */
   --font-serif: var(--font-serif);
   --font-sans: var(--font-sans);
   
-  /* Custom Accent for Editorial highlights */
   --color-rose-400: #fb7185;
 }
 
-/* 3. BASE STYLES */
+/* 1. PERFORMANCE BASE STYLES */
+html {
+  /* ❌ DELETED: scroll-behavior: smooth; (Conflicts with Lenis) */
+  background-color: #0a0a0a;
+  text-rendering: optimizeLegibility;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), ui-sans-serif, system-ui;
+  background: #0a0a0a;
+  color: #ededed;
+  font-family: var(--font-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; /* Prevents horizontal scrollbar flicker */
 }
 
-/* Editorial Typography Utilities */
-.font-serif {
-  font-family: var(--font-serif), serif;
-}
-
-.font-sans {
-  font-family: var(--font-sans), sans-serif;
-}
-
-/* 4. LENIS SMOOTH SCROLL OPTIMIZATION */
-html.lenis {
+/* 2. LENIS OPTIMIZATION (Critical for Lag Fix) */
+html.lenis, html.lenis body {
   height: auto;
 }
 
 .lenis.lenis-smooth {
-  scroll-behavior: auto !important;
+  scroll-behavior: auto !important; /* Force browser to yield to Lenis */
 }
 
 .lenis.lenis-smooth [data-lenis-prevent] {
@@ -58,32 +44,16 @@ html.lenis {
   overflow: hidden;
 }
 
-html.lenis-initialized {
-  overflow-x: hidden;
+/* 3. HARDWARE ACCELERATION */
+/* Add this class to large cards/images that cause lag */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
 }
 
-/* 5. LAYOUT & PERFORMANCE FIXES */
-html, body {
-  min-height: 100vh;
-  background-color: #0a0a0a; /* Prevent white flash on reload */
-}
-
-/* Standard Next.js wrapper fix */
-body > div {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* 6. EDITORIAL UI ACCENTS */
-::selection {
-  background-color: #27272a; /* zinc-800 */
-  color: #ffffff;
-}
-
-/* Minimalist Scrollbar */
+/* 4. SCROLLBAR */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px; /* Slightly wider for usability */
 }
 
 ::-webkit-scrollbar-track {
@@ -91,10 +61,10 @@ body > div {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #18181b; /* zinc-900 */
-  border-radius: 10px;
+  background: #27272a;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #27272a; /* zinc-800 */
+  background: #3f3f46;
 }
