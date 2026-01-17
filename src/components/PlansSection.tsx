@@ -2,19 +2,17 @@
 
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 const PlansSection = () => {
   const router = useRouter();
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const plans = [
     {
-      name: "Starter",
-      description: "A solid foundation for individuals and early-stage teams.",
+      name: "Foundation",
+      description: "For individuals or small teams launching their first serious presence.",
       features: [
-        "Marketing or portfolio website",
-        "Basic Discord server structure",
+        "Single marketing or portfolio site",
+        "OR structured Discord server",
         "Roles, permissions & clean layout",
         "Launch-ready delivery",
       ],
@@ -22,11 +20,12 @@ const PlansSection = () => {
       isPopular: false,
     },
     {
-      name: "Core",
-      description: "Built for growing creators and brands.",
+      name: "Growth",
+      description: "Built for growing creators and brands looking to scale conversion.",
+      subText: "Chosen by most creators & brands",
       features: [
-        "Custom website or landing system",
-        "Advanced Discord architecture",
+        "Custom site or landing system",
+        "OR advanced Discord architecture",
         "Automation & moderation setup",
         "UX, performance & clarity focus",
       ],
@@ -34,11 +33,11 @@ const PlansSection = () => {
       isPopular: true,
     },
     {
-      name: "Advanced",
-      description: "For serious products and large communities.",
+      name: "Scale",
+      description: "For serious products and large-scale community ecosystems.",
       features: [
         "Scalable website architecture",
-        "Full Discord ecosystem",
+        "Full Discord ecosystem design",
         "Custom workflows & integrations",
         "Ongoing iteration & support",
       ],
@@ -50,111 +49,112 @@ const PlansSection = () => {
   return (
     <section
       id="plans"
-      className="relative min-h-screen border-t border-white/20 bg-black py-24 font-mono text-zinc-200 sm:py-32"
+      className="relative border-t border-zinc-900 bg-[#0a0a0a] px-6 py-24 sm:py-32 selection:bg-zinc-800"
     >
-      {/* --- RETRO BACKGROUND GRID --- */}
-      <div 
-        className="pointer-events-none absolute inset-0 z-0 opacity-20"
-        style={{
-             backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), 
-             linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)`,
-             backgroundSize: '40px 40px'
-        }}
-      />
-
-      <div className="relative z-10 mx-auto max-w-7xl px-6">
-        {/* Header */}
-        <div className="mb-20 text-center">
-          <h2 className="text-3xl font-bold uppercase tracking-tighter text-white sm:text-4xl md:text-5xl">
-            Simple, transparent pricing
+      <div className="relative z-10 mx-auto max-w-7xl">
+        {/* Header Block */}
+        <div className="mb-24 max-w-3xl">
+          <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-600 mb-6 block">
+            Pricing & Engagement
+          </span>
+          <h2 className="text-3xl sm:text-5xl font-serif italic text-white leading-tight">
+            Simple, transparent <br className="hidden md:block" /> engagement tiers.
           </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-base text-zinc-400">
-            Clear engagement tiers for websites, Discord communities, and digital
-            systems — built with focus and intent.
-          </p>
+          <div className="mt-8 space-y-4">
+            <p className="text-base sm:text-lg text-zinc-500 font-light max-w-2xl leading-relaxed">
+              Clear tiers for websites, Discord communities, and digital
+              systems — built with focus and intent.
+            </p>
+            {/* Scope Clarity Line */}
+            <p className="text-sm text-zinc-600 max-w-xl italic font-serif">
+              *Each plan covers either a website or a Discord system. Combined builds are scoped separately.
+            </p>
+          </div>
         </div>
 
-        {/* Cards Grid */}
-        <div className="grid grid-cols-1 gap-0 border-l border-t border-white/20 md:grid-cols-3">
+        {/* SEO Hidden Header */}
+        <h3 className="sr-only">Website and Discord development pricing plans</h3>
+
+        {/* Pricing Layout - Editorial Style */}
+        <div className="grid grid-cols-1 md:grid-cols-3 border-t border-zinc-900">
           {plans.map((plan, index) => (
             <motion.div
               key={plan.name}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
+              transition={{ duration: 0.4, delay: index * 0.05 }}
               viewport={{ once: true }}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              className={`group relative flex flex-col border-b border-r border-white/20 bg-black p-8 transition-colors duration-300 ${
-                plan.isPopular ? "bg-white/5" : ""
-              } hover:bg-zinc-900`}
+              className="relative flex flex-col pt-12 pb-16 md:pr-12 border-b border-zinc-900 md:border-b-0 group"
             >
-              
-              {/* "Most Chosen" Badge - Styled Retro */}
+              {/* Popular Indicator */}
               {plan.isPopular && (
-                <div className="absolute top-0 right-0 border-b border-l border-white/20 bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black">
-                  Most Chosen
-                </div>
+                <span className="absolute top-6 left-0 text-[9px] font-bold uppercase tracking-[0.3em] text-rose-500">
+                  // Recommended
+                </span>
               )}
 
-              {/* Plan Title */}
-              <h3 className="mb-2 text-xl font-bold uppercase tracking-wide text-white">
+              {/* Plan Name */}
+              <h3 className="text-3xl font-serif italic text-white mb-4 group-hover:text-rose-400 transition-colors duration-300">
                 {plan.name}
               </h3>
               
-              {/* Description */}
-              <p className="mb-8 min-h-[40px] text-sm text-zinc-500">
-                {plan.description}
-              </p>
+              <div className="mb-10 min-h-[64px]">
+                <p className="text-sm text-zinc-500 font-light leading-relaxed">
+                  {plan.description}
+                </p>
+                {plan.subText && (
+                   <p className="text-[11px] text-zinc-600 italic mt-2">
+                    {plan.subText}
+                   </p>
+                )}
+              </div>
 
-              {/* Divider */}
-              <div className="mb-8 h-px w-full bg-white/20" />
-
-              {/* Features List */}
-              <ul className="mb-10 flex-1 space-y-4">
+              {/* Feature List */}
+              <ul className="flex-1 space-y-5 mb-12">
                 {plan.features.map((feature, i) => (
-                  <li key={i} className="flex items-start gap-3 text-sm text-zinc-300">
-                    {/* Retro Bullet Point */}
-                    <span className="mt-1 h-1.5 w-1.5 shrink-0 bg-white" />
+                  <li key={i} className="flex items-center gap-4 text-xs text-zinc-400 uppercase tracking-widest font-medium">
+                    <span className="h-px w-3 bg-zinc-800" />
                     {feature}
                   </li>
                 ))}
               </ul>
 
-              {/* Button */}
+              {/* Action Button */}
               <button
                 onClick={() => router.push("/contact")}
-                className={`relative w-full border border-white px-6 py-4 text-xs font-bold uppercase tracking-widest transition-all duration-200 
-                ${
+                className={`w-full py-4 text-[10px] font-bold uppercase tracking-[0.4em] transition-all duration-300 border ${
                   plan.isPopular 
-                    ? "bg-white text-black hover:bg-black hover:text-white" 
-                    : "bg-transparent text-white hover:bg-white hover:text-black"
+                    ? "bg-white text-black border-white hover:bg-black hover:text-white" 
+                    : "bg-transparent text-zinc-400 border-zinc-800 hover:border-white hover:text-white"
                 }`}
               >
                 {plan.buttonText}
               </button>
-
-              {/* Hover Decorative Corner */}
-              <div className={`absolute bottom-2 right-2 h-2 w-2 border-b border-r border-white opacity-0 transition-opacity duration-300 ${hoveredIndex === index ? 'opacity-100' : ''}`} />
-
             </motion.div>
           ))}
         </div>
 
-        {/* Bottom CTA */}
-        <div className="mt-16 text-center">
-          <p className="text-sm text-zinc-500">
+        {/* Bottom Recommendation */}
+        <div className="mt-20 pt-12 border-t border-zinc-900 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-8">
+          <p className="text-xs text-zinc-600 uppercase tracking-widest">
             Not sure which tier fits your needs?
           </p>
           <button
             onClick={() => router.push("/contact")}
-            className="group mt-4 inline-flex items-center gap-2 border-b border-white pb-0.5 text-sm font-bold uppercase tracking-wider text-white hover:text-zinc-300 hover:border-zinc-300"
+            className="group flex items-center gap-4 text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-400 hover:text-white transition-all"
           >
-            Get a recommendation
-            <span className="transition-transform group-hover:translate-x-1">→</span>
+            <span className="border-b border-zinc-800 group-hover:border-white pb-1 transition-all">
+              Get a recommendation
+            </span>
+            <span className="text-zinc-600 group-hover:translate-x-1 transition-transform inline-block">→</span>
           </button>
         </div>
       </div>
+
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&display=swap');
+        .font-serif { font-family: 'Playfair Display', serif; }
+      `}</style>
     </section>
   );
 };

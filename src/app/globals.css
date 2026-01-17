@@ -1,65 +1,100 @@
 @import "tailwindcss";
 
+/* 1. FONT VARIABLE INTEGRATION */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* These connect to the variables defined in your layout.tsx */
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+  
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
+/* 2. TAILWIND THEME CONFIG (V4 Style) */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  
+  /* Link Tailwind classes to our Next.js fonts */
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+  
+  /* Custom Accent for Editorial highlights */
+  --color-rose-400: #fb7185;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* 3. BASE STYLES */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-/* Add these to your existing globals.css */
 
-/* Smooth scroll base styles */
+/* Editorial Typography Utilities */
+.font-serif {
+  font-family: var(--font-serif), serif;
+}
+
+.font-sans {
+  font-family: var(--font-sans), sans-serif;
+}
+
+/* 4. LENIS SMOOTH SCROLL OPTIMIZATION */
 html.lenis {
   height: auto;
 }
 
 .lenis.lenis-smooth {
-  scroll-behavior: auto;
+  scroll-behavior: auto !important;
 }
 
 .lenis.lenis-smooth [data-lenis-prevent] {
   overscroll-behavior: contain;
 }
 
-/* Fix for position: fixed elements */
 .lenis.lenis-stopped {
   overflow: hidden;
 }
 
-/* Performance optimizations */
 html.lenis-initialized {
   overflow-x: hidden;
 }
 
-/* Ensure full viewport height */
+/* 5. LAYOUT & PERFORMANCE FIXES */
 html, body {
   min-height: 100vh;
+  background-color: #0a0a0a; /* Prevent white flash on reload */
 }
 
-/* Fix for Next.js hydration issues */
+/* Standard Next.js wrapper fix */
 body > div {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
+/* 6. EDITORIAL UI ACCENTS */
+::selection {
+  background-color: #27272a; /* zinc-800 */
+  color: #ffffff;
+}
 
+/* Minimalist Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
 
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #18181b; /* zinc-900 */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #27272a; /* zinc-800 */
+}

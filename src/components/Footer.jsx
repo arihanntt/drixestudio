@@ -1,165 +1,106 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="relative border-t border-white/20 bg-black pt-20 pb-10 font-mono text-zinc-400">
-      
-      {/* --- RETRO BACKGROUND GRID --- */}
-      <div 
-        className="pointer-events-none absolute inset-0 z-0 opacity-20"
-        style={{
-             backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), 
-             linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)`,
-             backgroundSize: '40px 40px'
-        }}
-      />
-
-      <div className="relative z-10 mx-auto max-w-7xl px-6">
+    <footer className="relative border-t border-zinc-900 bg-[#0a0a0a] pt-20 pb-10 text-zinc-400 selection:bg-zinc-800 selection:text-white">
+      <div className="mx-auto max-w-7xl px-6">
         
-        {/* MAIN GRID */}
-        <div className="grid grid-cols-1 gap-12 border-b border-white/20 pb-16 sm:grid-cols-2 lg:grid-cols-4">
-          
-          {/* BRAND COLUMN */}
-          <div className="flex flex-col gap-6">
-            <div>
-                <h2 className="flex items-center gap-2 text-xl font-bold uppercase tracking-tighter text-white">
-                  <div className="h-4 w-4 bg-white" />
-                  Drixe_Studio
-                </h2>
-                <div className="mt-1 flex items-center gap-2 text-[10px] uppercase tracking-widest text-green-500">
-                    <span className="h-1.5 w-1.5 animate-pulse bg-green-500 rounded-full" />
-                    System_Online
-                </div>
-            </div>
-
-            <p className="max-w-xs text-xs leading-relaxed text-zinc-500">
-              We build high-performance websites, Discord servers, and
-              content systems for creators. <br />
-              <span className="text-zinc-300">Engineered for scale.</span>
+        {/* TOP SECTION: CONCRETE VALUE & CTA */}
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-12 mb-20">
+          <div className="max-w-xl">
+            <h2 className="text-xl font-serif italic text-white mb-4 tracking-tight">
+              Drixe Studio.
+            </h2>
+            <p className="text-base font-light leading-relaxed text-zinc-400">
+              We design and build high-performance websites and scalable community systems for online brands. 
+              <span className="block text-zinc-500 mt-2">Strategy, architecture, and execution — handled end-to-end.</span>
             </p>
           </div>
-
-          {/* SERVICES COLUMN */}
-          <div>
-            <h3 className="mb-6 border-b border-white/20 pb-2 text-xs font-bold uppercase tracking-widest text-white">
-              [ Directory: Services ]
-            </h3>
-            <ul className="space-y-3 text-xs">
-              <li>
-                <Link href="/discord-server-setup" className="group flex items-center gap-2 hover:text-green-500 transition-colors">
-                  <span className="opacity-0 transition-opacity group-hover:opacity-100">{`>`}</span>
-                  Discord_Server_Setup
-                </Link>
-              </li>
-              <li>
-                <Link href="/website-design" className="group flex items-center gap-2 hover:text-green-500 transition-colors">
-                  <span className="opacity-0 transition-opacity group-hover:opacity-100">{`>`}</span>
-                  Web_Architecture
-                </Link>
-              </li>
-              <li>
-                <Link href="/social-media-content" className="group flex items-center gap-2 hover:text-green-500 transition-colors">
-                  <span className="opacity-0 transition-opacity group-hover:opacity-100">{`>`}</span>
-                  Content_Systems
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* COMPANY COLUMN */}
-          <div>
-            <h3 className="mb-6 border-b border-white/20 pb-2 text-xs font-bold uppercase tracking-widest text-white">
-              [ Directory: Company ]
-            </h3>
-            <ul className="space-y-3 text-xs">
-              <li>
-                <Link href="/whyus" className="group flex items-center gap-2 hover:text-white transition-colors">
-                  <span className="text-zinc-600 group-hover:text-white">01.</span> Why_Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/plans" className="group flex items-center gap-2 hover:text-white transition-colors">
-                  <span className="text-zinc-600 group-hover:text-white">02.</span> Plans_&_Pricing
-                </Link>
-              </li>
-              <li>
-                <Link href="/faq" className="group flex items-center gap-2 hover:text-white transition-colors">
-                  <span className="text-zinc-600 group-hover:text-white">03.</span> Database_FAQ
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="group flex items-center gap-2 hover:text-white transition-colors">
-                  <span className="text-zinc-600 group-hover:text-white">04.</span> Dev_Logs
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* CONTACT COLUMN */}
-          <div>
-            <h3 className="mb-6 border-b border-white/20 pb-2 text-xs font-bold uppercase tracking-widest text-white">
-              [ Comms_Channels ]
-            </h3>
-            <ul className="space-y-4 text-xs">
-              <li>
-                <a
-                  href="https://wa.me/917889386542"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between border border-white/10 bg-black px-4 py-3 transition-all hover:border-green-500 hover:text-green-500"
-                >
-                  <span>WhatsApp</span>
-                  <span>↗</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://discord.com/users/928934131893686292"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between border border-white/10 bg-black px-4 py-3 transition-all hover:border-indigo-500 hover:text-indigo-400"
-                >
-                  <span>Discord</span>
-                  <span>↗</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://t.me/drixe1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between border border-white/10 bg-black px-4 py-3 transition-all hover:border-blue-400 hover:text-blue-400"
-                >
-                  <span>Telegram</span>
-                  <span>↗</span>
-                </a>
-              </li>
-            </ul>
+          
+          <div className="flex flex-col items-start lg:items-end gap-5">
+             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-600">Bottom-of-page intent</span>
+             <Link href="/contact" className="group text-lg font-serif italic text-white border-b border-zinc-800 hover:border-white transition-all duration-300 flex items-center gap-4">
+                Discuss your project
+                <span className="transition-transform group-hover:translate-x-1 inline-block">→</span>
+             </Link>
           </div>
         </div>
 
-        {/* BOTTOM BAR */}
-        <div className="pt-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center text-[10px] uppercase tracking-widest text-zinc-600">
+        {/* SEO-OPTIMIZED DIRECTORY GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-y-12 gap-x-12 border-t border-zinc-900/50 pt-12 pb-16 font-sans">
           
-          <p>
-            © {new Date().getFullYear()} Drixe Studio // All_Rights_Reserved.
-          </p>
+          {/* SERVICES (Keyword-bearing labels) */}
+          <div>
+            <h3 className="mb-6 text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">
+              Services
+            </h3>
+            <ul className="space-y-3 text-xs font-medium tracking-widest uppercase">
+              <li>
+                <Link href="/discord-server-setup" className="hover:text-white transition-colors">
+                  Community Infrastructure
+                </Link>
+              </li>
+              <li>
+                <Link href="/website-design" className="hover:text-white transition-colors">
+                  Web Architecture
+                </Link>
+              </li>
+              <li>
+                <Link href="/social-media-content" className="hover:text-white transition-colors">
+                  Content Systems
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="flex items-center gap-4"
-          >
-            <span className="hidden sm:inline">Status: Optimized</span>
-            <span className="h-px w-8 bg-zinc-700 hidden sm:inline" />
-            <span className="text-zinc-400">Built for speed & clarity.</span>
-          </motion.div>
+          {/* COMPANY */}
+          <div>
+            <h3 className="mb-6 text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">
+              Company
+            </h3>
+            <ul className="space-y-3 text-xs font-medium tracking-widest uppercase">
+              <li><Link href="/whyus" className="hover:text-white transition-colors">Why Us</Link></li>
+              <li><Link href="/plans" className="hover:text-white transition-colors">Plans & Pricing</Link></li>
+              <li><Link href="/faq" className="hover:text-white transition-colors">Client FAQ</Link></li>
+            </ul>
+          </div>
 
+          {/* CONTACT */}
+          <div>
+            <h3 className="mb-6 text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">
+              Contact
+            </h3>
+            <div className="flex flex-col gap-3 text-xs font-medium tracking-widest uppercase">
+              <a href="mailto:hello@drixe.studio" className="hover:text-white transition-colors lowercase font-sans tracking-normal text-[13px]">hello@drixe.studio</a>
+              <a href="https://wa.me/917889386542" target="_blank" rel="noopener" className="hover:text-white transition-colors">WhatsApp ↗</a>
+              <a href="https://t.me/drixe1" target="_blank" rel="noopener" className="hover:text-white transition-colors">Telegram ↗</a>
+            </div>
+          </div>
+
+          {/* LOCATION/TRUST */}
+          <div className="lg:text-right flex flex-col justify-between h-full py-0.5">
+             
+             <div className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-bold mt-4 lg:mt-0">
+                © {currentYear} Drixe Studio
+             </div>
+          </div>
+        </div>
+
+        {/* BOTTOM BAR: LEGAL & CREDITS */}
+        <div className="pt-8 border-t border-zinc-900/50 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex gap-8 text-[10px] uppercase tracking-widest text-zinc-700 font-medium">
+            <Link href="/privacy" className="hover:text-zinc-400">Privacy</Link>
+            <Link href="/terms" className="hover:text-zinc-400">Terms</Link>
+          </div>
+          
+          <div className="flex items-center gap-6">
+             <div className="text-[10px] uppercase tracking-[0.3em] text-zinc-600 italic font-serif">
+                Built for speed & clarity
+             </div>
+          </div>
         </div>
       </div>
     </footer>

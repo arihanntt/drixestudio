@@ -1,4 +1,40 @@
-User-agent: *
-Allow: /
+import { MetadataRoute } from 'next';
 
-Sitemap: https://www.drixestudio.services/sitemap.xml
+export default function robots(): MetadataRoute.Sitemap {
+  const baseUrl = 'https://www.drixestudio.services';
+
+  return {
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: [
+          '/api/',    
+          '/clanzo/',  
+          '/campus/',  
+          '/marketing/', 
+          '/clients/',    // Block backend API calls
+          '/_next/',      // Block internal Next.js build files
+          '/admin/',      // Block login/admin panels (if any)
+          '/*.json$',     // Block JSON data files
+          '/clanzo/',    // Block any private test folders
+        ],
+      },
+      {
+        // Specific rule for high-value bot performance
+        userAgent: 'Googlebot',
+        allow: [
+          '/',
+          '/discord-server-setup', // Priority service
+          '/plans',                // Priority pricing
+          '/blog/',                // Priority content
+          '/whyus/',   
+           '/website-design/',   
+            '/social-media-content/',   
+             '/faq/',   
+        ],
+      }
+    ],
+    sitemap: `${baseUrl}/sitemap.xml`,
+  };
+}

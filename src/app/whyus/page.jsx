@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
 
 const principles = [
@@ -39,7 +36,7 @@ const services = [
   },
 ];
 
-const process = [
+const processSteps = [
   {
     step: "01",
     title: "Understand the goal",
@@ -62,99 +59,89 @@ const process = [
   },
 ];
 
-const WhyUsPage = () => {
+export default function WhyUsPage() {
   return (
-    <section className="min-h-screen bg-black font-mono text-zinc-300 border-t border-white/20">
-      
-      {/* --- BACKGROUND GRID --- */}
-      <div 
-        className="pointer-events-none absolute inset-0 z-0 opacity-20"
-        style={{
-             backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), 
-             linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)`,
-             backgroundSize: '40px 40px'
-        }}
-      />
-
+    <section className="min-h-screen bg-[#0a0a0a] font-sans text-zinc-300 border-t border-zinc-900 selection:bg-zinc-800 selection:text-white">
       <div className="relative z-10 mx-auto max-w-7xl px-6 pt-32 pb-32">
 
-        {/* --- HERO --- */}
-        <div className="mb-24 border-l-2 border-white pl-6 sm:pl-10">
-          <p className="mb-6 text-xs font-bold uppercase tracking-widest text-zinc-500">
-             // Why Drixe Studio
+        {/* --- HERO: CLARITY FIX --- */}
+        <header className="mb-24 border-l border-zinc-700 pl-6 sm:pl-10 max-w-4xl">
+          <p className="mb-6 text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">
+             Our Philosophy
           </p>
-          <h1 className="text-4xl font-bold uppercase leading-[0.9] tracking-tighter text-white sm:text-6xl md:text-7xl">
+          <h1 className="text-4xl font-serif italic leading-[1.1] tracking-tight text-white sm:text-6xl md:text-7xl">
             We build systems <br />
-            that <span className="text-transparent" style={{ WebkitTextStroke: "1px white" }}>actually last.</span>
+            that <span className="text-zinc-500">actually last.</span>
           </h1>
-          <p className="mt-8 max-w-2xl text-sm leading-relaxed text-zinc-400 sm:text-lg">
-            Drixe Studio is a digital systems studio focused on clarity, structure,
-            and long-term usability. We work with creators, communities, and brands
-            who want things built properly — not rushed.
+          <p className="mt-8 text-base leading-relaxed text-zinc-400 sm:text-lg italic font-light">
+            Drixe Studio is a digital systems studio. We build systems that actually last — 
+            websites and communities designed for long-term use, not quick launches. 
+            <span className="block mt-4 text-zinc-200 not-italic font-normal">
+              Our work focuses on websites, Discord systems, and content infrastructure.
+            </span>
           </p>
-        </div>
+          <p className="mt-6 text-[11px] uppercase tracking-widest text-zinc-600 font-medium">
+            Used by independent creators and early-stage brands
+          </p>
+        </header>
 
-        {/* --- PRINCIPLES --- */}
+        {/* --- PRINCIPLES: SEO & STABILITY FIX --- */}
         <div className="mb-32">
-          <div className="mb-8 border-b border-white/20 pb-4">
-             <h2 className="text-xl font-bold uppercase tracking-widest text-white">
-               How we think
+          <div className="mb-8 border-b border-zinc-900 pb-4">
+             <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white">
+               Our Design Principles
              </h2>
           </div>
 
-          <div className="grid grid-cols-1 border-t border-l border-white/20 md:grid-cols-3">
+          <div className="grid grid-cols-1 border-t border-l border-zinc-900 md:grid-cols-3">
             {principles.map((item, i) => (
-              <motion.div
+              <div
                 key={i}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: i * 0.1 }}
-                viewport={{ once: true }}
-                className="group relative flex flex-col justify-between border-b border-r border-white/20 bg-black p-8 transition-colors hover:bg-white hover:text-black"
+                className="group relative flex flex-col justify-between border-b border-r border-zinc-900 bg-transparent p-8 transition-colors duration-300 hover:bg-zinc-900/40"
               >
                 <div>
-                    <div className="mb-6 text-xs font-bold text-zinc-600 group-hover:text-black/40">
-                        {item.number}
+                    <div className="mb-6 font-mono text-[10px] text-zinc-700 uppercase tracking-widest">
+                        Principle_{item.number}
                     </div>
-                    <h3 className="mb-4 text-lg font-bold uppercase tracking-wide leading-tight">
+                    <h3 className="mb-4 text-xl font-serif italic text-white leading-tight">
                     {item.title}
                     </h3>
-                    <p className="text-sm leading-relaxed text-zinc-400 group-hover:text-black/80">
+                    <p className="text-sm leading-relaxed text-zinc-500 group-hover:text-zinc-400 transition-colors">
                     {item.desc}
                     </p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
 
-        {/* --- SERVICES --- */}
+        {/* --- SERVICES: SEMANTIC FIX --- */}
         <div className="mb-32 max-w-5xl">
-          <div className="mb-8 border-b border-white/20 pb-4">
-             <h2 className="text-xl font-bold uppercase tracking-widest text-white">
-               What we do
+          <div className="mb-8 border-b border-zinc-900 pb-4">
+             <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white">
+               Our Services
              </h2>
           </div>
           
-          <div className="w-full border-t border-white/20">
-             <p className="mb-8 mt-4 text-sm text-zinc-400">
+          <div className="w-full border-t border-zinc-900">
+             <p className="mb-8 mt-4 text-sm text-zinc-500 italic">
                 We don’t try to do everything. We focus on a small set of services and do them properly.
              </p>
 
              {services.map((s, i) => (
-                 <div key={i} className="group grid grid-cols-1 gap-4 border-b border-white/20 py-8 transition-colors hover:bg-zinc-900 sm:grid-cols-12 sm:gap-8">
-                     <div className="col-span-1 sm:col-span-2">
-                        <span className="bg-zinc-900 border border-white/10 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-zinc-500 group-hover:border-white group-hover:text-white">
+                 <div key={i} className="group grid grid-cols-1 gap-4 border-b border-zinc-900 py-8 transition-colors duration-300 hover:bg-zinc-900/20 sm:grid-cols-12 sm:gap-8">
+                     <div className="col-span-1 sm:col-span-2 pt-1">
+                        <span className="text-[10px] font-mono tracking-widest text-zinc-700">
                             {s.id}
                         </span>
                      </div>
                      <div className="col-span-1 sm:col-span-4">
-                        <h3 className="text-lg font-bold uppercase text-white">
+                        <h3 className="text-lg font-medium text-white tracking-tight">
                             {s.title}
                         </h3>
                      </div>
                      <div className="col-span-1 sm:col-span-6">
-                        <p className="text-sm text-zinc-400 group-hover:text-zinc-300">
+                        <p className="text-sm text-zinc-500 leading-relaxed">
                             {s.desc}
                         </p>
                      </div>
@@ -163,27 +150,26 @@ const WhyUsPage = () => {
           </div>
         </div>
 
-        {/* --- PROCESS --- */}
+        {/* --- PROCESS: SEO FIX --- */}
         <div className="mb-32">
-          <div className="mb-12 border-b border-white/20 pb-4">
-             <h2 className="text-xl font-bold uppercase tracking-widest text-white">
-               How we work
+          <div className="mb-12 border-b border-zinc-900 pb-4">
+             <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white">
+               Our Process
              </h2>
           </div>
 
           <div className="grid grid-cols-1 gap-0 sm:grid-cols-2 lg:grid-cols-4">
-            {process.map((p, i) => (
-              <div key={i} className="relative border-l border-white/20 pl-8 pb-12 sm:border-l-0 sm:border-t sm:pl-0 sm:pt-8 sm:pr-8">
-                {/* Connector Dot */}
-                <div className="absolute -left-[5px] top-0 h-2.5 w-2.5 bg-black border border-white sm:-top-[5px] sm:left-0" />
+            {processSteps.map((p, i) => (
+              <div key={i} className="relative border-l border-zinc-900 pl-8 pb-12 sm:border-l-0 sm:border-t sm:pl-0 sm:pt-8 sm:pr-8 group">
+                <div className="absolute -left-[3px] top-0 h-1.5 w-1.5 bg-zinc-700 sm:-top-[3px] sm:left-0 group-hover:bg-white transition-colors" />
                 
-                <span className="block text-xs font-bold text-zinc-600 mb-2">
+                <span className="block text-[10px] font-bold text-zinc-600 mb-2 tracking-widest">
                     STEP {p.step}
                 </span>
-                <h4 className="mb-4 text-lg font-bold uppercase text-white">
+                <h4 className="mb-4 text-lg font-serif italic text-white tracking-tight">
                   {p.title}
                 </h4>
-                <p className="text-sm text-zinc-400 leading-relaxed">
+                <p className="text-sm text-zinc-500 leading-relaxed font-light">
                   {p.desc}
                 </p>
               </div>
@@ -191,15 +177,15 @@ const WhyUsPage = () => {
           </div>
         </div>
 
-        {/* --- AUDIENCE & CTA --- */}
-        <div className="border border-white/20 bg-zinc-900/10 p-8 sm:p-12">
+        {/* --- AUDIENCE & CTA: LOGIC FIX --- */}
+        <div className="border border-zinc-900 bg-zinc-900/10 p-8 sm:p-12">
           <div className="mb-8 flex items-start gap-4">
-            <div className="flex h-6 w-6 shrink-0 items-center justify-center border border-white text-xs font-bold text-white">!</div>
+            <div className="flex h-5 w-5 shrink-0 items-center justify-center border border-zinc-600 text-[10px] font-bold text-zinc-600 italic font-serif">i</div>
             <div>
-                 <h2 className="text-lg font-bold uppercase tracking-wider text-white">
-                    Who this is for (and who it isn’t)
+                 <h2 className="text-sm font-bold uppercase tracking-widest text-white">
+                    The Ideal Fit
                 </h2>
-                <p className="mt-4 max-w-2xl text-sm leading-relaxed text-zinc-400">
+                <p className="mt-4 max-w-2xl text-sm leading-relaxed text-zinc-500 font-light">
                     Drixe Studio is for people who care about structure, clarity, and
                     long-term results. If you’re looking for the cheapest option or a
                     rushed setup, we’re probably not the right fit.
@@ -210,29 +196,34 @@ const WhyUsPage = () => {
             </div>
           </div>
 
-          <div className="mt-12 flex flex-col items-start justify-between gap-6 border-t border-white/10 pt-8 sm:flex-row sm:items-center">
+          <div className="mt-12 flex flex-col items-start justify-between gap-8 border-t border-zinc-900 pt-8 sm:flex-row sm:items-center">
              <div>
-                <h3 className="text-xl font-bold uppercase text-white">
+                <h3 className="text-xl font-serif italic text-white tracking-tight">
                     Ready to build something solid?
                 </h3>
-                <p className="text-xs text-zinc-500 mt-1">
+                <p className="text-[11px] uppercase tracking-widest text-zinc-600 mt-2">
                     Explore our plans or reach out for a recommendation.
                 </p>
              </div>
              
-             <Link
-                href="/plans"
-                className="group relative flex h-12 items-center justify-center border border-white bg-white px-8 text-sm font-bold uppercase tracking-widest text-black transition-all hover:bg-black hover:text-white"
-             >
-                <span className="relative z-10">View plans & pricing</span>
-                <div className="absolute inset-0 -translate-x-full bg-black transition-transform duration-300 group-hover:translate-x-0" />
-             </Link>
+             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8">
+                <Link
+                  href="/plans"
+                  className="text-[11px] font-bold uppercase tracking-[0.3em] bg-white text-black px-8 py-4 hover:bg-zinc-200 transition-colors"
+                >
+                  View plans & pricing
+                </Link>
+                <Link
+                  href="/contact"
+                  className="text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-500 hover:text-white border-b border-transparent hover:border-white transition-all pb-1"
+                >
+                  Contact us
+                </Link>
+             </div>
           </div>
         </div>
 
       </div>
     </section>
   );
-};
-
-export default WhyUsPage;
+}

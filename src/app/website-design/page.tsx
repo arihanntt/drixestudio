@@ -2,118 +2,202 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Website & Landing Page Design | Drixe Studio",
+  title: "High-Performance Web Architecture & Systems | Drixe Studio",
   description:
-    "Modern website and landing page design focused on speed, SEO, and conversions. Built for creators, startups, and brands.",
+    "Performance-first website architecture focused on speed, SEO, and conversion. We build websites as scalable infrastructure for serious brands—no page builders, no bloat.",
   keywords: [
-    "website designer",
-    "landing page designer",
-    "frontend developer",
-    "static website design",
-    "business website",
-    "seo website",
-    "conversion focused website"
+    "website architecture",
+    "conversion focused website",
+    "performance first website",
+    "frontend developer for startups",
+    "static site architecture",
+    "custom web systems"
   ],
+  alternates: {
+    canonical: "https://drixestudio.services/website-design",
+  },
 };
 
 export default function WebsiteDesignPage() {
   return (
-    <main className="bg-black text-white py-28">
+    <main className="bg-[#0a0a0a] text-white py-32 selection:bg-zinc-800">
       <div className="mx-auto max-w-6xl px-6 lg:px-12">
-        {/* HERO */}
-        <h1 className="text-4xl md:text-5xl font-bold mb-6">
-          Website & Landing Page Design
-        </h1>
+        
+        {/* --- HEADER BLOCK --- */}
+        <header className="mb-24 border-l border-zinc-800 pl-6 sm:pl-10">
+          <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-600 mb-6 block">
+            Web Infrastructure
+          </span>
+          <h1 className="text-4xl md:text-6xl font-serif italic mb-8 leading-tight max-w-4xl">
+            High-performance websites <br className="hidden md:block" /> built as systems.
+          </h1>
+          <p className="text-zinc-400 font-light leading-relaxed italic text-base sm:text-lg max-w-3xl">
+            Drixe Studio designs fast, clean, and conversion-focused websites for creators and startups. 
+            We focus on structure, information hierarchy, and performance—not templates or page builders.
+          </p>
+        </header>
 
-        <p className="text-white/70 mb-10 max-w-3xl">
-          Drixe Studio designs fast, clean, and conversion-focused websites
-          for creators, startups, and brands. We build modern frontend-driven
-          websites that load instantly, rank well on Google, and turn visitors
-          into leads.
-        </p>
+        {/* --- USE CASES --- */}
+        <section className="mb-32">
+          <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white border-b border-zinc-900 pb-4 mb-12">
+            Use cases we design for
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
+            <div>
+              <h3 className="text-lg font-medium mb-4 tracking-tight">Market Presence</h3>
+              <ul className="space-y-4 text-zinc-500 text-sm font-light">
+                <li className="flex items-start gap-3">
+                  <span className="h-px w-3 bg-zinc-800 mt-2.5 shrink-0" />
+                  Business and strategic brand websites
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="h-px w-3 bg-zinc-800 mt-2.5 shrink-0" />
+                  High-conversion, ad-optimized landing pages
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="h-px w-3 bg-zinc-800 mt-2.5 shrink-0" />
+                  SaaS and startup marketing infrastructure
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-medium mb-4 tracking-tight">Performance Assets</h3>
+              <ul className="space-y-4 text-zinc-500 text-sm font-light">
+                <li className="flex items-start gap-3">
+                  <span className="h-px w-3 bg-zinc-800 mt-2.5 shrink-0" />
+                  Portfolio and authority-building personal sites
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="h-px w-3 bg-zinc-800 mt-2.5 shrink-0" />
+                  SEO-optimized static architectures
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="h-px w-3 bg-zinc-800 mt-2.5 shrink-0" />
+                  Lightweight, headless CMS integrations
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
 
-        {/* WHAT WE BUILD */}
-        <h2 className="text-2xl font-semibold mb-4">
-          What we build
-        </h2>
+        {/* --- OUR APPROACH --- */}
+        <section className="mb-32 max-w-4xl">
+          <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white border-b border-zinc-900 pb-4 mb-8">
+            The Technical Stance
+          </h2>
+          <p className="text-zinc-400 font-light leading-relaxed text-base">
+            We reject the bloat of traditional page builders and legacy CMS platforms. 
+            We design with modern component-based frontend architecture that keeps sites fast, maintainable, and easy to evolve.
+            <span className="text-zinc-200 block mt-4 italic font-serif text-lg">
+              "Every line of code serves a conversion goal."
+            </span>
+          </p>
+        </section>
 
-        <ul className="space-y-3 text-white/70 list-disc list-inside mb-10">
-          <li>Business and brand websites</li>
-          <li>High-conversion landing pages</li>
-          <li>Portfolio and personal brand sites</li>
-          <li>SaaS and startup marketing pages</li>
-          <li>SEO-optimized static websites</li>
-        </ul>
+        {/* --- PERFORMANCE BENEFITS --- */}
+        <section className="mb-32">
+          <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white border-b border-zinc-900 pb-4 mb-12">
+            Business Value
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-zinc-900 border border-zinc-900">
+             {[
+               { t: "Speed", d: "Sub-second load times." },
+               { t: "SEO", d: "Perfect Lighthouse scores." },
+               { t: "Security", d: "Zero server-side vulns." },
+               { t: "ROI", d: "Minimal maintenance cost." }
+             ].map((item) => (
+               <div key={item.t} className="bg-[#0a0a0a] p-8 transition-colors hover:bg-zinc-900/50">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-white mb-2">{item.t}</p>
+                  <p className="text-[10px] text-zinc-600 uppercase tracking-widest leading-relaxed">{item.d}</p>
+               </div>
+             ))}
+          </div>
+          <p className="mt-8 text-xs text-zinc-600 italic">
+            In short: your site loads faster, ranks better, and costs less to maintain over time.
+          </p>
+        </section>
 
-        {/* WHY OUR APPROACH */}
-        <h2 className="text-2xl font-semibold mb-4">
-          Our approach to website design
-        </h2>
+        {/* --- THE BOUNDARY (Guardrails) --- */}
+        <section className="mb-32 border border-zinc-900 bg-zinc-900/10 p-8 sm:p-12">
+          <div className="flex flex-col md:flex-row gap-12">
+            <div className="flex-1">
+              <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white mb-6">What we don't do</h2>
+              <ul className="space-y-3 text-xs uppercase tracking-widest text-zinc-600">
+                <li>• No bloated page builders (Elementor/Divi)</li>
+                <li>• No slow, unmanaged CMS installs</li>
+                <li>• No generic, resold templates</li>
+                <li>• No ongoing platform lock-ins</li>
+              </ul>
+            </div>
+            <div className="flex-1">
+              <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white mb-6">What we deliver</h2>
+              <ul className="space-y-3 text-xs uppercase tracking-widest text-zinc-400">
+                <li>• Custom frontend architecture</li>
+                <li>• Scalable component systems</li>
+                <li>• Strategic information design</li>
+                <li>• Full ownership & clean handoff</li>
+              </ul>
+            </div>
+          </div>
+        </section>
 
-        <p className="text-white/70 mb-8 max-w-3xl">
-          We don’t use bloated page builders or slow CMS platforms. Every
-          website is built with modern frontend technology, clean code,
-          and performance-first architecture. This ensures faster load times,
-          better SEO scores, and long-term scalability.
-        </p>
+        {/* --- PROCESS --- */}
+        <section className="mb-32">
+          <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white border-b border-zinc-900 pb-4 mb-12">
+            Workflow Architecture
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-12">
+            {[
+              { t: "Discovery", d: "Understand brand, audience psychology, and performance goals." },
+              { t: "Architecture", d: "Design information hierarchy and layout logic." },
+              { t: "Implementation", d: "Build responsive, performance-first frontend components." },
+              { t: "Performance", d: "Optimization for SEO, speed, and deep accessibility." },
+              { t: "Validation", d: "Stress-testing across browsers and mobile environments." },
+              { t: "Launch", d: "Handoff of a stable, production-ready web system." },
+            ].map((step, i) => (
+              <div key={i} className="group">
+                <span className="font-mono text-[9px] text-zinc-700 block mb-4 group-hover:text-zinc-400 transition-colors">
+                  PROCESS_0{i + 1}
+                </span>
+                <h4 className="text-lg font-medium mb-2 tracking-tight">{step.t}</h4>
+                <p className="text-sm text-zinc-500 font-light leading-relaxed">{step.d}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-        {/* WHY STATIC */}
-        <h2 className="text-2xl font-semibold mb-4">
-          Why static & frontend-first websites
-        </h2>
-
-        <ul className="space-y-3 text-white/70 list-disc list-inside mb-10">
-          <li>Faster load times and better user experience</li>
-          <li>Higher Google Lighthouse and Core Web Vitals scores</li>
-          <li>Better SEO performance</li>
-          <li>Lower security risks</li>
-          <li>Lower long-term maintenance costs</li>
-        </ul>
-
-        {/* WHO IT'S FOR */}
-        <h2 className="text-2xl font-semibold mb-4">
-          Who this is for
-        </h2>
-
-        <ul className="space-y-3 text-white/70 list-disc list-inside mb-10">
-          <li>Creators and personal brands</li>
-          <li>Startups and SaaS products</li>
-          <li>Small businesses and agencies</li>
-          <li>Founders launching new products</li>
-          <li>Brands running paid ad campaigns</li>
-        </ul>
-
-        {/* PROCESS */}
-        <h2 className="text-2xl font-semibold mb-4">
-          Our design & build process
-        </h2>
-
-        <ol className="space-y-3 text-white/70 list-decimal list-inside mb-10">
-          <li>Understand your brand, audience, and goals</li>
-          <li>Design layout, structure, and page flow</li>
-          <li>Build responsive frontend components</li>
-          <li>Optimize for SEO, speed, and accessibility</li>
-          <li>Deploy and launch your website</li>
-        </ol>
-
-        {/* CTA */}
-        <div className="mt-14 flex flex-wrap gap-4">
-          <Link
-            href="/plans"
-            className="rounded-xl bg-violet-600 px-8 py-4 font-medium hover:opacity-90 transition"
-          >
-            View Website Plans →
-          </Link>
-
-          <a
-            href="https://wa.me/917889386542"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-xl border border-white/20 px-8 py-4 font-medium text-white/80 hover:border-white/40 transition"
-          >
-            Talk on WhatsApp
-          </a>
-        </div>
+        {/* --- FINAL CTA BLOCK --- */}
+        <footer className="border-t border-zinc-900 pt-16 mt-20">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-12">
+            <div>
+              <h2 className="text-2xl font-serif italic mb-2">Build your digital infrastructure.</h2>
+              <p className="text-sm text-zinc-500 font-light max-w-md">
+                We design with intent. Every pixel is placed to support your conversion goals. Let's build your next system.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-10">
+              <a
+                href="https://wa.me/917889386542"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-4 text-[11px] font-bold uppercase tracking-[0.3em] text-white"
+              >
+                <span className="border-b border-zinc-800 group-hover:border-white pb-1 transition-all">
+                  Discuss on WhatsApp
+                </span>
+                <span className="transition-transform group-hover:translate-x-1 inline-block">→</span>
+              </a>
+              <Link
+                href="/plans"
+                className="group flex items-center gap-4 text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-500 hover:text-white"
+              >
+                <span className="border-b border-zinc-800 group-hover:border-zinc-500 pb-1">
+                  View Tiers
+                </span>
+              </Link>
+            </div>
+          </div>
+        </footer>
       </div>
     </main>
   );

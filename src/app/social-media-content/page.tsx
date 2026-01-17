@@ -2,129 +2,191 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Social Media & Reels Editing | Drixe Studio",
+  title: "Short-Form Content Systems for Consistent Growth | Drixe Studio",
   description:
-    "Short-form video editing and content systems for Instagram Reels, YouTube Shorts, and TikTok. Built for creators, brands, and businesses that want consistent growth.",
+    "Systematic short-form video content infrastructure for Instagram Reels, YouTube Shorts, and TikTok. Built for creators and brands focusing on long-term authority.",
   keywords: [
-    "reels editor",
-    "short form video editor",
-    "social media content",
-    "instagram reels editing",
-    "youtube shorts editor",
-    "tiktok video editor",
-    "content creation services",
-    "video editing for creators",
+    "short form content systems",
+    "reels strategy",
+    "content infrastructure",
+    "video content systems",
+    "brand architecture",
+    "short form editor for founders"
   ],
+  alternates: {
+    canonical: "https://drixestudio.services/social-media-content",
+  },
 };
 
 export default function SocialMediaContentPage() {
   return (
-    <main className="bg-black text-white py-28">
+    <main className="bg-[#0a0a0a] text-white py-32 selection:bg-zinc-800">
       <div className="mx-auto max-w-6xl px-6 lg:px-12">
-        {/* HERO */}
-        <h1 className="text-4xl md:text-5xl font-bold mb-6">
-          Social Media & Short-Form Content Creation
-        </h1>
+        
+        {/* --- HEADER BLOCK --- */}
+        <header className="mb-24 border-l border-zinc-800 pl-6 sm:pl-10">
+          <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-600 mb-6 block">
+            Content Infrastructure
+          </span>
+          <h1 className="text-4xl md:text-6xl font-serif italic mb-8 leading-tight max-w-4xl">
+            Short-form content systems <br className="hidden md:block" /> for consistent growth.
+          </h1>
+          <p className="text-zinc-400 font-light leading-relaxed italic text-base sm:text-lg max-w-3xl">
+            Drixe Studio designs repeatable short-form content frameworks for Instagram, YouTube, and TikTok. 
+            We focus on sustainable content structures, not one-off edits.
+          </p>
+        </header>
 
-        <p className="text-white/70 mb-12 max-w-3xl">
-          Drixe Studio creates high-impact short-form video content designed
-          for reach, retention, and consistency. Our edits are optimized for
-          platform algorithms while maintaining strong brand identity.
-        </p>
+        {/* --- SYSTEM CAPABILITIES --- */}
+        <section className="mb-32">
+          <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white border-b border-zinc-900 pb-4 mb-12">
+            System Capabilities
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
+            <div>
+              <h3 className="text-lg font-medium mb-4 tracking-tight">Frameworks & Retention</h3>
+              <ul className="space-y-4 text-zinc-500 text-sm font-light">
+                <li className="flex items-start gap-3">
+                  <span className="h-px w-3 bg-zinc-800 mt-2.5 shrink-0" />
+                  Repeatable short-form content frameworks
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="h-px w-3 bg-zinc-800 mt-2.5 shrink-0" />
+                  Editorial pacing systems for maximum retention
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="h-px w-3 bg-zinc-800 mt-2.5 shrink-0" />
+                  Hook-focused, platform-optimized architectures
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-medium mb-4 tracking-tight">Identity & Distribution</h3>
+              <ul className="space-y-4 text-zinc-500 text-sm font-light">
+                <li className="flex items-start gap-3">
+                  <span className="h-px w-3 bg-zinc-800 mt-2.5 shrink-0" />
+                  Brand-aligned visuals, typography, and color grading
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="h-px w-3 bg-zinc-800 mt-2.5 shrink-0" />
+                  Multi-platform distribution readiness (Reels/Shorts/TikTok)
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="h-px w-3 bg-zinc-800 mt-2.5 shrink-0" />
+                  Systematic posting guidance and cadence mapping
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
 
-        {/* WHAT WE DO */}
-        <h2 className="text-2xl font-semibold mb-4">
-          What we do
-        </h2>
+        {/* --- THE STRATEGY: CONSISTENCY OVER VIRALITY --- */}
+        <section className="mb-32 max-w-4xl">
+          <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white border-b border-zinc-900 pb-4 mb-8">
+            The Philosophy
+          </h2>
+          <p className="text-zinc-400 font-light leading-relaxed text-base">
+            Consistency beats virality. Most creators fail because they can’t maintain output without burnout. 
+            Our system is designed to make short-form sustainable by removing the friction of technical execution.
+            <span className="text-zinc-200 block mt-4 italic font-serif text-lg">
+              "We build the engine so you can focus on the message."
+            </span>
+          </p>
+        </section>
 
-        <ul className="space-y-3 text-white/70 list-disc list-inside mb-10">
-          <li>Short-form video editing for social platforms</li>
-          <li>Reels, Shorts, and TikTok-style content</li>
-          <li>Hook-focused, high-retention edits</li>
-          <li>Brand-consistent visuals and pacing</li>
-          <li>Posting-ready videos optimized for algorithms</li>
-        </ul>
+        {/* --- TARGET AUDIENCE --- */}
+        <section className="mb-32">
+          <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white border-b border-zinc-900 pb-4 mb-12">
+            Strategic Alignment
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-zinc-900 border border-zinc-900">
+             {["Personal Brands", "Founder-Led Startups", "Educational Entities", "Creative Agencies"].map((item) => (
+               <div key={item} className="bg-[#0a0a0a] p-8 transition-colors hover:bg-zinc-900/50">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-zinc-500">{item}</p>
+               </div>
+             ))}
+          </div>
+        </section>
 
-        {/* PLATFORMS */}
-        <h2 className="text-2xl font-semibold mb-4">
-          Platforms we support
-        </h2>
+        {/* --- SYSTEM WORKFLOW --- */}
+        <section className="mb-32">
+          <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white border-b border-zinc-900 pb-4 mb-12">
+            Workflow Architecture
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-12 font-sans">
+            {[
+              { t: "Discovery", d: "Analyze brand tone, audience psychology, and content goals." },
+              { t: "Systems Design", d: "Define repeatable visual and editorial frameworks." },
+              { t: "Execution", d: "Implementation of high-retention structural edits." },
+              { t: "Optimization", d: "Refining pacing and hooks based on performance data." },
+              { t: "Cadence", d: "Establishing a sustainable delivery and posting schedule." },
+              { t: "Maintenance", d: "Ongoing system updates to match platform evolution." },
+            ].map((step, i) => (
+              <div key={i} className="group">
+                <span className="font-mono text-[9px] text-zinc-700 block mb-4 group-hover:text-zinc-400 transition-colors">
+                  PROCESS_0{i + 1}
+                </span>
+                <h4 className="text-lg font-medium mb-2 tracking-tight">{step.t}</h4>
+                <p className="text-sm text-zinc-500 font-light leading-relaxed">{step.d}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-        <ul className="space-y-3 text-white/70 list-disc list-inside mb-10">
-          <li>Instagram Reels</li>
-          <li>YouTube Shorts</li>
-          <li>TikTok</li>
-        </ul>
+        {/* --- WHAT WE DON'T PROMISE (Trust Guardrail) --- */}
+        <section className="mb-32 border border-zinc-900 bg-zinc-900/10 p-8 sm:p-12">
+          <div className="flex flex-col md:flex-row gap-12">
+            <div className="flex-1">
+              <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white mb-6">What we don't promise</h2>
+              <ul className="space-y-3 text-xs uppercase tracking-widest text-zinc-600">
+                <li>• Viral guarantees or overnight fame</li>
+                <li>• Trend chasing without brand alignment</li>
+                <li>• Low-quality, bulk-resell editing</li>
+              </ul>
+            </div>
+            <div className="flex-1">
+              <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white mb-6">What we do deliver</h2>
+              <ul className="space-y-3 text-xs uppercase tracking-widest text-zinc-400">
+                <li>• Reliable, high-retention content systems</li>
+                <li>• Long-term brand authority and trust</li>
+                <li>• Professional, intentional visual identity</li>
+              </ul>
+            </div>
+          </div>
+        </section>
 
-        {/* WHY SHORT FORM */}
-        <h2 className="text-2xl font-semibold mb-4">
-          Why short-form content matters
-        </h2>
-
-        <p className="text-white/70 mb-8 max-w-3xl">
-          Short-form video is currently the fastest-growing content format.
-          Platforms actively push Reels, Shorts, and TikTok videos to new
-          audiences, making it one of the most effective ways to grow reach,
-          engagement, and brand awareness.
-        </p>
-
-        {/* WHAT YOU GET */}
-        <h2 className="text-2xl font-semibold mb-4">
-          What you get with Drixe Studio
-        </h2>
-
-        <ul className="space-y-3 text-white/70 list-disc list-inside mb-10">
-          <li>Clean, modern video edits</li>
-          <li>Strong hooks in the first 1–3 seconds</li>
-          <li>Platform-optimized pacing and cuts</li>
-          <li>Brand-aligned colors, fonts, and style</li>
-          <li>Captions and posting guidance</li>
-        </ul>
-
-        {/* WHO IT’S FOR */}
-        <h2 className="text-2xl font-semibold mb-4">
-          Who this service is for
-        </h2>
-
-        <ul className="space-y-3 text-white/70 list-disc list-inside mb-10">
-          <li>Creators building a personal brand</li>
-          <li>Businesses growing on social media</li>
-          <li>Startups and founders</li>
-          <li>Agencies needing consistent content</li>
-          <li>Anyone focused on organic growth</li>
-        </ul>
-
-        {/* PROCESS */}
-        <h2 className="text-2xl font-semibold mb-4">
-          Our content workflow
-        </h2>
-
-        <ol className="space-y-3 text-white/70 list-decimal list-inside mb-12">
-          <li>Understand your niche, audience, and goals</li>
-          <li>Define content style and brand direction</li>
-          <li>Edit videos with high-retention structure</li>
-          <li>Optimize pacing for platform algorithms</li>
-          <li>Deliver posting-ready content consistently</li>
-        </ol>
-
-        {/* CTA */}
-        <div className="mt-16 flex flex-wrap gap-4">
-          <Link
-            href="/plans"
-            className="rounded-xl bg-violet-600 px-8 py-4 font-medium hover:opacity-90 transition"
-          >
-            View Content Plans →
-          </Link>
-
-          <a
-            href="https://wa.me/917889386542"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-xl border border-white/20 px-8 py-4 font-medium text-white/80 hover:border-white/40 transition"
-          >
-            Talk on WhatsApp
-          </a>
-        </div>
+        {/* --- FINAL CTA BLOCK --- */}
+        <footer className="border-t border-zinc-900 pt-16 mt-20">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-12">
+            <div>
+              <h2 className="text-2xl font-serif italic mb-2">Build your content engine.</h2>
+              <p className="text-sm text-zinc-500 font-light max-w-md">
+                We handle the infrastructure. You handle the message. Let's build a sustainable growth system.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-10">
+              <a
+                href="https://wa.me/917889386542"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-4 text-[11px] font-bold uppercase tracking-[0.3em] text-white"
+              >
+                <span className="border-b border-zinc-800 group-hover:border-white pb-1 transition-all">
+                  Discuss on WhatsApp
+                </span>
+                <span className="transition-transform group-hover:translate-x-1 inline-block">→</span>
+              </a>
+              <Link
+                href="/plans"
+                className="group flex items-center gap-4 text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-500 hover:text-white"
+              >
+                <span className="border-b border-zinc-800 group-hover:border-zinc-500 pb-1">
+                  View Tiers
+                </span>
+              </Link>
+            </div>
+          </div>
+        </footer>
       </div>
     </main>
   );

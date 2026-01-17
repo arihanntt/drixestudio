@@ -1,173 +1,159 @@
 "use client";
 
-import { useState } from "react";
-// Assuming these imports exist in your project
+import { useState, useMemo } from "react";
 import { faqData } from "./faq-data"; 
 import FaqSchema from "./FaqSchema";
 import { linkifyPricing } from "./utils/linkify";
-import { motion, AnimatePresence } from "framer-motion";
 
 export default function FAQPage() {
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("all");
+  const [activeCategory, setActiveCategory] = useState("all");
 
-  // --- UTILS ---
-  const escapeRegExp = (str: string) =>
-    str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-  const highlight = (text: string) => {
-    if (!query) return text;
-    const safe = escapeRegExp(query);
-    return text.replace(
-      new RegExp(`(${safe})`, "gi"),
-      // Retro Highlight: Green background, black text
-      `<mark class="bg-green-500 text-black font-bold px-0.5">$1</mark>`
-    );
+  // --- SAFE HIGHLIGHTING ---
+  const highlightText = (text: string) => {
+    if (!query.trim()) return text;
+    const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(`(${safeQuery})`, "gi");
+    return text.replace(regex, `<mark class="bg-rose-500/10 text-rose-400 font-medium px-0.5">$1</mark>`);
   };
 
-  // Get unique categories for the sidebar
-  const categories = ["all", ...Array.from(new Set(faqData.map((s) => s.category)))];
-
-  const sections = faqData.filter((s) =>
-    category === "all" ? true : s.category === category
+  // --- DATA FILTERING (Optimized for SEO Crawlers) ---
+  const categories = useMemo(() => 
+    ["all", ...Array.from(new Set(faqData.map((s) => s.category)))], 
+    []
   );
+
+  const visibleSections = useMemo(() => {
+    const baseSections = activeCategory === "all" 
+      ? faqData 
+      : faqData.filter((s) => s.category === activeCategory);
+
+    return baseSections.map(section => ({
+      ...section,
+      faqs: section.faqs.filter(f => 
+        f.q.toLowerCase().includes(query.toLowerCase()) || 
+        f.a.toLowerCase().includes(query.toLowerCase())
+      )
+    })).filter(section => section.faqs.length > 0);
+  }, [activeCategory, query]);
 
   return (
     <>
+      {/* SEO: Schema always receives the full, unfiltered dataset */}
       <FaqSchema data={faqData} />
 
-      <section className="min-h-screen bg-black px-4 py-32 font-mono text-zinc-300 sm:px-6">
+      <section className="min-h-screen bg-[#0a0a0a] px-6 py-32 selection:bg-zinc-800 selection:text-white">
         
-        {/* --- BACKGROUND GRID --- */}
-        <div 
-            className="pointer-events-none absolute inset-0 z-0 opacity-20"
-            style={{
-                backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), 
-                linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)`,
-                backgroundSize: '40px 40px'
-            }}
-        />
-
-        <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-12 lg:grid-cols-4">
+        <div className="relative z-10 mx-auto max-w-7xl">
           
-          {/* --- SIDEBAR (INLINED FOR RETRO STYLE) --- */}
-          <aside className="lg:col-span-1">
-            <div className="sticky top-32">
-                <div className="mb-6 border-b border-white/20 pb-2">
-                    <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-500">
-                        // Index_Directory
-                    </h3>
-                </div>
-                <div className="flex flex-row flex-wrap gap-2 lg:flex-col">
-                    {categories.map((cat) => (
-                        <button
-                            key={cat}
-                            onClick={() => setCategory(cat)}
-                            className={`group flex items-center justify-between border px-4 py-2 text-xs font-bold uppercase tracking-widest transition-all ${
-                                category === cat 
-                                ? "border-white bg-white text-black" 
-                                : "border-white/20 bg-black text-zinc-500 hover:border-white hover:text-white"
-                            }`}
-                        >
-                            <span>{cat}</span>
-                            {category === cat && <span className="text-[10px] animate-pulse">●</span>}
-                        </button>
-                    ))}
-                </div>
-            </div>
-          </aside>
+          {/* HEADER: Trust & Reassurance */}
+          <header className="mb-24 max-w-3xl">
+            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-600 mb-6 block">
+              Support & Logistics
+            </span>
+            <h1 className="text-4xl sm:text-6xl font-serif italic text-white leading-tight mb-8">
+              Frequently asked <br className="hidden md:block" /> inquiries.
+            </h1>
+            <p className="text-zinc-500 text-base sm:text-lg font-light leading-relaxed italic">
+              Clear answers to common questions regarding our operational standards, 
+              ownership policies, and engagement frameworks.
+            </p>
+          </header>
 
-          {/* --- MAIN CONTENT --- */}
-          <main className="lg:col-span-3">
+          <div className="grid grid-cols-1 gap-16 lg:grid-cols-12">
             
-            {/* Header */}
-            <div className="mb-12 border-l-4 border-white pl-6">
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-500">
-                    <span className="h-2 w-2 bg-green-500" />
-                    System_Help
-                </div>
-                <h1 className="mt-4 text-4xl font-bold uppercase tracking-tighter text-white">
-                  Faq
-                </h1>
-            </div>
+            {/* SIDEBAR: Plain Language Index */}
+            <aside className="lg:col-span-3">
+              <div className="sticky top-32">
+                <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-700 mb-8 border-b border-zinc-900 pb-2">
+                  Directory
+                </h3>
+                <nav className="flex flex-col gap-1">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setActiveCategory(cat)}
+                      className={`text-left py-2 text-[11px] font-bold uppercase tracking-widest transition-all duration-300 ${
+                        activeCategory === cat 
+                          ? "text-white pl-4 border-l border-white" 
+                          : "text-zinc-600 hover:text-zinc-400 pl-0 border-l border-transparent"
+                      }`}
+                    >
+                      {cat === "all" ? "All Inquiries" : cat}
+                    </button>
+                  ))}
+                </nav>
+              </div>
+            </aside>
 
-            {/* Retro Search Input */}
-            <div className="group relative mb-16">
-                <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-green-500">
-                    {`>`}
-                </div>
+            {/* MAIN CONTENT */}
+            <main className="lg:col-span-9">
+              
+              {/* SEARCH: Accessible & Intuitive */}
+              <div className="relative mb-20 border-b border-zinc-900 pb-4 focus-within:border-zinc-500 transition-colors group">
                 <input
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="QUERY_DATABASE..."
-                    className="w-full border border-white/20 bg-black py-4 pl-10 pr-4 font-mono text-sm text-white placeholder-zinc-700 outline-none transition-colors focus:border-green-500 focus:bg-green-900/5"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search questions..."
+                  className="w-full bg-transparent pt-8 text-xl sm:text-2xl font-serif italic text-white placeholder-zinc-800 outline-none"
                 />
-                <div className="absolute right-4 top-1/2 hidden -translate-y-1/2 text-[10px] uppercase text-zinc-600 sm:block">
-                    [Enter] to Search
-                </div>
-            </div>
+                <span className="absolute left-0 top-0 text-[10px] uppercase tracking-widest text-zinc-700 font-bold">
+                  Search keyword
+                </span>
+              </div>
 
-            {/* Sections */}
-            <div className="space-y-20">
-              {sections.map((section) => (
-                <div key={section.title}>
-                  {/* Section Title */}
-                  <div className="mb-8 flex items-center gap-4">
-                     <h2 className="text-xl font-bold uppercase tracking-widest text-white">
-                        [{section.title}]
-                     </h2>
-                     <div className="h-px flex-1 bg-white/20" />
-                  </div>
-
-                  <div className="grid gap-px border border-white/20 bg-white/20">
-                    {section.faqs
-                      .filter(
-                        (f) =>
-                          f.q.toLowerCase().includes(query.toLowerCase()) ||
-                          f.a.toLowerCase().includes(query.toLowerCase())
-                      )
-                      .map((faq, i) => (
-                        <div
-                          key={i}
-                          className="group relative bg-black p-8 transition-all hover:bg-white hover:text-black"
-                        >
-                          {/* Corner Accent */}
-                          <div className="absolute right-0 top-0 h-0 w-0 border-l-[10px] border-t-[10px] border-l-transparent border-t-white opacity-0 transition-opacity group-hover:opacity-100" />  
-
-                          <div className="mb-4 flex items-start gap-3">
-                             <span className="mt-1 text-xs font-bold text-green-500 group-hover:text-black">Q:</span>
-                             <h3
-                                className="text-lg font-bold uppercase leading-tight"
-                                dangerouslySetInnerHTML={{
-                                    __html: highlight(faq.q),
-                                }}
-                             />
-                          </div>
-
-                          <div className="flex items-start gap-3">
-                            <span className="mt-1 text-xs font-bold text-zinc-600 group-hover:text-black/50">A:</span>
-                            <div
-                                className="text-sm leading-relaxed text-zinc-400 group-hover:text-black/80"
-                                dangerouslySetInnerHTML={{
-                                    __html: linkifyPricing(highlight(faq.a)),
-                                }}
-                            />
-                          </div>
-                        </div>
-                      ))}
-                  </div>
-                  
-                  {/* Empty State Check */}
-                  {section.faqs.filter(f => f.q.toLowerCase().includes(query.toLowerCase()) || f.a.toLowerCase().includes(query.toLowerCase())).length === 0 && (
-                      <div className="border border-dashed border-white/20 p-8 text-center text-sm text-zinc-500">
-                          [!] No_Data_Found
+              {/* FAQ SECTIONS */}
+              <div className="space-y-32">
+                {visibleSections.length > 0 ? (
+                  visibleSections.map((section) => (
+                    <div key={section.title}>
+                      {/* Section Heading */}
+                      <div className="mb-12 flex items-baseline gap-4">
+                        <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-white">
+                          {section.title}
+                        </h2>
+                        <div className="h-px flex-1 bg-zinc-900" />
                       </div>
-                  )}
 
-                </div>
-              ))}
-            </div>
-          </main>
+                      {/* Question List */}
+                      <div className="grid gap-px bg-zinc-900 border border-zinc-900">
+                        {section.faqs.map((faq, i) => (
+                          <div
+                            key={i}
+                            className="bg-[#0a0a0a] p-10 transition-colors duration-500 hover:bg-[#0d0d0d] group"
+                          >
+                            <div className="flex items-start gap-8">
+                               <span className="font-mono text-[9px] text-zinc-800 mt-2">
+                                 {String(i + 1).padStart(2, '0')}
+                               </span>
+                               <div className="flex-1">
+                                  <h3 
+                                    className="text-lg sm:text-xl font-medium text-white mb-6 tracking-tight leading-snug"
+                                    dangerouslySetInnerHTML={{ __html: highlightText(faq.q) }}
+                                  />
+                                  <div
+                                    className="text-sm sm:text-base leading-relaxed text-zinc-500 font-light italic font-serif tracking-wide"
+                                    dangerouslySetInnerHTML={{
+                                      __html: linkifyPricing(highlightText(faq.a)),
+                                    }}
+                                  />
+                               </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="border border-dashed border-zinc-900 py-20 text-center">
+                    <p className="text-xs uppercase tracking-widest text-zinc-700">
+                      No matching questions found in the database.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </main>
+          </div>
         </div>
       </section>
     </>

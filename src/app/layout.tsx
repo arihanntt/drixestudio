@@ -1,133 +1,94 @@
-// app/layout.tsx
-
 import './globals.css';
+import { Playfair_Display, Inter } from 'next/font/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import ClientHelmetProvider from '../components/ClientHelmetProvider';
+import Script from 'next/script';
 import LayoutWrapper from '../components/LayoutWrapper';
-import type { Metadata } from 'next';
 import SmoothScrollWrapper from "@/components/SmoothScrollWrapper"; 
+import type { Metadata, Viewport } from 'next';
+
+// 1. Optimized Font Loading (Editorial Serif + Clean Sans)
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  style: ['italic', 'normal'],
+  weight: ['400', '700'],
+  variable: '--font-serif',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+});
+
+export const viewport: Viewport = {
+  themeColor: '#0a0a0a',
+  colorScheme: 'dark',
+};
 
 export const metadata: Metadata = {
-  title: 'Drixe Studio | Discord Server Setup, Website Design & Social Media Services',
-  description: 'Drixe Studio designs custom Discord servers, high-performance websites, and social media content for creators and brands. Fast, scalable, and professional.',
-  keywords: [
-    'Drixe Studio',
-    'Discord server setup',
-    'Discord server design',
-    'custom Discord',
-    'Discord bots',
-    'moderation',
-    'role setup',
-    'Drixe services',
-  ],
-  authors: [{ name: 'Drixe Studio' }],
+  title: 'Drixe Studio | Digital Systems & Web Architecture',
+  description: 'Premium Discord server design, high-performance websites, and content infrastructure for creators and brands. Engineered for speed and clarity.',
+  keywords: ['Drixe Studio', 'Discord server setup', 'Web Architecture', 'Next.js developer', 'Discord automation'],
+  metadataBase: new URL('https://drixestudio.services'),
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
-    title: 'Drixe Studio | Discord Server Setup Experts',
-    description: 'Custom, stylish, and functional Discord server setups — perfect for communities, creators, and brands.',
+    title: 'Drixe Studio | Digital Architecture',
+    description: 'Custom Discord ecosystems and high-performance websites for modern brands.',
     url: 'https://drixestudio.services',
     siteName: 'Drixe Studio',
-    images: [
-      {
-        url: 'https://drixestudio.services/drixe-preview.png',
-        width: 1200,
-        height: 630,
-        alt: 'Drixe Studio Preview',
-      },
-    ],
+    images: [{ url: '/drixe-preview.png', width: 1200, height: 630 }],
     type: 'website',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Drixe Studio | Discord Server Setup Experts',
-    description: 'Custom, stylish, and functional Discord server setups — perfect for communities, creators, and brands.',
-    images: ['https://drixestudio.services/drixe-preview.png'],
-  },
-  metadataBase: new URL('https://drixestudio.services'),
   icons: {
     icon: '/drixe-icon.png',
     apple: '/drixe-icon.png',
   },
-  themeColor: '#5f4ab4',
-  manifest: '/manifest.json',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${playfair.variable} ${inter.variable} scroll-smooth`}>
       <head>
-        {/* ✅ Favicon & Apple Icon fallback */}
-        <link rel="icon" href="/drixe-icon.png" sizes="32x32" type="image/png" />
-<link rel="apple-touch-icon" href="/drixe-icon.png" />
-
-        {/* ✅ Mobile Web App Config */}
-        <meta name="theme-color" content="#5f4ab4" />
-        <meta name="apple-mobile-web-app-title" content="Drixe Studio" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta
-          name="robots"
-          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        {/* GA4 using Next.js Script component for performance */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-PB0HBP3GY2"
+          strategy="afterInteractive"
         />
-        <link rel="canonical" href="https://drixestudio.services/" />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-PB0HBP3GY2');
+          `}
+        </Script>
 
-        {/* ✅ Fonts Preconnect */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-
-        {/* ✅ GA4 Script */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-PB0HBP3GY2"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-PB0HBP3GY2');
-            `,
-          }}
-        />
-
-        {/* ✅ Structured Data: Organization */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Organization',
-              name: 'Drixe Studio',
-              url: 'https://drixestudio.services',
-              logo: 'https://drixestudio.services/drixe-icon.png',
-              sameAs: ['https://www.instagram.com/drixestudio/'],
-            }),
-          }}
-        />
-
-        {/* ✅ Structured Data: ProfessionalService */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'ProfessionalService',
-              name: 'Drixe Studio',
-              url: 'https://drixestudio.services',
-              image: 'https://drixestudio.services/drixe-preview.png',
-              description:
-'Premium Discord server design, website development, and social media content systems for creators, brands, and communities.',
-              areaServed: 'Worldwide',
-              availableLanguage: 'English',
-              serviceType: 'Discord server setup and design',
-            }),
-          }}
-        />
+        {/* Structured Data: ProfessionalService */}
+        <Script id="structured-data" type="application/ld+json" strategy="beforeInteractive">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ProfessionalService',
+            name: 'Drixe Studio',
+            url: 'https://drixestudio.services',
+            image: 'https://drixestudio.services/drixe-preview.png',
+            description: 'Premium Discord server design, website development, and content systems for creators and brands.',
+            address: {
+              '@type': 'PostalAddress',
+              'addressCountry': 'IN'
+            },
+            areaServed: 'Worldwide',
+            priceRange: '$$'
+          })}
+        </Script>
       </head>
-      <body className="bg-black text-white">
-        <ClientHelmetProvider>
-          <SmoothScrollWrapper>
-          <LayoutWrapper>{children}</LayoutWrapper>
+      <body className="bg-[#0a0a0a] text-white antialiased">
+        <SmoothScrollWrapper>
+          <LayoutWrapper>
+            {children}
+          </LayoutWrapper>
           <SpeedInsights />
-          </SmoothScrollWrapper>
-        </ClientHelmetProvider>
+        </SmoothScrollWrapper>
       </body>
     </html>
   );
