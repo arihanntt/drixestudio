@@ -1,92 +1,133 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 
 const HeroSection = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, margin: "-20%" });
+
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#0a0a0a] px-6 selection:bg-zinc-800 selection:text-white">
-      {/* --- VISUAL LAYERS (Restrained) --- */}
-      <div className="absolute top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-zinc-900/20 blur-[120px] pointer-events-none" />
+    <section
+      ref={ref}
+      className="relative w-full min-h-screen bg-black selection:bg-cyan-500 selection:text-black flex flex-col border-b border-white/10 pt-32 md:pt-28 xl:pt-32 pb-72 md:pb-40 overflow-visible"
+    >
 
-      {/* --- MAIN CONTENT (Centered & Focused) --- */}
-      <div className="relative z-10 mx-auto max-w-6xl text-center">
-        
-        {/* Eyebrow - Audience Qualification */}
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-8 text-[10px] font-bold uppercase tracking-[0.5em] text-zinc-600"
-        >
-          For creators, startups, and online brands
-        </motion.div>
+      {/* Background (removed bg-fixed for performance) */}
+      <div className="absolute inset-0 z-0 bg-[url('/your-premium-bg.webp')] bg-cover bg-center bg-no-repeat opacity-25 pointer-events-none" />
 
-        {/* H1 Heading - SEO & Editorial Core */}
-        <motion.h1 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="mb-10 flex flex-col items-center"
+      {/* Grid Lines */}
+      <div className="absolute inset-0 z-0 mx-auto w-full max-w-[120rem] pointer-events-none">
+        <div className="absolute top-0 bottom-0 left-6 md:left-12 xl:left-32 w-px bg-white/10 hidden md:block" />
+        <div className="absolute top-0 bottom-0 right-6 md:right-12 xl:right-32 w-px bg-white/10 hidden md:block" />
+      </div>
+
+     
+
+      {/* MAIN CONTENT */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.9 }}
+        className="relative z-10 w-full max-w-[120rem] mx-auto px-6 md:px-12 xl:px-32 flex flex-col"
+      >
+
+        <div className="mb-8 flex items-center gap-6">
+          <span className="h-[2px] w-12 bg-cyan-400 block" />
+          <span className="text-[11px] font-black uppercase tracking-[0.5em] text-white">
+            Discord. Web. Content.
+          </span>
+        </div>
+
+        <motion.h1
+          initial={{ opacity: 0, y: 60 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1 }}
+          className="flex flex-col z-20 w-full"
         >
-          <span className="text-5xl sm:text-7xl md:text-8xl font-serif italic font-light tracking-tight text-white leading-none">
-            Websites and
+          <span className="text-[15vw] xl:text-[11rem] font-black tracking-tighter text-white leading-[0.85] uppercase">
+            Discord.
           </span>
-          <span className="mt-2 text-5xl sm:text-7xl md:text-8xl font-serif italic font-light tracking-tight text-zinc-500 leading-none">
-            Discord systems
+          <span className="text-[15vw] xl:text-[11rem] font-black tracking-tighter text-white leading-[0.85] uppercase ml-[10%]">
+            Websites.
           </span>
-          
-          <div className="mt-6 text-[11px] uppercase tracking-[0.35em] text-zinc-500 font-medium">
-             built to scale with your brand
-          </div>
+          <span className="text-[15vw] xl:text-[11rem] font-light italic text-white leading-[0.85] uppercase ml-[20%] mt-2 relative w-fit">
+            <span className="relative z-10">Content.</span>
+            <span className="absolute bottom-[15%] left-[-5%] w-[110%] h-[6px] xl:h-[12px] bg-cyan-500 -z-10" />
+          </span>
         </motion.h1>
 
-        {/* Description - Concrete Value Proposition */}
-        <motion.div 
+        <motion.h2
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.3 }}
-          className="mx-auto mb-14 max-w-2xl text-center px-4"
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ duration: 1, delay: 0.2 }}
+          className="mt-16 max-w-2xl text-lg sm:text-xl md:text-2xl leading-snug text-white font-medium"
         >
-          <p className="text-base sm:text-lg leading-relaxed text-zinc-400 font-light italic">
-            We design and build high-performance websites and structured Discord servers. 
-            <span className="text-zinc-200 block mt-1">Clear systems, clean execution, no unnecessary layers.</span>
-          </p>
-        </motion.div>
+          Custom Next.js web development. Premium Discord server setup. High-retention short-form content.
+          <span className="block mt-4 text-cyan-400 font-bold tracking-widest uppercase text-xs">
+            Precision-crafted digital systems.
+          </span>
+        </motion.h2>
 
-        {/* CTA Hierarchy - Decision Focused */}
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="flex flex-col items-center justify-center gap-10 sm:flex-row"
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="mt-16 flex"
         >
-          {/* Primary CTA (High Contrast) */}
-          <Link href="/contact" className="group relative">
-            <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-white border border-white/20 px-10 py-4 group-hover:bg-white group-hover:text-black transition-all duration-300">
-              Start a Project
-            </span>
-          </Link>
-
-          {/* Secondary CTA (Subtle Link) */}
-          <Link href="/services" className="group text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-500 hover:text-zinc-300 transition-all">
-            <span className="border-b border-zinc-800 group-hover:border-zinc-500 pb-1">
-              View services
+          <Link
+            href="/contact"
+            className="group relative overflow-hidden bg-white px-12 py-6 border border-white transition-all duration-300 hover:bg-black w-full sm:w-auto text-center"
+          >
+            <span className="relative z-10 text-xs font-black uppercase tracking-[0.4em] text-black group-hover:text-white transition-colors duration-300">
+              Start Deployment
             </span>
           </Link>
         </motion.div>
-      </div>
+      </motion.div>
 
-      {/* --- HIDDEN SEO SUPPORT --- */}
-      <h2 className="sr-only">
-        Website development, Discord server setup, and digital systems for creators and brands
-      </h2>
+      {/* OVERLAP PANEL – Premium Layered Design */}
+     <motion.div
+  initial={{ opacity: 0, y: 80 }}
+  animate={isInView ? { opacity: 1, y: 0 } : {}}
+  transition={{ duration: 1 }}
+  className="absolute -bottom-40 md:-bottom-28 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-12 xl:right-32 w-[92%] md:w-[60%] lg:w-[40%] max-w-[600px] z-30"
+>
+        <div className="relative bg-zinc-900/95 backdrop-blur-md p-10 md:p-14 rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
 
-      {/* --- COMPRESSED SCROLL INDICATOR --- */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-20">
-        <div className="h-10 w-px bg-gradient-to-b from-white to-transparent" />
-      </div>
+          {/* Glow Edge */}
+          <div className="absolute inset-0 rounded-3xl border border-cyan-400/20 pointer-events-none" />
+
+          {/* Top Highlight Bar */}
+          <div className="absolute top-0 left-0 h-[3px] w-full bg-gradient-to-r from-cyan-400 via-white to-cyan-400" />
+
+          {/* Subtle Animated Shine */}
+          <div className="absolute -top-20 -left-20 w-40 h-40 bg-cyan-400/10 blur-3xl animate-pulse" />
+
+          <div className="flex justify-between items-end mb-8 relative z-10">
+            <span className="text-[11px] font-black uppercase tracking-[0.4em] text-white">
+              Services
+            </span>
+            <span className="text-sm text-cyan-400 font-black">03</span>
+          </div>
+
+          <ul className="space-y-6 relative z-10">
+            {["Web Development", "Discord Server Setup", "Content Production"].map(
+              (item, i) => (
+                <li
+                  key={i}
+                  className="text-lg font-semibold text-white tracking-wide uppercase flex justify-between hover:translate-x-2 transition-transform duration-300"
+                >
+                  <span>{item}</span>
+                  <span className="text-cyan-400">↗</span>
+                </li>
+              )
+            )}
+          </ul>
+        </div>
+      </motion.div>
+
     </section>
   );
 };

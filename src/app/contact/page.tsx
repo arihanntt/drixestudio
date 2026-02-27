@@ -1,88 +1,105 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact Drixe Studio | Direct Support & Inquiries",
+  title: "Contact Drixe Studio | Custom Websites & Discord Setup",
   description:
-    "Contact Drixe Studio to discuss your project directly via WhatsApp, Discord, or Telegram. No forms, no delays—engineered for speed and clarity.",
+    "Get in touch with Drixe Studio to discuss your project. We offer direct support via WhatsApp, Discord, or Telegram for website development and Discord setups.",
   alternates: {
-    canonical: "https://drixestudio.services/contact",
+    canonical: "https://www.drixestudio.services/contact",
   },
 };
 
 export default function ContactPage() {
   return (
-    <main className="bg-[#0a0a0a] text-white py-32 selection:bg-zinc-800">
-      <div className="mx-auto max-w-6xl px-6">
+    <main className="relative w-full bg-black text-white pt-32 pb-40 overflow-hidden border-t border-white/10 selection:bg-cyan-500 selection:text-black">
+      
+      {/* --- Corrected Structured Data for SEO Authority --- */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Drixe Studio",
+            "url": "https://www.drixestudio.services",
+            "contactPoint": [
+              {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "availableLanguage": "English",
+                "url": "https://wa.me/916005956542"
+              },
+              {
+                "@type": "ContactPoint",
+                "contactType": "technical support",
+                "availableLanguage": "English",
+                "url": "https://discord.com/users/928934131893686292"
+              },
+              {
+                "@type": "ContactPoint",
+                "contactType": "customer support",
+                "availableLanguage": "English",
+                "url": "https://t.me/drixe1"
+              }
+            ]
+          }),
+        }}
+      />
 
-        {/* --- Corrected Structured Data for SEO Authority --- */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "Drixe Studio",
-              "url": "https://drixestudio.services",
-              "contactPoint": [
-                {
-                  "@type": "ContactPoint",
-                  "contactType": "sales",
-                  "availableLanguage": "English",
-                  "url": "https://wa.me/917889386542"
-                },
-                {
-                  "@type": "ContactPoint",
-                  "contactType": "technical support",
-                  "availableLanguage": "English",
-                  "url": "https://discord.com/users/928934131893686292"
-                },
-                {
-                  "@type": "ContactPoint",
-                  "contactType": "customer support",
-                  "availableLanguage": "English",
-                  "url": "https://t.me/drixe1"
-                }
-              ]
-            }),
-          }}
-        />
+      {/* --- THE MASTER GRID LINES --- */}
+      <div className="absolute inset-0 z-0 mx-auto w-full max-w-[120rem] pointer-events-none">
+        <div className="absolute top-0 bottom-0 left-6 md:left-12 xl:left-32 w-px bg-white/10 hidden md:block" />
+        <div className="absolute top-0 bottom-0 right-6 md:right-12 xl:right-32 w-px bg-white/10 hidden md:block" />
+      </div>
 
-        {/* --- Header: Clean & Personal --- */}
-        <header className="text-center mb-24">
-          <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-600 mb-6 block">
-            Direct Access
-          </span>
+      <div className="relative z-10 mx-auto w-full max-w-[120rem] px-6 md:px-12 xl:px-32">
+        
+        {/* --- 1. HEADER BLOCK (Split Layout) --- */}
+        <header className="mb-20 md:mb-32 flex flex-col lg:flex-row lg:items-end justify-between gap-12 border-b border-white/10 pb-12">
+          <div className="max-w-4xl">
+            <div className="flex items-center gap-6 mb-8">
+              <span className="h-[2px] w-12 bg-cyan-500 block" />
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">
+                Direct Access
+              </span>
+            </div>
+            
+            <h1 className="text-5xl sm:text-7xl lg:text-[7rem] font-black uppercase leading-[0.85] tracking-tighter">
+              Start Your <br />
+              <span className="text-white/40">Project.</span>
+            </h1>
+          </div>
 
-          <h1 className="text-4xl md:text-6xl font-serif italic mb-8">
-            Talk directly with us.
-          </h1>
-
-          <div className="max-w-2xl mx-auto border-t border-zinc-900 pt-8">
-            <p className="text-zinc-400 font-light leading-relaxed italic text-base sm:text-lg">
-              No forms. No waiting. We respond personally and schedule structured follow-ups for qualified projects. 
-              <span className="text-zinc-600 block mt-2 not-italic text-sm">Typical response time: under 24 hours.</span>
+          <div className="lg:max-w-sm pb-2">
+            <p className="text-base md:text-lg text-white/50 font-medium leading-relaxed">
+              No long forms. No automated emails. Choose a platform below to message our team directly. We typically reply within a few hours.
             </p>
           </div>
         </header>
 
-        {/* --- Contact Channels: Hairline Grid --- */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-zinc-900 border border-zinc-900">
+        {/* --- 2. CONTACT CHANNELS (Brutalist Bento Grid) --- */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/10">
 
           {/* WhatsApp */}
           <a
             href="https://wa.me/917889386542"
             target="_blank"
             rel="noopener noreferrer"
-            className="group bg-[#0a0a0a] p-12 transition-colors duration-500 hover:bg-[#0f0f0f]"
+            className="group relative bg-black p-10 md:p-14 transition-colors duration-500 hover:bg-[#050505] overflow-hidden flex flex-col justify-between min-h-[320px]"
           >
-            <h3 className="text-xl font-serif italic mb-4 group-hover:text-white transition-colors">
-              WhatsApp
-            </h3>
-            <p className="text-zinc-500 text-sm mb-12 font-light leading-relaxed">
-              Fastest way to discuss project scope, architecture, and next steps.
-            </p>
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 border-b border-zinc-800 pb-1 group-hover:border-white group-hover:text-white transition-all">
-              Launch WhatsApp →
+            <div className="absolute top-0 left-0 w-full h-1 bg-cyan-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+            
+            <div>
+              <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white mb-6">
+                WhatsApp
+              </h3>
+              <p className="text-sm text-white/50 font-medium leading-relaxed">
+                The fastest way to get a price quote and check our availability.
+              </p>
+            </div>
+            
+            <span className="inline-block mt-12 text-[11px] font-black uppercase tracking-[0.3em] text-white/60 group-hover:text-cyan-400 transition-colors duration-300">
+              Message Us →
             </span>
           </a>
 
@@ -91,15 +108,20 @@ export default function ContactPage() {
             href="https://discord.com/users/928934131893686292"
             target="_blank"
             rel="noopener noreferrer"
-            className="group bg-[#0a0a0a] p-12 transition-colors duration-500 hover:bg-[#0f0f0f]"
+            className="group relative bg-black p-10 md:p-14 transition-colors duration-500 hover:bg-[#050505] overflow-hidden flex flex-col justify-between min-h-[320px]"
           >
-            <h3 className="text-xl font-serif italic mb-4 group-hover:text-white transition-colors">
-              Discord
-            </h3>
-            <p className="text-zinc-500 text-sm mb-12 font-light leading-relaxed">
-              Best for long-term collaboration, server architecture, and community planning.
-            </p>
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 border-b border-zinc-800 pb-1 group-hover:border-white group-hover:text-white transition-all">
+            <div className="absolute top-0 left-0 w-full h-1 bg-cyan-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+            
+            <div>
+              <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white mb-6">
+                Discord
+              </h3>
+              <p className="text-sm text-white/50 font-medium leading-relaxed">
+                Best for discussing complex server setups and sharing reference files.
+              </p>
+            </div>
+            
+            <span className="inline-block mt-12 text-[11px] font-black uppercase tracking-[0.3em] text-white/60 group-hover:text-cyan-400 transition-colors duration-300">
               DM: Drixeeee →
             </span>
           </a>
@@ -109,29 +131,35 @@ export default function ContactPage() {
             href="https://t.me/drixe1"
             target="_blank"
             rel="noopener noreferrer"
-            className="group bg-[#0a0a0a] p-12 transition-colors duration-500 hover:bg-[#0f0f0f]"
+            className="group relative bg-black p-10 md:p-14 transition-colors duration-500 hover:bg-[#050505] overflow-hidden flex flex-col justify-between min-h-[320px]"
           >
-            <h3 className="text-xl font-serif italic mb-4 group-hover:text-white transition-colors">
-              Telegram
-            </h3>
-            <p className="text-zinc-500 text-sm mb-12 font-light leading-relaxed">
-              Ideal for quick technical queries and lightweight system discussions.
-            </p>
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 border-b border-zinc-800 pb-1 group-hover:border-white group-hover:text-white transition-all">
-              Launch Telegram →
+            <div className="absolute top-0 left-0 w-full h-1 bg-cyan-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+            
+            <div>
+              <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white mb-6">
+                Telegram
+              </h3>
+              <p className="text-sm text-white/50 font-medium leading-relaxed">
+                Ideal for quick technical questions and following up on active projects.
+              </p>
+            </div>
+            
+            <span className="inline-block mt-12 text-[11px] font-black uppercase tracking-[0.3em] text-white/60 group-hover:text-cyan-400 transition-colors duration-300">
+              Message Us →
             </span>
           </a>
         </div>
 
-        {/* --- Trust Footer --- */}
-        <footer className="mt-24 text-center border-t border-zinc-900 pt-12">
-          <p className="text-[10px] uppercase tracking-[0.4em] text-zinc-700 font-medium">
-            Drixe Studio // Remote Digital Systems Studio // Global Operations
-          </p>
-          <p className="mt-4 text-[9px] uppercase tracking-widest text-zinc-800">
-             For complex projects, we may suggest moving to a short onboarding call.
-          </p>
+        {/* --- 3. TRUST FOOTER --- */}
+        <footer className="mt-20 border-t border-white/10 pt-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="text-[10px] uppercase tracking-[0.4em] text-white/30 font-black">
+            Drixe Studio // Global Operations
+          </div>
+          <div className="text-[10px] uppercase tracking-[0.2em] text-white/50 font-bold">
+             We will schedule an onboarding call for complex builds.
+          </div>
         </footer>
+
       </div>
     </main>
   );

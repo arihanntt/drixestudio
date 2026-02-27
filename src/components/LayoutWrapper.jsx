@@ -20,7 +20,9 @@ export default function LayoutWrapper({ children }) {
   return (
     <>
       {!hideLayout && <Navbar />}
-      <main>{children}</main>
+      <main className={!hideLayout ? "pt-[110px]" : ""}>
+        {children}
+      </main>
       {!hideLayout && <Footer />}
     </>
   );

@@ -41,7 +41,7 @@
     "src/app/marketing/page.jsx",
     "src/app/api/send-emails/route.js",
     ".next/dev/types/**/*.ts"
-  ],
+, "src/components/ContactModal.tsx"  ],
   "exclude": [
     "node_modules"
   ]

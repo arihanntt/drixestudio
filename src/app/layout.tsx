@@ -86,14 +86,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       
       {/* ✅ Added transform-gpu to force hardware acceleration on the body */}
-      <body className="bg-[#0a0a0a] text-white antialiased transform-gpu">
-        <SmoothScrollWrapper>
-          <LayoutWrapper>
-            {children}
-          </LayoutWrapper>
-          <SpeedInsights />
-        </SmoothScrollWrapper>
-      </body>
+     <body className="bg-[#0a0a0a] text-white antialiased">
+
+  <LayoutWrapper>
+    <SmoothScrollWrapper>
+      {children}
+    </SmoothScrollWrapper>
+  </LayoutWrapper>
+
+  <SpeedInsights />
+
+</body>
     </html>
   );
 }

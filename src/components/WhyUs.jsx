@@ -1,110 +1,151 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const WhyUs = () => {
-  const router = useRouter();
-
   const features = [
     {
-      title: "Conversion-focused websites",
-      description: "Landing pages, portfolios, and full sites built for speed, clarity, and real user behavior.",
+      title: "Website Development",
+      description: "Custom Next.js websites built for fast loading, clear navigation, and higher conversion rates.",
+      abstract: "bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"
     },
     {
-      title: "Structured Discord servers",
-      description: "Clean channel architecture, roles, and permissions designed for community growth and moderation.",
+      title: "Discord Server Setup",
+      description: "Professional Discord communities with clear channels, secure permissions, and custom bot automation.",
+      abstract: "bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:24px_24px]"
     },
     {
-      title: "Consistent social content",
-      description: "Visual and written content that fits your brand perfectly—without chasing trends or noise.",
+      title: "Social Media Content",
+      description: "High-quality short-form videos designed to grow your audience and build long-term brand authority.",
+      abstract: "bg-[linear-gradient(45deg,rgba(255,255,255,0.02)_25%,transparent_25%,transparent_75%,rgba(255,255,255,0.02)_75%,rgba(255,255,255,0.02)),linear-gradient(45deg,rgba(255,255,255,0.02)_25%,transparent_25%,transparent_75%,rgba(255,255,255,0.02)_75%,rgba(255,255,255,0.02))] bg-[size:60px_60px] bg-[position:0_0,30px_30px]"
     },
     {
-      title: "Modular services",
-      description: "Hire us for one service or combine them. Nothing breaks if you decide to expand later.",
+      title: "Flexible Packages",
+      description: "Hire us for a single project or combine our services. Everything is engineered to work together.",
+      abstract: "bg-[linear-gradient(rgba(0,229,255,0.03)_1px,transparent_1px)] bg-[size:100%_40px]"
     },
   ];
 
   return (
     <section
-      className="relative border-t border-zinc-900 bg-[#0a0a0a] px-6 py-24 sm:py-32 selection:bg-zinc-800"
+      className="relative w-full bg-black text-white selection:bg-cyan-500 selection:text-black pt-32 pb-40 overflow-hidden border-t border-white/10"
       aria-labelledby="why-us-heading"
     >
-      <div className="relative z-10 mx-auto max-w-7xl">
-        {/* Header Block */}
-        <div className="mb-24 max-w-4xl">
-          <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-600 mb-8 block">
-            The Advantage
-          </span>
-          
-          <h2
-            id="why-us-heading"
-            className="text-3xl sm:text-5xl lg:text-6xl font-serif italic text-white leading-[1.1] tracking-tight"
-          >
-            Websites, Discord servers, and content — built independently or together.
-          </h2>
+      {/* --- THE MASTER GRID LINES --- */}
+      <div className="absolute inset-0 z-0 mx-auto w-full max-w-[120rem] pointer-events-none">
+        <div className="absolute top-0 bottom-0 left-6 md:left-12 xl:left-32 w-px bg-white/10 hidden md:block" />
+        <div className="absolute top-0 bottom-0 right-6 md:right-12 xl:right-32 w-px bg-white/10 hidden md:block" />
+      </div>
 
-          <div className="mt-10 flex flex-col md:flex-row md:items-end gap-8">
-            <div className="max-w-xl">
-              <h3 className="text-lg sm:text-xl text-zinc-200 font-medium leading-relaxed">
-                Start with what you need today. <br/> Add the rest when it makes sense.
-              </h3>
-              <p className="mt-4 text-zinc-500 font-light leading-relaxed">
-                We build websites, Discord servers, and social content as standalone services—with 
-                the option to integrate them later without rework.
-              </p>
-            </div>
-          </div>
+      <div className="relative z-10 mx-auto w-full max-w-[120rem] px-6 md:px-12 xl:px-32">
+        
+        {/* --- MASSIVE HEADER BLOCK --- */}
+        <div className="mb-24 md:mb-32 max-w-5xl">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            className="flex items-center gap-6 mb-12"
+          >
+            <span className="h-[2px] w-12 bg-cyan-500 block" />
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">
+              Operational Standards
+            </span>
+          </motion.div>
+          
+          <motion.h2
+            id="why-us-heading"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="text-[12vw] md:text-[6rem] lg:text-[8rem] font-black uppercase leading-[0.85] tracking-tighter"
+          >
+            Clear Work. <br />
+            <span className="text-white/30">Real</span> Results.
+          </motion.h2>
+
+          <motion.p 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="mt-12 text-lg md:text-2xl text-white/50 font-medium max-w-2xl leading-relaxed italic"
+          >
+            Start with the services you need today and expand when you're ready. We build clear, fast, and scalable digital products for your brand.
+          </motion.p>
         </div>
 
-        {/* Optimized Grid - Using CSS Border-Gap pattern */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-zinc-900 border border-zinc-900">
+        {/* --- BRUTALIST BENTO GRID --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/10 border border-white/10">
           {features.map((item, index) => (
             <motion.div
               key={index}
-              // Lightest possible animation: simple fade up once
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.05, ease: "easeOut" }}
               viewport={{ once: true, margin: "-50px" }}
-              // Use standard CSS for hover to save JS cycles
-              className="bg-[#0a0a0a] p-8 sm:p-10 flex flex-col min-h-[280px] transition-colors duration-300 hover:bg-[#0f0f0f] group"
+              transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="group relative bg-black p-10 md:p-16 lg:p-24 min-h-[450px] flex flex-col justify-between overflow-hidden cursor-crosshair"
             >
-              <span className="font-mono text-[9px] text-zinc-700 block mb-10 transition-colors duration-300 group-hover:text-zinc-500">
-                SERVICE_0{index + 1}
-              </span>
-              <h4 className="text-xl font-medium text-white tracking-tight mb-4">
-                {item.title}
-              </h4>
-              <p className="text-sm text-zinc-500 leading-relaxed transition-colors duration-300 group-hover:text-zinc-400">
-                {item.description}
-              </p>
+              {/* CSS Abstract Pattern Background (Reveals on Hover) */}
+              <div className={`absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none ${item.abstract}`} />
+              
+              {/* Massive Ghost Number (Reacts to hover) */}
+              <motion.div 
+                whileHover={{ x: -20, y: 10 }}
+                className="absolute -top-10 -right-10 z-0 text-[18rem] font-black text-white/[0.02] leading-none select-none pointer-events-none group-hover:text-white/[0.04] transition-colors duration-700"
+              >
+                0{index + 1}
+              </motion.div>
+
+              {/* Box Content */}
+              <div className="relative z-10">
+                <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-cyan-500 block mb-10">
+                  SERVICE_CORE_0{index + 1}
+                </span>
+                <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white mb-6 group-hover:text-cyan-400 transition-colors duration-300">
+                  {item.title}
+                </h3>
+              </div>
+
+              <div className="relative z-10 mt-12">
+                <p className="text-base md:text-lg text-white/40 font-medium leading-relaxed max-w-sm group-hover:text-white/80 transition-colors duration-500">
+                  {item.description}
+                </p>
+              </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Action Bar */}
-        <div className="mt-16 flex justify-between items-center border-t border-zinc-900 pt-12">
-          <button
-            onClick={() => router.push("/plans")}
-            className="group flex items-center gap-6 text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-400 hover:text-white transition-all duration-300"
-          >
-            <span className="border-b border-transparent group-hover:border-white pb-1">
-              View services & pricing
+        {/* --- ARCHITECTURAL ACTION BAR --- */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="mt-px bg-white/5 border border-white/10 p-10 md:p-14 flex flex-col md:flex-row justify-between items-start md:items-center gap-10"
+        >
+          <div className="flex flex-col gap-2">
+            <span className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-black">
+              Service Delivery
             </span>
-            <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-          </button>
-          
-          <div className="hidden sm:block text-[9px] text-zinc-800 uppercase tracking-widest font-mono">
-            No_Rework_Guaranteed
+            <span className="text-sm md:text-base font-bold tracking-[0.2em] uppercase text-white">
+              Professional execution. No shortcuts.
+            </span>
           </div>
-        </div>
-      </div>
 
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&display=swap');
-        .font-serif { font-family: 'Playfair Display', serif; }
-      `}</style>
+          <Link
+            href="/plans"
+            className="group flex items-center justify-center bg-white px-12 py-5 hover:bg-cyan-400 transition-colors duration-300 w-full md:w-auto"
+          >
+            <span className="text-[11px] font-black uppercase tracking-[0.3em] text-black">
+              View All Tiers
+            </span>
+          </Link>
+        </motion.div>
+        
+      </div>
     </section>
   );
 };

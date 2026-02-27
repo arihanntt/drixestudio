@@ -6,42 +6,40 @@ export async function generateMetadata(): Promise<Metadata> {
   const imageUrl = `${baseUrl}/assets/plans.jpg`;
 
   return {
-    // 🚀 SEO CHANGE 1: Title that targets "Intent"
-    // Old: "Pricing & Plans | Drixe Studio"
-    // New: Targets the exact search queries people use to find you.
-    title: "Service Pricing: Custom Discord, Web Architecture & Content | Drixe Studio",
+    // 🚀 SEO STRATEGY: Target exactly what the user types into Google.
+    // No jargon, just clear, high-intent product keywords.
+    title: "Service Pricing: Website, Discord & Content Packages | Drixe Studio",
     
     description:
-      "Transparent pricing for custom Discord server setups, Next.js websites, and social media content engines. No hidden fees—just professional digital architecture.",
+      "Transparent pricing for custom website development, Discord server setups, and social media content. No hidden fees, just clear packages and professional service.",
 
     keywords: [
       // Core Identity
       "Drixe Studio",
-      "digital architecture agency",
+      "digital services agency",
 
-      // 💰 High-Intent Discord Terms (Money Keywords)
+      // 💰 High-Intent Discord Terms
       "cost of custom discord server",
-      "discord server setup pricing 2026",
+      "discord server setup pricing",
       "hire professional discord developer",
-      "discord community architecture plans",
-      "discord bot development cost",
+      "discord server creation plans",
 
       // 💻 High-Intent Web Terms
       "Next.js website pricing",
-      "static website design cost",
+      "custom website design cost",
       "dark mode website agency",
-      "conversion landing page rates",
+      "landing page pricing",
 
       // 📹 High-Intent Content Terms
       "short form video editing packages",
-      "social media growth agency pricing",
-      "content engine subscription"
+      "social media content pricing",
+      "monthly video content subscription"
     ],
 
     openGraph: {
-      title: "Drixe Studio Service Plans: Web, Discord & Content",
+      title: "Drixe Studio Pricing: Website, Discord & Content",
       description:
-        "View our transparent pricing tiers for custom digital ecosystems. From single landing pages to enterprise Discord architecture.",
+        "View our transparent pricing for custom digital projects. From single landing pages to large Discord server setups.",
       url: pageUrl,
       siteName: "Drixe Studio",
       images: [
@@ -49,7 +47,7 @@ export async function generateMetadata(): Promise<Metadata> {
           url: imageUrl,
           width: 1200,
           height: 630,
-          alt: "Drixe Studio Service Pricing Tiers",
+          alt: "Drixe Studio Service Pricing",
         },
       ],
       locale: "en_US",
@@ -60,7 +58,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: "Service Pricing | Drixe Studio",
       description:
-        "Transparent investment tiers for high-performance digital assets.",
+        "Clear, upfront pricing for professional website development and Discord setups.",
       images: [imageUrl],
     },
 
@@ -95,9 +93,9 @@ export default function PlansLayout({
   children: React.ReactNode;
 }) {
   return (
-    // ⚠️ DESIGN NOTE: Your page uses `bg-[#0a0a0a]`, but layout used `bg-black`.
-    // I synced them here to prevent a visual "flicker" on load.
-    <main className="min-h-screen bg-[#0a0a0a] text-white selection:bg-zinc-800">
+    // ⚠️ DESIGN NOTE: Synced to pure `bg-black` to match the brutalist page design perfectly.
+    // Added the custom cyan selection highlight to match your brand identity globally.
+    <main className="min-h-screen bg-black text-white selection:bg-cyan-500 selection:text-black">
       {children}
     </main>
   );

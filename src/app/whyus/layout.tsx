@@ -6,42 +6,43 @@ export async function generateMetadata(): Promise<Metadata> {
   const imageUrl = `${baseUrl}/assets/whyus.png`;
 
   return {
-    title: "Why Drixe Studio | Our Approach & Philosophy",
+    // 🚀 SEO STRATEGY: Target search intent. 
+    // People search for "Why work with X agency" or "Professional digital studio approach"
+    title: "Why Drixe Studio | Our Professional Approach & Philosophy",
     description:
-      "Learn how Drixe Studio approaches websites, Discord communities, and digital systems with clarity, structure, and long-term thinking.",
+      "Learn why top brands choose Drixe Studio for custom website development, Discord server architecture, and consistent content systems built for long-term growth.",
 
     keywords: [
       // Brand
       "Drixe Studio",
-      "digital studio",
+      "digital services studio",
 
       // Systems positioning
-      "digital systems design",
-      "community systems",
-      "automation workflows",
+      "professional digital systems",
+      "community architecture",
+      "automated workflows",
       "scalable digital solutions",
 
       // Website services
-      "website design studio",
-      "frontend development",
-      "static website development",
+      "custom website development",
+      "Next.js design agency",
+      "professional web studio",
 
       // Discord (retain authority)
       "Discord server setup",
-      "Discord community systems",
-      "Discord automation",
-      "Discord moderation services",
+      "Discord community management",
+      "Discord automation services",
 
       // Creator & business
-      "creator tools",
-      "community building",
-      "online communities",
+      "creator systems",
+      "brand infrastructure",
+      "online community building",
     ],
 
     openGraph: {
-      title: "Why Drixe Studio | Systems, Not Just Setups",
+      title: "Why Drixe Studio | Systems Built to Last",
       description:
-        "We design websites, Discord communities, and workflows with structure, clarity, and long-term usability in mind.",
+        "We design websites, Discord communities, and social media systems with structure, clarity, and performance in mind.",
       url: pageUrl,
       siteName: "Drixe Studio",
       images: [
@@ -49,7 +50,7 @@ export async function generateMetadata(): Promise<Metadata> {
           url: imageUrl,
           width: 1200,
           height: 630,
-          alt: "Drixe Studio – our approach to building digital systems",
+          alt: "Drixe Studio — Our approach to digital systems",
         },
       ],
       locale: "en_US",
@@ -58,9 +59,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
     twitter: {
       card: "summary_large_image",
-      title: "Why Drixe Studio",
+      title: "Why Drixe Studio | Our Philosophy",
       description:
-        "Our philosophy on building websites, communities, and digital systems that last.",
+        "Building websites, communities, and digital systems that operate at peak performance.",
       images: [imageUrl],
     },
 
@@ -95,7 +96,8 @@ export default function WhyUsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen bg-black text-white">
+    /* ⚠️ BRAND CONSISTENCY: Synced to pure bg-black and cyan selection color */
+    <main className="min-h-screen bg-black text-white selection:bg-cyan-500 selection:text-black">
       {children}
     </main>
   );

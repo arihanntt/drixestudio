@@ -30,13 +30,16 @@ export default function SmoothScrollWrapper({ children }) {
     lenisRef.current = lenis;
 
     // RAF with error handling and delta time
-    let lastTime = 0;
-    const raf = (time) => {
-      lenis.raf(time);
-      lastTime = time;
-      requestAnimationFrame(raf);
-    };
-    requestAnimationFrame(raf);
+    let rafId;
+
+const raf = (time) => {
+  if (lenisRef.current) {
+    lenisRef.current.raf(time);
+  }
+  rafId = requestAnimationFrame(raf);
+};
+
+rafId = requestAnimationFrame(raf);
 
     // Dynamic adjustments
     const handleResize = () => {
@@ -50,6 +53,22 @@ export default function SmoothScrollWrapper({ children }) {
 
     window.addEventListener('resize', handleResize);
     handleResize(); // Initial check
+
+     // 🔥 expose globally
+    window.lenis = lenis;
+window.toggleLenis = (state) => {
+  if (!lenisRef.current) return;
+
+  if (state === "stop") {
+    lenisRef.current.stop();
+    lenisRef.current.options.smoothWheel = false;
+    lenisRef.current.options.smoothTouch = false;
+  } else {
+    lenisRef.current.options.smoothWheel = true;
+    lenisRef.current.options.smoothTouch = true;
+    lenisRef.current.start();
+  }
+};
 
     return () => {
       lenis.destroy();

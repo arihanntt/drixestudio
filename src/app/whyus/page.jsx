@@ -1,9 +1,12 @@
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 const principles = [
   {
     number: "01",
-    title: "Systems over surface-level work",
+    title: "Systems over surface",
     desc: "We don’t just make things look good. We design structures that remain usable, scalable, and maintainable long after launch.",
   },
   {
@@ -21,209 +24,216 @@ const principles = [
 const services = [
   {
     id: "WEB",
-    title: "Websites",
-    desc: "Fast, SEO-ready, static websites built for clarity and performance. No bloated stacks, no unnecessary complexity.",
+    title: "Website Development",
+    desc: "Fast, custom Next.js websites built for clarity and speed. No templates, no bloat.",
   },
   {
     id: "DSY",
-    title: "Discord systems",
-    desc: "Structured communities with clear roles, permissions, onboarding flows, automation, and moderation.",
+    title: "Discord Architecture",
+    desc: "Professional community setups with clear roles, secure permissions, and bot automation.",
   },
   {
     id: "CNT",
-    title: "Content & social presence",
-    desc: "Simple, consistent short-form video and content systems designed to support your brand, not distract from it.",
+    title: "Content Systems",
+    desc: "Consistent short-form video frameworks designed to grow your brand on social media.",
   },
 ];
 
 const processSteps = [
   {
     step: "01",
-    title: "Understand the goal",
-    desc: "We start by understanding what you’re building, who it’s for, and what success actually looks like.",
+    title: "Goal Alignment",
+    desc: "We start by defining what success looks like for your specific brand and audience.",
   },
   {
     step: "02",
-    title: "Design the structure",
-    desc: "Before visuals or tools, we map out architecture — pages, roles, flows, permissions, and systems.",
+    title: "System Design",
+    desc: "We map out the architecture—pages, roles, and flows—before writing a single line of code.",
   },
   {
     step: "03",
-    title: "Build with intent",
-    desc: "Execution is clean, focused, and documented. No rushed decisions or messy setups.",
+    title: "Clean Execution",
+    desc: "We build your system with intent. Execution is clean, documented, and production-ready.",
   },
   {
     step: "04",
-    title: "Refine & support",
-    desc: "We help you stabilize, iterate, and improve — not disappear after delivery.",
+    title: "Live Support",
+    desc: "We help you stabilize and improve your system, ensuring it operates perfectly at scale.",
   },
 ];
 
 export default function WhyUsPage() {
   return (
-    <section className="min-h-screen bg-[#0a0a0a] font-sans text-zinc-300 border-t border-zinc-900 selection:bg-zinc-800 selection:text-white">
-      <div className="relative z-10 mx-auto max-w-7xl px-6 pt-32 pb-32">
+    <main className="relative w-full bg-black text-white pt-32 pb-40 overflow-hidden border-t border-white/10 selection:bg-cyan-500 selection:text-black">
+      
+      {/* --- THE MASTER GRID LINES --- */}
+      <div className="absolute inset-0 z-0 mx-auto w-full max-w-[120rem] pointer-events-none">
+        <div className="absolute top-0 bottom-0 left-6 md:left-12 xl:left-32 w-px bg-white/10 hidden md:block" />
+        <div className="absolute top-0 bottom-0 right-6 md:right-12 xl:right-32 w-px bg-white/10 hidden md:block" />
+      </div>
 
-        {/* --- HERO: CLARITY FIX --- */}
-        <header className="mb-24 border-l border-zinc-700 pl-6 sm:pl-10 max-w-4xl">
-          <p className="mb-6 text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">
-             Our Philosophy
-          </p>
-          <h1 className="text-4xl font-serif italic leading-[1.1] tracking-tight text-white sm:text-6xl md:text-7xl">
-            We build systems <br />
-            that <span className="text-zinc-500">actually last.</span>
-          </h1>
-          <p className="mt-8 text-base leading-relaxed text-zinc-400 sm:text-lg italic font-light">
-            Drixe Studio is a digital systems studio. We build systems that actually last — 
-            websites and communities designed for long-term use, not quick launches. 
-            <span className="block mt-4 text-zinc-200 not-italic font-normal">
-              Our work focuses on websites, Discord systems, and content infrastructure.
+      <div className="relative z-10 mx-auto w-full max-w-[120rem] px-6 md:px-12 xl:px-32">
+
+        {/* --- 1. HERO BLOCK --- */}
+        <header className="mb-32 border-b border-white/10 pb-20">
+          <div className="flex items-center gap-6 mb-12">
+            <span className="h-[2px] w-12 bg-cyan-500 block" />
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">
+               Studio Philosophy
             </span>
-          </p>
-          <p className="mt-6 text-[11px] uppercase tracking-widest text-zinc-600 font-medium">
-            Used by independent creators and early-stage brands
-          </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:items-end">
+            <h1 className="text-5xl sm:text-7xl lg:text-[8rem] font-black uppercase leading-[0.85] tracking-tighter">
+              We Build <br />
+              <span className="text-white/30">Systems.</span>
+            </h1>
+            <div className="max-w-md lg:pb-4">
+               <p className="text-lg md:text-xl font-medium text-white/60 leading-relaxed italic">
+                 Drixe Studio is a digital systems laboratory. We build websites and communities designed for high-performance use, not just quick launches.
+               </p>
+            </div>
+          </div>
         </header>
 
-        {/* --- PRINCIPLES: SEO & STABILITY FIX --- */}
-        <div className="mb-32">
-          <div className="mb-8 border-b border-zinc-900 pb-4">
-             <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white">
-               Our Design Principles
-             </h2>
+        {/* --- 2. PRINCIPLES GRID --- */}
+        <section className="mb-40">
+          <div className="mb-12 flex items-center gap-6">
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">
+              Operating Principles
+            </span>
           </div>
 
-          <div className="grid grid-cols-1 border-t border-l border-zinc-900 md:grid-cols-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/10">
             {principles.map((item, i) => (
               <div
                 key={i}
-                className="group relative flex flex-col justify-between border-b border-r border-zinc-900 bg-transparent p-8 transition-colors duration-300 hover:bg-zinc-900/40"
+                className="group relative bg-black p-12 transition-colors duration-500 hover:bg-[#050505] overflow-hidden"
               >
-                <div>
-                    <div className="mb-6 font-mono text-[10px] text-zinc-700 uppercase tracking-widest">
-                        Principle_{item.number}
-                    </div>
-                    <h3 className="mb-4 text-xl font-serif italic text-white leading-tight">
-                    {item.title}
-                    </h3>
-                    <p className="text-sm leading-relaxed text-zinc-500 group-hover:text-zinc-400 transition-colors">
-                    {item.desc}
-                    </p>
-                </div>
+                <div className="absolute top-0 left-0 w-full h-1 bg-cyan-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                
+                <span className="block mb-10 font-mono text-[10px] text-cyan-500 tracking-[0.3em]">
+                   RULE_{item.number}
+                </span>
+                <h3 className="mb-6 text-3xl font-black uppercase tracking-tighter text-white">
+                  {item.title}
+                </h3>
+                <p className="text-sm font-medium leading-relaxed text-white/50">
+                  {item.desc}
+                </p>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* --- SERVICES: SEMANTIC FIX --- */}
-        <div className="mb-32 max-w-5xl">
-          <div className="mb-8 border-b border-zinc-900 pb-4">
-             <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white">
-               Our Services
-             </h2>
+        {/* --- 3. SERVICES LIST --- */}
+        <section className="mb-40">
+          <div className="mb-16 border-b border-white/10 pb-8 flex justify-between items-end">
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">
+              Core Capabilities
+            </span>
+            <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em]">
+              Focus over variety
+            </span>
           </div>
           
-          <div className="w-full border-t border-zinc-900">
-             <p className="mb-8 mt-4 text-sm text-zinc-500 italic">
-                We don’t try to do everything. We focus on a small set of services and do them properly.
-             </p>
-
+          <div className="space-y-0">
              {services.map((s, i) => (
-                 <div key={i} className="group grid grid-cols-1 gap-4 border-b border-zinc-900 py-8 transition-colors duration-300 hover:bg-zinc-900/20 sm:grid-cols-12 sm:gap-8">
-                     <div className="col-span-1 sm:col-span-2 pt-1">
-                        <span className="text-[10px] font-mono tracking-widest text-zinc-700">
-                            {s.id}
+                 <div key={i} className="group grid grid-cols-1 md:grid-cols-12 gap-8 border-b border-white/10 py-12 transition-colors duration-500 hover:bg-white/[0.02]">
+                     <div className="md:col-span-2">
+                        <span className="text-xs font-mono tracking-widest text-cyan-500">
+                            [{s.id}]
                         </span>
                      </div>
-                     <div className="col-span-1 sm:col-span-4">
-                        <h3 className="text-lg font-medium text-white tracking-tight">
+                     <div className="md:col-span-4">
+                        <h3 className="text-2xl font-black uppercase tracking-tighter text-white">
                             {s.title}
                         </h3>
                      </div>
-                     <div className="col-span-1 sm:col-span-6">
-                        <p className="text-sm text-zinc-500 leading-relaxed">
+                     <div className="md:col-span-6">
+                        <p className="text-base font-medium text-white/50 leading-relaxed max-w-lg">
                             {s.desc}
                         </p>
                      </div>
                  </div>
              ))}
           </div>
-        </div>
+        </section>
 
-        {/* --- PROCESS: SEO FIX --- */}
-        <div className="mb-32">
-          <div className="mb-12 border-b border-zinc-900 pb-4">
-             <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white">
-               Our Process
-             </h2>
+        {/* --- 4. PROCESS: WITH GHOST NUMBERS --- */}
+        <section className="mb-40">
+          <div className="mb-20 flex items-center gap-6">
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">
+              Workflow Architecture
+            </span>
           </div>
 
-          <div className="grid grid-cols-1 gap-0 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             {processSteps.map((p, i) => (
-              <div key={i} className="relative border-l border-zinc-900 pl-8 pb-12 sm:border-l-0 sm:border-t sm:pl-0 sm:pt-8 sm:pr-8 group">
-                <div className="absolute -left-[3px] top-0 h-1.5 w-1.5 bg-zinc-700 sm:-top-[3px] sm:left-0 group-hover:bg-white transition-colors" />
+              <div key={i} className="relative group">
+                {/* Massive Background Ghost Number */}
+                <div className="absolute -top-16 -left-4 text-[10rem] font-black text-white/[0.03] select-none pointer-events-none group-hover:text-cyan-500/10 transition-colors duration-700">
+                   {p.step}
+                </div>
                 
-                <span className="block text-[10px] font-bold text-zinc-600 mb-2 tracking-widest">
-                    STEP {p.step}
-                </span>
-                <h4 className="mb-4 text-lg font-serif italic text-white tracking-tight">
-                  {p.title}
-                </h4>
-                <p className="text-sm text-zinc-500 leading-relaxed font-light">
-                  {p.desc}
-                </p>
+                <div className="relative z-10 pt-10">
+                  <span className="block text-[10px] font-black text-cyan-500 mb-4 tracking-[0.3em]">
+                      PHASE_{p.step}
+                  </span>
+                  <h4 className="mb-6 text-2xl font-black uppercase tracking-tighter text-white">
+                    {p.title}
+                  </h4>
+                  <p className="text-sm font-medium text-white/50 leading-relaxed">
+                    {p.desc}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* --- AUDIENCE & CTA: LOGIC FIX --- */}
-        <div className="border border-zinc-900 bg-zinc-900/10 p-8 sm:p-12">
-          <div className="mb-8 flex items-start gap-4">
-            <div className="flex h-5 w-5 shrink-0 items-center justify-center border border-zinc-600 text-[10px] font-bold text-zinc-600 italic font-serif">i</div>
-            <div>
-                 <h2 className="text-sm font-bold uppercase tracking-widest text-white">
-                    The Ideal Fit
+        {/* --- 5. THE BOUNDARY (Ideal Fit & CTA) --- */}
+        <section className="bg-white/5 border border-white/10 p-10 md:p-20 overflow-hidden relative">
+          {/* Subtle Grid Overlay */}
+          <div className="absolute inset-0 opacity-10 bg-[linear-gradient(45deg,rgba(255,255,255,0.1)_25%,transparent_25%,transparent_75%,rgba(255,255,255,0.1)_75%,rgba(255,255,255,0.1))] bg-[length:20px_20px]" />
+          
+          <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-16">
+            <div className="max-w-2xl">
+                <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white mb-8">
+                    The Ideal <br />
+                    <span className="text-cyan-500">Fit.</span>
                 </h2>
-                <p className="mt-4 max-w-2xl text-sm leading-relaxed text-zinc-500 font-light">
-                    Drixe Studio is for people who care about structure, clarity, and
-                    long-term results. If you’re looking for the cheapest option or a
-                    rushed setup, we’re probably not the right fit.
+                <p className="text-base md:text-lg leading-relaxed text-white/60 font-medium">
+                    Drixe Studio is for people who care about structure and long-term results. 
+                    If you’re looking for the cheapest option or a rushed setup, we’re probably 
+                    not the right studio for you. 
                     <br /><br />
-                    If you want something built cleanly, with thought behind every
-                    decision — we’ll work well together.
+                    But if you want it built cleanly, with thought behind every decision—we should talk.
                 </p>
             </div>
-          </div>
 
-          <div className="mt-12 flex flex-col items-start justify-between gap-8 border-t border-zinc-900 pt-8 sm:flex-row sm:items-center">
-             <div>
-                <h3 className="text-xl font-serif italic text-white tracking-tight">
-                    Ready to build something solid?
-                </h3>
-                <p className="text-[11px] uppercase tracking-widest text-zinc-600 mt-2">
-                    Explore our plans or reach out for a recommendation.
-                </p>
-             </div>
-             
-             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8">
+            <div className="flex flex-col gap-6 w-full lg:w-auto">
                 <Link
                   href="/plans"
-                  className="text-[11px] font-bold uppercase tracking-[0.3em] bg-white text-black px-8 py-4 hover:bg-zinc-200 transition-colors"
+                  className="group flex items-center justify-center bg-white px-10 py-6 hover:bg-cyan-400 transition-colors duration-300 w-full lg:w-72"
                 >
-                  View plans & pricing
+                  <span className="text-xs font-black uppercase tracking-[0.3em] text-black transition-colors duration-300">
+                    View Pricing
+                  </span>
                 </Link>
                 <Link
                   href="/contact"
-                  className="text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-500 hover:text-white border-b border-transparent hover:border-white transition-all pb-1"
+                  className="group flex items-center justify-center border border-white/20 px-10 py-6 hover:bg-white hover:text-black transition-all duration-300 w-full lg:w-72"
                 >
-                  Contact us
+                  <span className="text-xs font-black uppercase tracking-[0.3em] transition-colors duration-300">
+                    Contact Us
+                  </span>
                 </Link>
-             </div>
+            </div>
           </div>
-        </div>
+        </section>
 
       </div>
-    </section>
+    </main>
   );
 }

@@ -2,142 +2,178 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter, usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { ChevronDown } from "lucide-react";
 
-const NAV_HEIGHT = 72;
 interface MobileMenuProps {
-  setMobileOpen: (value: boolean) => void;
+  isOpen: boolean;
+  setIsOpen: (value: boolean) => void;
 }
 
-const MobileMenu = ({ setMobileOpen }: MobileMenuProps) => {
+const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const [servicesOpen, setServicesOpen] = useState(false);
 
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
   const handleNav = (path: string) => {
-    setMobileOpen(false);
+    setIsOpen(false);
     if (pathname !== path) router.push(path);
   };
 
   const navLinks = [
     { label: "Why Us", path: "/whyus", num: "01" },
-    { label: "Engagements", path: "/plans", num: "02" },
+    { label: "Pricing", path: "/plans", num: "02" },
     { label: "Inquiries", path: "/faq", num: "03" },
   ];
 
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-40 md:hidden"
-      >
-        {/* Backdrop: Solid & Dark */}
-        <div
-          className="absolute inset-0 bg-black/95"
-          onClick={() => setMobileOpen(false)}
-        />
-
-        {/* Menu Panel */}
+      {isOpen && (
         <motion.div
-          initial={{ x: "100%" }}
-          animate={{ x: 0 }}
-          exit={{ x: "100%" }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute inset-y-0 right-0 w-full bg-[#0a0a0a] border-l border-zinc-900 flex flex-col pt-24 pb-12 px-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4 }}
+          className="fixed inset-0 z-[999]"
         >
-          {/* TOP SECTION: DIRECTORY */}
-          <div className="flex-1">
-            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-600 mb-12 block">
-              Directory
-            </span>
+          {/* Dark Backdrop Dimmer */}
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-crosshair"
+            onClick={() => setIsOpen(false)}
+          />
 
-            <nav className="flex flex-col gap-10">
-              {/* HOME LINK */}
-              <button
-                onClick={() => handleNav("/")}
-                className="flex items-baseline gap-4 group"
+          {/* RIGHT SLIDING PANEL */}
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute top-0 right-0 bottom-0 w-full md:w-[500px] xl:w-[600px] bg-[#050505] border-l border-white/10 flex flex-col justify-between overflow-y-auto"
+          >
+            {/* Header / Close Button */}
+            <div className="flex items-center justify-between p-6 md:p-12 border-b border-white/5">
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30">
+                Navigation
+              </span>
+              <button 
+                onClick={() => setIsOpen(false)}
+                className="group flex flex-col gap-[6px] p-2"
               >
-                <span className="font-mono text-[9px] text-zinc-700 group-hover:text-white transition-colors">00</span>
-                <span className={`text-3xl font-serif italic ${pathname === "/" ? "text-white" : "text-zinc-500"}`}>
-                  Home
-                </span>
+                {/* Custom X Icon using pure CSS lines */}
+                <div className="h-[2px] w-8 bg-white rotate-45 translate-y-[4px] group-hover:bg-white/50 transition-colors" />
+                <div className="h-[2px] w-8 bg-white -rotate-45 -translate-y-[4px] group-hover:bg-white/50 transition-colors" />
               </button>
+            </div>
 
-              {/* SERVICES DROPDOWN (Manual Override for mobile clarity) */}
-              <div className="flex flex-col gap-4">
+            {/* MAIN DIRECTORY */}
+            <div className="flex-1 flex flex-col justify-center px-8 md:px-12 py-12">
+              <nav className="flex flex-col gap-10 md:gap-14">
+                
+                {/* HOME */}
                 <button
-                  onClick={() => setServicesOpen(!servicesOpen)}
-                  className="flex items-baseline justify-between group"
+                  onClick={() => handleNav("/")}
+                  className="flex items-baseline gap-6 group w-fit"
                 >
-                  <div className="flex items-baseline gap-4">
-                    <span className="font-mono text-[9px] text-zinc-700 group-hover:text-white transition-colors">++</span>
-                    <span className="text-3xl font-serif italic text-zinc-500 group-hover:text-white transition-colors">
-                      Services
-                    </span>
-                  </div>
-                  <span className="text-zinc-700 text-lg font-light">{servicesOpen ? "−" : "+"}</span>
-                </button>
-
-                <AnimatePresence>
-                  {servicesOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden flex flex-col gap-5 pl-12 border-l border-zinc-900"
-                    >
-                      {[
-                        { l: "Discord Architecture", p: "/discord-server-setup" },
-                        { l: "Web Development", p: "/website-design" },
-                        { l: "Content Systems", p: "/social-media-content" },
-                      ].map((s) => (
-                        <button
-                          key={s.p}
-                          onClick={() => handleNav(s.p)}
-                          className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-600 text-left hover:text-white"
-                        >
-                          {s.l}
-                        </button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* NAV LINKS */}
-              {navLinks.map((link) => (
-                <button
-                  key={link.path}
-                  onClick={() => handleNav(link.path)}
-                  className="flex items-baseline gap-4 group"
-                >
-                  <span className="font-mono text-[9px] text-zinc-700 group-hover:text-white transition-colors">{link.num}</span>
-                  <span className={`text-3xl font-serif italic ${pathname === link.path ? "text-white" : "text-zinc-500"} group-hover:text-white transition-colors`}>
-                    {link.label}
+                  <span className="text-[10px] md:text-xs font-mono tracking-[0.3em] text-white/30">
+                    00
+                  </span>
+                  <span className="text-[10vw] md:text-6xl font-black uppercase tracking-tighter text-white group-hover:text-white/50 transition-colors">
+                    Home
                   </span>
                 </button>
-              ))}
-            </nav>
-          </div>
 
-          {/* BOTTOM SECTION: CTA & FOOTER */}
-          <div className="mt-auto pt-12 border-t border-zinc-900">
-            <button
-              onClick={() => handleNav("/contact")}
-              className="w-full bg-white text-black py-5 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-zinc-200 transition-colors"
-            >
-              Start a Project
-            </button>
-            
-            <div className="mt-8 flex justify-between items-center text-[9px] uppercase tracking-[0.2em] text-zinc-700">
-              <p>© Drixe Studio</p>
-              <p>Systems_Online</p>
+                {/* SERVICES ACCORDION */}
+                <div className="flex flex-col gap-6">
+                  <button
+                    onClick={() => setServicesOpen(!servicesOpen)}
+                    className="flex items-baseline gap-6 group w-fit"
+                  >
+                    <span className="text-[10px] md:text-xs font-mono tracking-[0.3em] text-white/30">
+                      ++
+                    </span>
+                    <span className="text-[10vw] md:text-6xl font-black uppercase tracking-tighter text-white group-hover:text-white/50 transition-colors flex items-center gap-4">
+                      Services
+                      <ChevronDown size={24} className={`transition-transform duration-500 opacity-50 ${servicesOpen ? "rotate-180" : ""}`} />
+                    </span>
+                  </button>
+
+                  <AnimatePresence>
+                    {servicesOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                        className="flex flex-col gap-6 pl-[15%] md:pl-16 border-l border-white/10 ml-[10px] overflow-hidden"
+                      >
+                        <div className="pt-2 pb-4 flex flex-col gap-6">
+                          {[
+                            { l: "Web Architecture", p: "/website-design" },
+                            { l: "Discord Systems", p: "/discord-server-setup" },
+                            { l: "Content Production", p: "/social-media-content" },
+                          ].map((s) => (
+                            <button
+                              key={s.p}
+                              onClick={() => handleNav(s.p)}
+                              className="text-sm md:text-base font-bold uppercase tracking-[0.2em] text-white/50 hover:text-white transition-colors text-left"
+                            >
+                              {s.l}
+                            </button>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* OTHER LINKS */}
+                {navLinks.map((link) => (
+                  <button
+                    key={link.path}
+                    onClick={() => handleNav(link.path)}
+                    className="flex items-baseline gap-6 group w-fit"
+                  >
+                    <span className="text-[10px] md:text-xs font-mono tracking-[0.3em] text-white/30">
+                      {link.num}
+                    </span>
+                    <span className="text-[10vw] md:text-6xl font-black uppercase tracking-tighter text-white group-hover:text-white/50 transition-colors">
+                      {link.label}
+                    </span>
+                  </button>
+                ))}
+              </nav>
             </div>
-          </div>
+
+            {/* BOTTOM CTA */}
+            <div className="p-8 md:p-12 border-t border-white/5 bg-white/5">
+              <button
+                onClick={() => handleNav("/contact")}
+                className="w-full border border-white px-6 py-6 text-sm font-black uppercase tracking-[0.3em] text-white hover:bg-white hover:text-black transition-all duration-300"
+              >
+                Initialize Project
+              </button>
+
+              <div className="mt-8 text-[9px] tracking-[0.3em] text-white/30 uppercase flex justify-between">
+                <span>© Drixe Studio</span>
+                <span>Digital Systems</span>
+              </div>
+            </div>
+
+          </motion.div>
         </motion.div>
-      </motion.div>
+      )}
     </AnimatePresence>
   );
 };
