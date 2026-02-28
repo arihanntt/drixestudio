@@ -1,42 +1,49 @@
 import './globals.css';
-import { Playfair_Display, Inter } from 'next/font/google';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
 import LayoutWrapper from '../components/LayoutWrapper';
 import SmoothScrollWrapper from "@/components/SmoothScrollWrapper"; 
 import type { Metadata, Viewport } from 'next';
 
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  style: ['italic', 'normal'],
-  weight: ['400', '700'],
-  variable: '--font-serif',
-  display: 'swap', // ✅ Adds performance by swapping font faster
-});
-
+// Clean, professional sans-serif for body
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
 });
 
+// Technical mono-space for specs and PHASE_ labels
+const jetbrains = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
+});
+
 export const viewport: Viewport = {
-  themeColor: '#0a0a0a',
+  themeColor: '#000000',
   colorScheme: 'dark',
 };
 
 export const metadata: Metadata = {
-  title: 'Drixe Studio | Digital Systems & Web Architecture',
-  description: 'Premium Discord server design, high-performance websites, and content infrastructure for creators and brands.',
-  keywords: ['Drixe Studio', 'Discord server setup', 'Web Architecture', 'Next.js developer'],
-  metadataBase: new URL('https://drixestudio.services'),
+  title: 'Drixe Studio | Custom Web Development & Discord Server Setup',
+  description: 'Drixe Studio specialize in building custom Next.js websites, professional Discord server , and high-retention content systems.',
+  keywords: [
+    'Drixe Studio', 
+    'Discord server setup', 
+    'Website development agency', 
+    'Next.js developer', 
+    'Professional Discord designer',
+    'Short form video editing systems'
+  ],
+  metadataBase: new URL('https://www.drixestudio.services'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'Drixe Studio | Digital Architecture',
-    description: 'Custom Discord ecosystems and high-performance websites.',
-    url: 'https://drixestudio.services',
+    title: 'Drixe Studio | Custom Web Development & Discord Server Setup',
+    description: 'Custom Discord server and high-performance web systems.',
+    url: 'https://www.drixestudio.services',
     siteName: 'Drixe Studio',
     images: [{ url: '/drixe-preview.png', width: 1200, height: 630 }],
     type: 'website',
@@ -49,8 +56,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    // ❌ REMOVED: "scroll-smooth" class (It causes conflict with Lenis)
-    <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
+    <html lang="en" className={`${inter.variable} ${jetbrains.variable} bg-black`}>
       <head>
         {/* GA4 Script */}
         <Script
@@ -66,37 +72,34 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}
         </Script>
 
-        {/* Structured Data */}
+        {/* Structured Data - Refined for Organization Authority */}
         <Script id="structured-data" type="application/ld+json" strategy="beforeInteractive">
           {JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'ProfessionalService',
             name: 'Drixe Studio',
-            url: 'https://drixestudio.services',
-            image: 'https://drixestudio.services/drixe-preview.png',
-            description: 'Premium Discord server design and web architecture.',
+            url: 'https://www.drixestudio.services',
+            image: 'https://www.drixestudio.services/drixe-preview.png',
+            description: 'Elite digital laboratory specializing in Next.js web systems and Discord community engineering.',
             address: {
               '@type': 'PostalAddress',
               'addressCountry': 'IN'
             },
             areaServed: 'Worldwide',
-            priceRange: '$$'
+            priceRange: '$$$'
           })}
         </Script>
       </head>
       
-      {/* ✅ Added transform-gpu to force hardware acceleration on the body */}
-     <body className="bg-[#0a0a0a] text-white antialiased">
+      <body className="bg-black text-white antialiased selection:bg-cyan-500 selection:text-black">
+        <LayoutWrapper>
+          <SmoothScrollWrapper>
+            {children}
+          </SmoothScrollWrapper>
+        </LayoutWrapper>
 
-  <LayoutWrapper>
-    <SmoothScrollWrapper>
-      {children}
-    </SmoothScrollWrapper>
-  </LayoutWrapper>
-
-  <SpeedInsights />
-
-</body>
+        <SpeedInsights />
+      </body>
     </html>
   );
 }
